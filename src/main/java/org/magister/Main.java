@@ -1,7 +1,22 @@
 package org.magister;
 
+
+import org.magister.bubbleSort.PerformanceTestBubbleSort;
+import org.magister.matrix.PerformanceTestMatrix;
+import org.magister.vector.PerformanceTestVector;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        PerformanceTestMatrix performanceTestMatrix = new PerformanceTestMatrix();
+        performanceTestMatrix.performTests();
+
+
+        PerformanceTestVector performanceTestVector = new PerformanceTestVector();
+        performanceTestVector.performTests();
+
+
+        PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
+        performanceTestBubbleSort.performTests();
     }
 }
+
