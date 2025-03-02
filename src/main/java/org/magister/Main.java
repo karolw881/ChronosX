@@ -12,11 +12,11 @@ public class Main {
 
 
         PerformanceTestVector performanceTestVector = new PerformanceTestVector();
-        performanceTestVector.performTests();
+     //   performanceTestVector.performTests();
 
 
         PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
-        performanceTestBubbleSort.performTests();
+        // performanceTestBubbleSort.performTests();
     }
 }
 
