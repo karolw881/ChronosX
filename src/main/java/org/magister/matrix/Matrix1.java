@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-class Matrix1 {
+public class Matrix1 {
     private int[][] data;
     private int rows;
     private int cols;
