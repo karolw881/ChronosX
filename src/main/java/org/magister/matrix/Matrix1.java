@@ -65,26 +65,37 @@ public class Matrix1 {
         return new Matrix1(result);
     }
 
-    // Metoda mnożenia macierzy
-    public Matrix1 multiply(Matrix1 matrix) {
-        if (cols != matrix.rows) {
-            throw new IllegalArgumentException("Liczba kolumn pierwszej macierzy musi być równa liczbie wierszy drugiej");
+
+    // Metoda sprawdzająca odwracalność macierzy
+    public boolean isInvertible() {
+        if (rows != cols) {
+            return false; // Tylko macierze kwadratowe mogą być odwracalne
         }
 
-        int[][] result = new int[rows][matrix.cols];
-
-        // Mnożenie macierzy
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < matrix.cols; j++) {
-                result[i][j] = 0;
-                for (int k = 0; k < cols; k++) {
-                    result[i][j] += data[i][k] * matrix.data[k][j];
-                }
-            }
-        }
-
-        return new Matrix1(result);
+        // Macierz jest odwracalna, jeśli jej wyznacznik jest różny od zera
+        return determinant() != 0;
     }
+
+    //  tworzenia podmacierzy poprzez usunięcie wiersza i kolumny
+    private Matrix1 getSubMatrix(int excludeRow, int excludeCol) {
+        int[][] subData = new int[rows - 1][cols - 1];
+
+        int r = 0;
+        for (int i = 0; i < rows; i++) {
+            if (i == excludeRow) continue;
+
+            int c = 0;
+            for (int j = 0; j < cols; j++) {
+                if (j == excludeCol) continue;
+                subData[r][c] = data[i][j];
+                c++;
+            }
+            r++;
+        }
+
+        return new Matrix1(subData);
+    }
+
 
     // Metoda obliczania wyznacznika
     public int determinant() {
@@ -114,34 +125,124 @@ public class Matrix1 {
         return result;
     }
 
-    //  tworzenia podmacierzy poprzez usunięcie wiersza i kolumny
-    private Matrix1 getSubMatrix(int excludeRow, int excludeCol) {
-        int[][] subData = new int[rows - 1][cols - 1];
 
-        int r = 0;
-        for (int i = 0; i < rows; i++) {
-            if (i == excludeRow) continue;
+    // Metoda obliczająca macierz odwrotną
 
-            int c = 0;
-            for (int j = 0; j < cols; j++) {
-                if (j == excludeCol) continue;
-                subData[r][c] = data[i][j];
-                c++;
-            }
-            r++;
+
+    // Metoda mnożenia macierzy
+    public Matrix1 multiply(Matrix1 matrix) {
+        if (cols != matrix.rows) {
+            throw new IllegalArgumentException("Liczba kolumn pierwszej macierzy musi być równa liczbie wierszy drugiej");
         }
 
-        return new Matrix1(subData);
+        int[][] result = new int[rows][matrix.cols];
+
+        // Mnożenie macierzy
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < matrix.cols; j++) {
+                result[i][j] = 0;
+                for (int k = 0; k < cols; k++) {
+                    result[i][j] += data[i][k] * matrix.data[k][j];
+                }
+            }
+        }
+
+        return new Matrix1(result);
     }
 
-    // Metoda sprawdzająca odwracalność macierzy
-    public boolean isInvertible() {
-        if (rows != cols) {
-            return false; // Tylko macierze kwadratowe mogą być odwracalne
+
+
+
+    // Metoda dzielenia macierzy: A / B = A * B^{-1}
+    public Matrix1 divide(Matrix1 matrix) {
+        if (!matrix.isInvertible()) {
+            throw new IllegalArgumentException("Macierz dzielnik nie jest odwracalna");
         }
 
-        // Macierz jest odwracalna, jeśli jej wyznacznik jest różny od zera
-        return determinant() != 0;
+        // Dzielenie to mnożenie przez macierz odwrotną
+        return multiply(matrix.inverse());
+    }
+
+    // Metoda obliczania macierzy odwrotnej (Gauss-Jordan elimination)
+    public Matrix1 inverse() {
+        if (rows != cols) {
+            throw new IllegalArgumentException("Macierz musi być kwadratowa, aby obliczyć odwrotność");
+        }
+
+        int n = rows;
+
+        // Tworzymy rozszerzoną macierz [A | I]
+        int[][] augmented = new int[n][2 * n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                augmented[i][j] = data[i][j];
+            }
+            for (int j = n; j < 2 * n; j++) {
+                augmented[i][j] = (j - n == i) ? 1 : 0;
+            }
+        }
+
+        // Eliminacja Gauss-Jordana
+        for (int i = 0; i < n; i++) {
+            // Jeśli pivot jest równy zero, zamień wiersze
+            if (augmented[i][i] == 0) {
+                boolean swapped = false;
+                for (int k = i + 1; k < n; k++) {
+                    if (augmented[k][i] != 0) {
+                        // Zamiana wierszy
+                        int[] temp = augmented[i];
+                        augmented[i] = augmented[k];
+                        augmented[k] = temp;
+                        swapped = true;
+                        break;
+                    }
+                }
+                if (!swapped) {
+                    throw new ArithmeticException("Macierz jest osobliwa i nie ma odwrotności");
+                }
+            }
+
+            // Normalizujemy wiersz, aby pivot stał się jedynką
+            // Uwaga: dla int to może powodować utratę precyzji
+            int pivot = augmented[i][i];
+            if (pivot != 1) {
+                // Sprawdzamy czy można dokładnie znormalizować
+                boolean allDivisible = true;
+                for (int j = 0; j < 2 * n; j++) {
+                    if (augmented[i][j] % pivot != 0 && augmented[i][j] != 0) {
+                        allDivisible = false;
+                        break;
+                    }
+                }
+
+                if (!allDivisible) {
+                    throw new ArithmeticException("Nie można obliczyć dokładnej odwrotności w liczbach całkowitych");
+                }
+
+                for (int j = 0; j < 2 * n; j++) {
+                    augmented[i][j] /= pivot;
+                }
+            }
+
+            // Eliminujemy pozostałe elementy w kolumnie pivotu
+            for (int k = 0; k < n; k++) {
+                if (k == i) continue;
+                int factor = augmented[k][i];
+                for (int j = 0; j < 2 * n; j++) {
+                    augmented[k][j] -= factor * augmented[i][j];
+                }
+            }
+        }
+
+        // Wyodrębniamy macierz odwrotną (prawa połowa rozszerzonej macierzy)
+        int[][] invData = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                invData[i][j] = augmented[i][j + n];
+            }
+        }
+
+        return new Matrix1(invData);
     }
 
     // Metoda wyświetlania macierzy

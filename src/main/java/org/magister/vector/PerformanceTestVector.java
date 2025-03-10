@@ -2,6 +2,7 @@ package org.magister.vector;
 
 
 import org.magister.helper.IntegerOperations;
+import org.magister.matrix.PerformanceTestMatrix;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -17,14 +18,16 @@ import java.util.stream.Collectors;
 public class PerformanceTestVector {
 
     // Directory constants
-    private static final String INPUT_DIR = "test_data/input/vector/";
-    private static final String OUTPUT_DIR = "test_data/output/vector/";
+    private static final String INPUT_DIR = "test_dataG/input/vector/input";
+    private static final String OUTPUT_DIR = "test_dataG/output/vector/output";
     // Number of test runs for each case
     private static final int RUNS = 100;
     private static final Random random = new Random(42);
     // Vector dimensions (wymiar wektora)
     private static final int[] DIMENSIONS = {10, 50, 100, 200};
 
+    // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
+   // protected final List<StatisticResult> aggregatedResults = new ArrayList<>();
     /**
      * Metoda główna wykonująca testy wydajności dla wektorów.
      */
@@ -35,8 +38,8 @@ public class PerformanceTestVector {
             System.out.println("Testing vector of dimension " + dim);
 
             // Tworzymy dwa losowe wektory
-            VectorR<Integer> vector1 = createRandomVector(dim);
-            VectorR<Integer> vector2 = createRandomVector(dim);
+            Vector<Integer> vector1 = createRandomVector(dim);
+            Vector<Integer> vector2 = createRandomVector(dim);
 
             // Zapisujemy wektory do pliku (opcjonalnie)
             saveVectorToFile(vector1, INPUT_DIR + "vector1_" + dim + ".txt");
@@ -51,7 +54,7 @@ public class PerformanceTestVector {
     /**
      * Testuje operację dodawania wektorów.
      */
-    private void testAdd(VectorR<Integer> vector1, VectorR<Integer> vector2, int dim) {
+    private void testAdd(Vector<Integer> vector1, Vector<Integer> vector2, int dim) {
         List<Long> directTimes = new ArrayList<>();
         List<Long> reflectionTimes = new ArrayList<>();
 
@@ -64,12 +67,12 @@ public class PerformanceTestVector {
         // Pomiary RUNS razy
         for (int i = 0; i < RUNS; i++) {
             long startDirect = System.nanoTime();
-            VectorR<Integer> resultDirect = vector1.addVector(vector2);
+            Vector<Integer> resultDirect = vector1.addVector(vector2);
             long endDirect = System.nanoTime();
             directTimes.add(endDirect - startDirect);
 
             long startReflection = System.nanoTime();
-            VectorR<Integer> resultReflection = VectorReflectionUtil.performOperation(vector1, vector2, "addVector");
+            Vector<Integer> resultReflection = VectorReflectionUtil.performOperation(vector1, vector2, "addVector");
             long endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
         }
@@ -87,7 +90,7 @@ public class PerformanceTestVector {
     /**
      * Testuje operację odejmowania wektorów (bezpośrednie odejmowanie – subtractVector2).
      */
-    private void testSubtract(VectorR<Integer> vector1, VectorR<Integer> vector2, int dim) {
+    private void testSubtract(Vector<Integer> vector1, Vector<Integer> vector2, int dim) {
         List<Long> directTimes = new ArrayList<>();
         List<Long> reflectionTimes = new ArrayList<>();
 
@@ -100,12 +103,12 @@ public class PerformanceTestVector {
         // Pomiary
         for (int i = 0; i < RUNS; i++) {
             long startDirect = System.nanoTime();
-            VectorR<Integer> resultDirect = vector1.subtractVector2(vector2);
+            Vector<Integer> resultDirect = vector1.subtractVector2(vector2);
             long endDirect = System.nanoTime();
             directTimes.add(endDirect - startDirect);
 
             long startReflection = System.nanoTime();
-            VectorR<Integer> resultReflection = VectorReflectionUtil.performOperation(vector1, vector2, "subtractVector2");
+            Vector<Integer> resultReflection = VectorReflectionUtil.performOperation(vector1, vector2, "subtractVector2");
             long endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
         }
@@ -123,18 +126,18 @@ public class PerformanceTestVector {
     /**
      * Tworzy losowy wektor o zadanym wymiarze z wartościami z zakresu 0-10.
      */
-    private VectorR<Integer> createRandomVector(int dimension) {
+    private Vector<Integer> createRandomVector(int dimension) {
         Integer[] data = new Integer[dimension];
         for (int i = 0; i < dimension; i++) {
             data[i] = random.nextInt(11);
         }
-        return new VectorR<>(data, new IntegerOperations());
+        return new Vector<>(data, new IntegerOperations());
     }
 
     /**
      * Zapisuje wektor do pliku tekstowego.
      */
-    private <T extends Number> void saveVectorToFile(VectorR<T> vector, String filename) {
+    private <T extends Number> void saveVectorToFile(Vector<T> vector, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("Vector Dimension: " + vector.getCoordinates().length + "\n\n");
             for (T coordinate : vector.getCoordinates()) {

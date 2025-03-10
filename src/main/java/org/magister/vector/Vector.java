@@ -4,11 +4,11 @@ package org.magister.vector;
 
 import org.magister.helper.NumberOperations;
 
-public class VectorR<T extends Number> {
+public class Vector<T extends Number> {
     private T[] coordinates;
     private NumberOperations<T> operations;
 
-    public VectorR(T[] coordinates, NumberOperations<T> operations) {
+    public Vector(T[] coordinates, NumberOperations<T> operations) {
         this.coordinates = coordinates.clone();
         this.operations = operations;
     }
@@ -18,7 +18,7 @@ public class VectorR<T extends Number> {
     }
 
     // Metoda dodawania wektorów (element-wise)
-    public VectorR<T> addVector(VectorR<T> other) {
+    public Vector<T> addVector(Vector<T> other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
@@ -28,27 +28,27 @@ public class VectorR<T extends Number> {
         for (int i = 0; i < n; i++) {
             result[i] = operations.add(this.coordinates[i], other.coordinates[i]);
         }
-        return new VectorR<>(result, operations);
+        return new Vector<>(result, operations);
     }
 
     // Metoda obliczania przeciwnego wektora (negacja) poprzez: 0 - coordinate
-    public VectorR<T> opposite() {
+    public Vector<T> opposite() {
         int n = this.coordinates.length;
         @SuppressWarnings("unchecked")
         T[] result = (T[]) new Number[n];
         for (int i = 0; i < n; i++) {
             result[i] = operations.subtract(operations.zero(), this.coordinates[i]);
         }
-        return new VectorR<>(result, operations);
+        return new Vector<>(result, operations);
     }
 
     // Metoda 1: odejmowanie przez dodanie przeciwnego wektora
-    public VectorR<T> subtractVector1(VectorR<T> other) {
+    public Vector<T> subtractVector1(Vector<T> other) {
         return this.addVector(other.opposite());
     }
 
     // Metoda 2: bezpośrednie odejmowanie elementów
-    public VectorR<T> subtractVector2(VectorR<T> other) {
+    public Vector<T> subtractVector2(Vector<T> other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
@@ -58,22 +58,22 @@ public class VectorR<T extends Number> {
         for (int i = 0; i < n; i++) {
             result[i] = operations.subtract(this.coordinates[i], other.coordinates[i]);
         }
-        return new VectorR<>(result, operations);
+        return new Vector<>(result, operations);
     }
 
     // Mnożenie wektora przez skalar
-    public VectorR<T> multiplyByScalar(T scalar) {
+    public Vector<T> multiplyByScalar(T scalar) {
         int n = this.coordinates.length;
         @SuppressWarnings("unchecked")
         T[] result = (T[]) new Number[n];
         for (int i = 0; i < n; i++) {
             result[i] = operations.multiply(this.coordinates[i], scalar);
         }
-        return new VectorR<>(result, operations);
+        return new Vector<>(result, operations);
     }
 
     // Iloczyn skalarny (dot product): suma iloczynów odpowiadających sobie współrzędnych
-    public T dotProduct(VectorR<T> other) {
+    public T dotProduct(Vector<T> other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
