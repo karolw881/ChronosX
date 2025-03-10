@@ -16,9 +16,9 @@ import java.util.List;
 @Setter
 public class PerformanceTestMatrixGenericofReflectionVsObject extends PerformanceTestMatrix {
 
-    private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "GenericOfReflectionVsObject/";
-    private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "GenericOfReflectionVsObject/";
-    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "GenericOfReflectionVsObject/";
+    private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
     private static final int RUNS = PerformanceTestMatrix.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestMatrix.DIMENSIONS;
   //  private final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -35,84 +35,10 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         // Czyszczenie poprzednich wyników
         aggregatedResults.clear();
         performTestGeneric();
-        aggregatedResults.clear();
-        performTestConcrete();
-    }
-
-    public void performTestConcrete() {
-        // Testujemy dla każdego wymiaru macierzy
-        for (int dim : DIMENSIONS) {
-            System.out.println("Testing matrix of dimension " + dim + "x" + dim);
-
-            // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
-            Matrix1 matrixConcrete1 = createRandomMatrix1(dim, 0L);
-            Matrix1 matrixConcrete2 = createRandomMatrix1(dim, 1L);
-
-            // Tworzenie katalogów wejściowych, wyjściowych, wykresów oraz dodatkowego katalogu "wyniki"
-            createDirectoriesIfNotExists(INPUT_DIR);
-            createDirectoriesIfNotExists(OUTPUT_DIR);
-            createDirectoriesIfNotExists(CHARTS_DIR);
-            createDirectoriesIfNotExists("wyniki");
-
-            // Zapisujemy macierze wejściowe do plików
-            saveMatrix1ToFile( matrixConcrete1, INPUT_DIR + "matrix1_concrete" + dim + ".txt");
-            saveMatrix1ToFile(matrixConcrete2, INPUT_DIR + "matrix2_concrete" + dim + ".txt");
-
-            // Porównanie i zapis macierzy
-            //  saveMatrixComparerToFile(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
-
-
-
-            aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-           // aggregatedResults.add(testSubstractGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-           // aggregatedResults.add(testMultiplyGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-           // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-
-        }
-
-        // Wyświetlamy i zapisujemy zagregowane statystyki
-        displayDetailedStatistics();
-        saveAggregatedStatisticsToFile();
-
-        // Generowanie wykresów (jeśli wymagane)
-        // generateCharts();
-    }
-
-    private StatisticsResult testAddConcreteObjectVsReflect(Matrix1 matrixConcrete1,
-                                                            Matrix1 matrixConcrete2,
-                                                            int dim) {
-        List<Long> reflectionTimes = new ArrayList<>();
-        List<Long> objectTimes = new ArrayList<>();
-
-        // Warm-up – wykonywane kilka razy przed pomiarem
-        for (int i = 0; i < 3; i++) {
-            matrixConcrete1.add(matrixConcrete2);
-            MatrixReflectionUtil.performOperation2(matrixConcrete1, matrixConcrete2 , "add");
-        }
-
-        // Główne pomiary
-        for (int i = 0; i < RUNS; i++) {
-            // Pomiar operacji refleksyjnej
-            long startReflection = System.nanoTime();
-            MatrixReflectionUtil.performOperation2(matrixConcrete1, matrixConcrete2, "add");
-            long endReflection = System.nanoTime();
-            reflectionTimes.add(endReflection - startReflection);
-
-            // Pomiar operacji obiektowej
-            long startObject = System.nanoTime();
-            matrixConcrete1.add(matrixConcrete2);
-            long endObject = System.nanoTime();
-            objectTimes.add(endObject - startObject);
-        }
-
-        String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_and_object_concrete" + dim + ".txt";
-        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
-        String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "add", dim);
-        System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
 
     }
+
+
 
 
     public void performTestGeneric() {
@@ -438,5 +364,22 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         }
         return new StatisticsResult(operation, dimension, genericMean, genericMedian, genericMode, genericStd,
                 concreteMean, concreteMedian, concreteMode, concreteStd, ratio);
+    }
+
+    void saveAggregatedStatisticsToFile() {
+        String filename = CHARTS_DIR + "/aggregated_statistics_Generic.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("Operacja\tDim\tGen_Mean(ns)\tGen_Median(ns)\tGen_Mode(ns)\tGen_StdDev(ns)\t" +
+                    "Con_Mean(ns)\tCon_Median(ns)\tCon_Mode(ns)\tCon_StdDev(ns)\tRatio\n");
+            for (StatisticsResult sr : aggregatedResults) {
+                writer.write(String.format(
+                        "%s\t%d\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\n",
+                        sr.operation, sr.dimension, sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
+                        sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev, sr.ratio
+                ));
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving aggregated statistics: " + e.getMessage());
+        }
     }
 }

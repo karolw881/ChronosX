@@ -19,9 +19,9 @@ import javax.imageio.ImageIO;
 
 public  class PerformanceTestMatrix {
     // Directory constants
-    protected static final String INPUT_DIR = "test_dataGG/input/concrete/matrix/";
-    protected static final String OUTPUT_DIR = "test_dataGG/output/concrete/matrix/";
-    protected static final String CHARTS_DIR = "test_dataGG/output/concrete/matrix/wynik/";
+    protected static final String INPUT_DIR = "test_dataGG/input/matrix/";
+    protected static final String OUTPUT_DIR = "test_dataGG/output/matrix/";
+    protected static final String CHARTS_DIR = "test_dataGG/output/matrix/wynik/";
 
     // Number of test runs for each case
     protected static final int RUNS = 100;

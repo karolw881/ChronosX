@@ -3,6 +3,7 @@ package org.magister;
 
 import org.magister.bubbleSort.PerformanceTestBubbleSort;
 import org.magister.matrix.PerformanceTestMatrix;
+import org.magister.matrix.PerformanceTestMatrixConcreteReflectionVsObject;
 import org.magister.matrix.PerformanceTestMatrixGenericofReflectionVsObject;
 import org.magister.vector.PerformanceTestVector;
 
@@ -20,9 +21,11 @@ public class Main {
         // performanceTestBubbleSort.performTests();
 
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
-        //performanceTestMatrixGenericofReflectionVsObject.runTest();
+        performanceTestMatrixGenericofReflectionVsObject.runTest();
 
-        performanceTestMatrixGenericofReflectionVsObject.performTestConcrete();
+        PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
+        performanceTestMatrixConcreteReflectionVsObject.runTest();
+
 
 
     }
