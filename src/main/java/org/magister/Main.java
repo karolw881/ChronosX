@@ -9,18 +9,21 @@ import org.magister.vector.PerformanceTestVector;
 public class Main {
     public static void main(String[] args) {
         PerformanceTestMatrix performanceTestMatrix = new PerformanceTestMatrix();
-        performanceTestMatrix.performTests();
+     //   performanceTestMatrix.performTests();
 
 
         PerformanceTestVector performanceTestVector = new PerformanceTestVector();
-     //   performanceTestVector.performTests();
+     ///   performanceTestVector.performTests();
 
 
         PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
         // performanceTestBubbleSort.performTests();
 
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
-        performanceTestMatrixGenericofReflectionVsObject.runTest();
+        //performanceTestMatrixGenericofReflectionVsObject.runTest();
+
+        performanceTestMatrixGenericofReflectionVsObject.performTestConcrete();
+
 
     }
 }

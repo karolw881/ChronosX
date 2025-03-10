@@ -1,6 +1,7 @@
 package org.magister.matrix;
 
 import org.magister.helper.IntegerOperations;
+import org.magister.helper.StatisticsResult;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -18,16 +19,17 @@ import javax.imageio.ImageIO;
 
 public  class PerformanceTestMatrix {
     // Directory constants
-    protected static final String INPUT_DIR = "test_dataG/input/matrix/";
-    protected static final String OUTPUT_DIR = "test_dataG/output/matrix/";
-    protected static final String CHARTS_DIR = "test_dataG/output/matrix/wynik/";
+    protected static final String INPUT_DIR = "test_dataGG/input/concrete/matrix/";
+    protected static final String OUTPUT_DIR = "test_dataGG/output/concrete/matrix/";
+    protected static final String CHARTS_DIR = "test_dataGG/output/concrete/matrix/wynik/";
 
     // Number of test runs for each case
     protected static final int RUNS = 100;
 
     // Matrix dimensions to test
-  //  protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 , 1000, 2000 };
-    protected static final int[] DIMENSIONS = {  100,50,10,6,5,4,3,2,1 };
+   // protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 , 1000, 2000 };
+   // protected static final int[] DIMENSIONS = {  100,50,10,6,5,4,3,2,1 };
+    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 };
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -63,7 +65,7 @@ public  class PerformanceTestMatrix {
             // Zapisz macierze wejściowe do plików
             aggregatedResults.add(testSubtract(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
             aggregatedResults.add(testMultiply(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
-            aggregatedResults.add(testAddObjectVsReflect(matrix1Generic, matrix2Generic ,  matrix1Concrete , matrix1Concrete ,   dim));
+            aggregatedResults.add(testAddGenericObjectVsReflect(matrix1Generic, matrix2Generic ,  matrix1Concrete , matrix1Concrete ,   dim));
 
         }
 
@@ -78,11 +80,11 @@ public  class PerformanceTestMatrix {
     }
 
 
-    StatisticsResult testAddObjectVsReflect(Matrix<Integer> matrix1,
-                                            Matrix<Integer> matrix2,
-                                            Matrix1 matrix1Concrete,
-                                            Matrix1 matrix2Concrete,
-                                            int dim) {
+    StatisticsResult testAddGenericObjectVsReflect(Matrix<Integer> matrix1,
+                                                   Matrix<Integer> matrix2,
+                                                   Matrix1 matrix1Concrete,
+                                                   Matrix1 matrix2Concrete,
+                                                   int dim) {
         List<Long> objectTester = new ArrayList<>();
         List<Long> reflectionTester = new ArrayList<>();
 
@@ -660,42 +662,14 @@ public  class PerformanceTestMatrix {
         g.dispose();
     }
 
-    StatisticsResult testAddObjectVsReflect(Matrix<Integer> matrix1,
-                                            Matrix<Integer> matrix2,
-                                            int dim) {
+    StatisticsResult testAddGenericObjectVsReflect(Matrix<Integer> matrix1,
+                                                   Matrix<Integer> matrix2,
+                                                   int dim) {
         return null;
     }
 
     /**
      * Klasa przechowująca zagregowane statystyki dla danej operacji i wymiaru macierzy.
      */
-    static class StatisticsResult {
-        String operation;
-        int dimension;
-        double genericMean;
-        double genericMedian;
-        long genericMode;
-        double genericStdDev;
-        double concreteMean;
-        double concreteMedian;
-        long concreteMode;
-        double concreteStdDev;
-        double ratio;
 
-        public StatisticsResult(String operation, int dimension, double genericMean, double genericMedian, long genericMode,
-                                double genericStdDev, double concreteMean, double concreteMedian, long concreteMode,
-                                double concreteStdDev, double ratio) {
-            this.operation = operation;
-            this.dimension = dimension;
-            this.genericMean = genericMean;
-            this.genericMedian = genericMedian;
-            this.genericMode = genericMode;
-            this.genericStdDev = genericStdDev;
-            this.concreteMean = concreteMean;
-            this.concreteMedian = concreteMedian;
-            this.concreteMode = concreteMode;
-            this.concreteStdDev = concreteStdDev;
-            this.ratio = ratio;
-        }
-    }
 }

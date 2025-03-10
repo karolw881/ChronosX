@@ -1,8 +1,8 @@
 package org.magister.matrix;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,18 +34,19 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
     public void runTest() {
         // Czyszczenie poprzednich wyników
         aggregatedResults.clear();
-        performTest();
+        performTestGeneric();
+        aggregatedResults.clear();
+        performTestConcrete();
     }
 
-
-    public void performTest() {
+    public void performTestConcrete() {
         // Testujemy dla każdego wymiaru macierzy
         for (int dim : DIMENSIONS) {
             System.out.println("Testing matrix of dimension " + dim + "x" + dim);
 
             // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
-            Matrix<Integer> matrixGenericReflectFirst = createRandomMatrix(dim, 0L);
-            Matrix<Integer> matrixGenericReflectSecond = createRandomMatrix(dim, 1L);
+            Matrix1 matrixConcrete1 = createRandomMatrix1(dim, 0L);
+            Matrix1 matrixConcrete2 = createRandomMatrix1(dim, 1L);
 
             // Tworzenie katalogów wejściowych, wyjściowych, wykresów oraz dodatkowego katalogu "wyniki"
             createDirectoriesIfNotExists(INPUT_DIR);
@@ -54,45 +55,205 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             createDirectoriesIfNotExists("wyniki");
 
             // Zapisujemy macierze wejściowe do plików
-            saveMatrixToFile(matrixGenericReflectFirst, INPUT_DIR + "matrix1_generic_reflect" + dim + ".txt");
-            saveMatrixToFile(matrixGenericReflectSecond, INPUT_DIR + "matrix2_generic_object" + dim + ".txt");
+            saveMatrix1ToFile( matrixConcrete1, INPUT_DIR + "matrix1_concrete" + dim + ".txt");
+            saveMatrix1ToFile(matrixConcrete2, INPUT_DIR + "matrix2_concrete" + dim + ".txt");
 
             // Porównanie i zapis macierzy
-            porownajIMZapiszMacierze2(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
+            //  saveMatrixComparerToFile(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
 
-            // Test operacji dodawania oraz agregacja statystyk
 
-            aggregatedResults.add(testAddObjectVsReflect(matrixGenericReflectFirst, matrixGenericReflectSecond, dim));
-            //aggregatedResults.add(testSubstractObjectVsReflect(matrixGenericReflectFirst, matrixGenericReflectSecond, dim));
-           // aggregatedResults.add(testMultiplyObjec\VsReflect(matrixGenericReflectFirst, matrixGenericReflectSecond, dim));
-          //  aggregatedResults.add(testDivideObjectVsReflect(matrixGenericReflectFirst, matrixGenericReflectSecond, dim));
+
+            aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+           // aggregatedResults.add(testSubstractGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+           // aggregatedResults.add(testMultiplyGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+           // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
 
         }
 
         // Wyświetlamy i zapisujemy zagregowane statystyki
         displayDetailedStatistics();
-             saveAggregatedStatisticsToFile();
+        saveAggregatedStatisticsToFile();
 
         // Generowanie wykresów (jeśli wymagane)
         // generateCharts();
     }
 
+    private StatisticsResult testAddConcreteObjectVsReflect(Matrix1 matrixConcrete1,
+                                                            Matrix1 matrixConcrete2,
+                                                            int dim) {
+        List<Long> reflectionTimes = new ArrayList<>();
+        List<Long> objectTimes = new ArrayList<>();
+
+        // Warm-up – wykonywane kilka razy przed pomiarem
+        for (int i = 0; i < 3; i++) {
+            matrixConcrete1.add(matrixConcrete2);
+            MatrixReflectionUtil.performOperation2(matrixConcrete1, matrixConcrete2 , "add");
+        }
+
+        // Główne pomiary
+        for (int i = 0; i < RUNS; i++) {
+            // Pomiar operacji refleksyjnej
+            long startReflection = System.nanoTime();
+            MatrixReflectionUtil.performOperation2(matrixConcrete1, matrixConcrete2, "add");
+            long endReflection = System.nanoTime();
+            reflectionTimes.add(endReflection - startReflection);
+
+            // Pomiar operacji obiektowej
+            long startObject = System.nanoTime();
+            matrixConcrete1.add(matrixConcrete2);
+            long endObject = System.nanoTime();
+            objectTimes.add(endObject - startObject);
+        }
+
+        String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_and_object_concrete" + dim + ".txt";
+        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+        String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_and_object_concrete" + dim + ".txt";
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "add", dim);
+        System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
+        return stats;
+
+    }
+
+
+    public void performTestGeneric() {
+        // Testujemy dla każdego wymiaru macierzy
+        for (int dim : DIMENSIONS) {
+            System.out.println("Testing matrix of dimension " + dim + "x" + dim);
+
+            // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
+            Matrix<Integer> matrixGenericFirst = createRandomMatrix(dim, 0L);
+            Matrix<Integer> matrixGenericSecond = createRandomMatrix(dim, 1L);
+
+            // Tworzenie katalogów wejściowych, wyjściowych, wykresów oraz dodatkowego katalogu "wyniki"
+            createDirectoriesIfNotExists(INPUT_DIR);
+            createDirectoriesIfNotExists(OUTPUT_DIR);
+            createDirectoriesIfNotExists(CHARTS_DIR);
+            createDirectoriesIfNotExists("wyniki");
+
+            // Zapisujemy macierze wejściowe do plików
+            saveMatrixToFile(matrixGenericFirst, INPUT_DIR + "matrix1_generic" + dim + ".txt");
+            saveMatrixToFile(matrixGenericSecond, INPUT_DIR + "matrix2_generic" + dim + ".txt");
+
+            // Porównanie i zapis macierzy
+          //  saveMatrixComparerToFile(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
+
+
+
+            aggregatedResults.add(testAddGenericObjectVsReflect(matrixGenericFirst, matrixGenericSecond, dim));
+            aggregatedResults.add(testSubstractGenericObjectVsReflect(matrixGenericFirst, matrixGenericSecond, dim));
+            aggregatedResults.add(testMultiplyGenericObjectVsReflect(matrixGenericFirst, matrixGenericSecond, dim));
+            aggregatedResults.add(testDivideGenericObjectVsReflect(matrixGenericFirst, matrixGenericSecond, dim));
+
+        }
+
+        // Wyświetlamy i zapisujemy zagregowane statystyki
+        displayDetailedStatistics();
+        saveAggregatedStatisticsToFile();
+
+        // Generowanie wykresów (jeśli wymagane)
+        // generateCharts();
+    }
+
+    private StatisticsResult testDivideGenericObjectVsReflect(Matrix<Integer> matrix1,
+                                                              Matrix<Integer> matrix2,
+                                                              int dim) {
+        List<Long> reflectionTimes = new ArrayList<>();
+        List<Long> objectTimes = new ArrayList<>();
+
+        // Warm-up – wykonywane kilka razy przed pomiarem
+        for (int i = 0; i < 3; i++) {
+            matrix1.divide(matrix2);
+            MatrixReflectionUtil.performOperation(matrix1, matrix2, "divide");
+        }
+
+        // Główne pomiary
+        for (int i = 0; i < RUNS; i++) {
+            // Pomiar operacji refleksyjnej
+            long startReflection = System.nanoTime();
+            MatrixReflectionUtil.performOperation(matrix1, matrix2, "divide");
+            long endReflection = System.nanoTime();
+            reflectionTimes.add(endReflection - startReflection);
+
+            // Pomiar operacji obiektowej
+            long startObject = System.nanoTime();
+            matrix1.divide(matrix2);
+            long endObject = System.nanoTime();
+            objectTimes.add(endObject - startObject);
+        }
+
+        String resultsFilename = OUTPUT_DIR + "matrix_performance_divide_of_reflection_generic" + dim + ".txt";
+        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+        String statsFilename = OUTPUT_DIR + "matrix_statistics_divide_of_reflection_generic" + dim + ".txt";
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Divide", dim);
+        System.out.println("Divide results saved to " + resultsFilename + " and " + statsFilename);
+        return stats;
+
+    }
+
+    /**
+     *
+     * @param matrix1
+     * @param matrix2
+     * @param dim
+     * @return
+     */
+    private StatisticsResult testMultiplyGenericObjectVsReflect(
+            Matrix<Integer> matrix1,
+            Matrix<Integer> matrix2,
+            int dim) {
+
+
+        List<Long> reflectionTimes = new ArrayList<>();
+        List<Long> objectTimes = new ArrayList<>();
+
+        // Warm-up – wykonywane kilka razy przed pomiarem
+        for (int i = 0; i < 3; i++) {
+            matrix1.multiply(matrix2);
+            MatrixReflectionUtil.performOperation(matrix1, matrix2, "multiply");
+        }
+
+        // Główne pomiary
+        for (int i = 0; i < RUNS; i++) {
+            // Pomiar operacji refleksyjnej
+            long startReflection = System.nanoTime();
+            MatrixReflectionUtil.performOperation(matrix1, matrix2, "multiply");
+            long endReflection = System.nanoTime();
+            reflectionTimes.add(endReflection - startReflection);
+
+            // Pomiar operacji obiektowej
+            long startObject = System.nanoTime();
+            matrix1.multiply(matrix2);
+            long endObject = System.nanoTime();
+            objectTimes.add(endObject - startObject);
+        }
+
+        String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_of_reflection_generic" + dim + ".txt";
+        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+        String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_of_reflection_generic" + dim + ".txt";
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Multiply", dim);
+        System.out.println("Multiply results saved to " + resultsFilename + " and " + statsFilename);
+        return stats;
+
+
+
+    }
 
 
     @Override
     void displayDetailedStatistics() {
-       // System.out.println("XXXXXXXXXXXXXXXXXXXXXXx");
-        //System.out.println(aggregatedResults);
-        System.out.println("\n===== AGREGOWANE STATYSTYKI Generyki obiektowe versus Generyki refleksyjne  =====");
-        System.out.printf("%-10s %-8s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-10s\n",
+        System.out.println("\n===== AGREGOWANE STATYSTYKI Generyki obiektowe versus Generyki refleksyjne =====");
+        System.out.printf("%-10s %-5s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-10s\n",
                 "Operacja", "Dim", "Gen_Ref_Mean(ns)", "Gen_Ref_Median(ns)", "Gen_Ref_Mode(ns)", "Gen_Ref_StdDev(ns)",
                 "Gen_Object_Mean(ns)", "Gen_Object_Median(ns)", "Gen_Object_Mode(ns)", "Gen_Object_StdDev(ns)", "Ratio");
+
         for (StatisticsResult sr : aggregatedResults) {
-            System.out.printf("%-10s %-8d %-15.2f %-15.2f %-15d %-15.2f %-15.2f %-15.2f %-15d %-15.2f %-10.2f\n",
-                    sr.operation, sr.dimension, sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                    sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev, sr.ratio);
+            System.out.printf("%-10s %-5d %20.2f %20.2f %20d %20.2f %20.2f %20.2f %20d %20.2f %10.2f\n",
+                    sr.operation, sr.dimension,
+                    sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
+                    sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev,
+                    sr.ratio);
         }
-        System.out.println("==================================\n");
+        System.out.println("=========================================================================================");
     }
 
     private void createDirectoriesIfNotExists(String path) {
@@ -106,6 +267,9 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             }
         }
     }
+
+
+
 
     /**
      * Zapis wyników testów do pliku.
@@ -131,14 +295,58 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
     }
 
 
+    /**
+     *
+      * @param matrix1
+     * @param matrix2
+     * @param dim
+     * @return
+     */
+    StatisticsResult testSubstractGenericObjectVsReflect(
+            Matrix<Integer> matrix1,
+            Matrix<Integer> matrix2,
+            int dim
+    ){
+        List<Long> reflectionTimes = new ArrayList<>();
+        List<Long> objectTimes = new ArrayList<>();
+
+        // Warm-up – wykonywane kilka razy przed pomiarem
+        for (int i = 0; i < 3; i++) {
+          //  matrix1.subtract(matrix2);
+            MatrixReflectionUtil.performOperation(matrix1, matrix2, "subtract");
+        }
 
 
+        // Główne pomiary
+        for (int i = 0; i < RUNS; i++) {
+            // Pomiar operacji refleksyjnej
+            long startReflection = System.nanoTime();
+            MatrixReflectionUtil.performOperation(matrix1, matrix2, "subtract");
+            long endReflection = System.nanoTime();
+            reflectionTimes.add(endReflection - startReflection);
+
+            // Pomiar operacji obiektowej
+            long startObject = System.nanoTime();
+            matrix1.add(matrix2);
+            long endObject = System.nanoTime();
+            objectTimes.add(endObject - startObject);
+        }
+
+        String resultsFilename = OUTPUT_DIR + "matrix_performance_subtrac_of_reflection_generic" + dim + ".txt";
+        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+        String statsFilename = OUTPUT_DIR + "matrix_statistics_subtrac_of_reflection_generic" + dim + ".txt";
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Subtract", dim);
+        System.out.println("subtrac results saved to " + resultsFilename + " and " + statsFilename);
+        return stats;
+
+
+    }
 
 
     @Override
-    StatisticsResult testAddObjectVsReflect(Matrix<Integer> matrix1,
-                                            Matrix<Integer> matrix2,
-                                            int dim) {
+    StatisticsResult testAddGenericObjectVsReflect(Matrix<Integer> matrix1,
+                                                   Matrix<Integer> matrix2,
+                                                   int dim) {
         List<Long> reflectionTimes = new ArrayList<>();
         List<Long> objectTimes = new ArrayList<>();
 
@@ -171,7 +379,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         return stats;
     }
 
-    public void porownajIMZapiszMacierze2(int dimension, Matrix<Integer> matrixGeneric, Matrix<Integer> matrixOther) {
+    public void saveMatrixComparerToFile(int dimension, Matrix<Integer> matrixGeneric, Matrix<Integer> matrixOther) {
         File dir = new File("wyniki");
         if (!dir.exists()) {
             dir.mkdirs();

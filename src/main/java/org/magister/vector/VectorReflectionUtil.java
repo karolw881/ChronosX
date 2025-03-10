@@ -21,10 +21,10 @@ public class VectorReflectionUtil {
      * @param <T>           typ elementów wektora
      * @return wynik operacji jako nowy wektor
      */
-    public static <T extends Number > VectorR<T> performOperation(VectorR<T> vector1, VectorR<T> vector2, String operationName) {
+    public static <T extends Number > Vector<T> performOperation(Vector<T> vector1, Vector<T> vector2, String operationName) {
         try {
-            Method method = VectorR.class.getMethod(operationName, VectorR.class);
-            VectorR<T> result = (VectorR<T>) method.invoke(vector1, vector2);
+            Method method = Vector.class.getMethod(operationName, Vector.class);
+            Vector<T> result = (Vector<T>) method.invoke(vector1, vector2);
             return result;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Błąd podczas wykonywania operacji '" + operationName +
@@ -40,9 +40,9 @@ public class VectorReflectionUtil {
      * @param <T>     typ elementów wektora
      * @return iloczyn skalarny jako obiekt typu T
      */
-    public static <T extends Number> T calculateDotProduct(VectorR<T> vector1, VectorR<T> vector2) {
+    public static <T extends Number> T calculateDotProduct(Vector<T> vector1, Vector<T> vector2) {
         try {
-            Method method = VectorR.class.getMethod("dotProduct", VectorR.class);
+            Method method = Vector.class.getMethod("dotProduct", Vector.class);
             T result = (T) method.invoke(vector1, vector2);
             return result;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

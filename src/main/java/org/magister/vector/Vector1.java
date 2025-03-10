@@ -3,14 +3,14 @@ package org.magister.vector;
 
 
 // Implementacja konkretna dla liczb całkowitych
-public class IntVector {
+public class Vector1 {
     private int[] coordinates;
 
-    public IntVector(int[] coordinates) {
+    public Vector1(int[] coordinates) {
         this.coordinates = coordinates.clone();
     }
 
-    public IntVector addVector(IntVector other) {
+    public Vector1 addVector(Vector1 other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Vectors must have same dimension");
         }
@@ -18,23 +18,23 @@ public class IntVector {
         for (int i = 0; i < coordinates.length; i++) {
             result[i] = this.coordinates[i] + other.coordinates[i];
         }
-        return new IntVector(result);
+        return new Vector1(result);
     }
 
-    public IntVector opposite() {
+    public Vector1 opposite() {
         int[] result = new int[coordinates.length];
         for (int i = 0; i < coordinates.length; i++) {
             result[i] = -coordinates[i];
         }
-        return new IntVector(result);
+        return new Vector1(result);
     }
 
-    public IntVector subVector(IntVector other) {
+    public Vector1 subVector(Vector1 other) {
         // Metoda 1: bezpośrednie odejmowanie
         return this.addVector(other.opposite());
     }
 
-    public IntVector subVectorDirect(IntVector other) {
+    public Vector1 subVectorDirect(Vector1 other) {
         // Metoda 2: bezpośrednie odejmowanie
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Vectors must have same dimension");
@@ -43,18 +43,18 @@ public class IntVector {
         for (int i = 0; i < coordinates.length; i++) {
             result[i] = this.coordinates[i] - other.coordinates[i];
         }
-        return new IntVector(result);
+        return new Vector1(result);
     }
 
-    public IntVector multiplyByScalar(int scalar) {
+    public Vector1 multiplyByScalar(int scalar) {
         int[] result = new int[coordinates.length];
         for (int i = 0; i < coordinates.length; i++) {
             result[i] = coordinates[i] * scalar;
         }
-        return new IntVector(result);
+        return new Vector1(result);
     }
 
-    public int dotProduct(IntVector other) {
+    public int dotProduct(Vector1 other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Vectors must have same dimension");
         }

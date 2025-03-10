@@ -20,6 +20,19 @@ public class MatrixReflectionUtil {
         }
     }
 
+    public static  Matrix1 performOperation2(Matrix1 matrix1, Matrix1 matrix2, String operationName) {
+        try {
+            Method method = Matrix1.class.getMethod(operationName, Matrix1.class);
+            Matrix1 result = (Matrix1) method.invoke(matrix1, matrix2);
+            return result;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException("Błąd podczas wykonywania operacji za pomocą refleksji: " + e.getMessage(), e);
+        }
+    }
+
+
+
+
     // Sprawdzenie odwracalności za pomocą refleksji
     public static <T extends Number> boolean checkInvertibility(Matrix<T> matrix) {
         try {
