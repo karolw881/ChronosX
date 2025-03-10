@@ -28,6 +28,7 @@ public class Matrix1OperationTest {
         Matrix1 result = matrixA.add(matrixB);
         int[][] expected = { {6, 8}, {10, 12} };
         assert2dArrayEquals("Dodawanie 2x2", expected, result.getData());
+
     }
 
     @Test
