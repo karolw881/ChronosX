@@ -7,8 +7,10 @@ import org.magister.matrix.PerformanceTestMatrixConcreteReflectionVsObject;
 import org.magister.matrix.PerformanceTestMatrixGenericofReflectionVsObject;
 import org.magister.vector.PerformanceTestVector;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         PerformanceTestMatrix performanceTestMatrix = new PerformanceTestMatrix();
      //   performanceTestMatrix.performTests();
 
@@ -18,13 +20,13 @@ public class Main {
 
 
         PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
-        // performanceTestBubbleSort.performTests();
+       //  performanceTestBubbleSort.performTests();
 
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
         performanceTestMatrixGenericofReflectionVsObject.runTest();
 
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-        performanceTestMatrixConcreteReflectionVsObject.runTest();
+     //   performanceTestMatrixConcreteReflectionVsObject.runTest();
 
 
 

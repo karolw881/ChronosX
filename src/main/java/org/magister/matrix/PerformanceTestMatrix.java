@@ -21,7 +21,7 @@ public  class PerformanceTestMatrix {
     // Directory constants
     protected static final String INPUT_DIR = "test_dataGG/input/matrix/";
     protected static final String OUTPUT_DIR = "test_dataGG/output/matrix/";
-    protected static final String CHARTS_DIR = "test_dataGG/output/matrix/wynik/";
+    protected static final String CHARTS_DIR = "test_dataGG/output/matrix/wykres/";
 
     // Number of test runs for each case
     protected static final int RUNS = 100;
@@ -29,7 +29,7 @@ public  class PerformanceTestMatrix {
     // Matrix dimensions to test
    // protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 , 1000, 2000 };
    // protected static final int[] DIMENSIONS = {  100,50,10,6,5,4,3,2,1 };
-    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 };
+    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 20, 30, 60 , 100 , 150 , 200 };
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -420,8 +420,8 @@ public  class PerformanceTestMatrix {
                 "Con_Mean(ns)", "Con_Median(ns)", "Con_Mode(ns)", "Con_StdDev(ns)", "Ratio");
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-8d %-15.2f %-15.2f %-15d %-15.2f %-15.2f %-15.2f %-15d %-15.2f %-10.2f\n",
-                    sr.operation, sr.dimension, sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                    sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev, sr.ratio);
+                    sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
+                    sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio);
         }
         System.out.println("==================================\n");
     }
@@ -437,8 +437,8 @@ public  class PerformanceTestMatrix {
             for (StatisticsResult sr : aggregatedResults) {
                 writer.write(String.format(
                         "%s\t%d\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\n",
-                        sr.operation, sr.dimension, sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                        sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev, sr.ratio
+                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
+                        sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio
                 ));
             }
         } catch (IOException e) {
@@ -473,8 +473,8 @@ public  class PerformanceTestMatrix {
         for (StatisticsResult sr : aggregatedResults) {
             String label = sr.operation + " (" + sr.dimension + "x" + sr.dimension + ")";
             categories.add(label);
-            genericValues.add(sr.genericMean);
-            concreteValues.add(sr.concreteMean);
+            genericValues.add(sr.reflectMean);
+            concreteValues.add(sr.objectMean);
         }
 
         // Znajdź maksymalną wartość do skalowania
@@ -632,8 +632,8 @@ public  class PerformanceTestMatrix {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
 
-        double totalGeneric = aggregatedResults.stream().mapToDouble(sr -> sr.genericMean).sum();
-        double totalConcrete = aggregatedResults.stream().mapToDouble(sr -> sr.concreteMean).sum();
+        double totalGeneric = aggregatedResults.stream().mapToDouble(sr -> sr.reflectMean).sum();
+        double totalConcrete = aggregatedResults.stream().mapToDouble(sr -> sr.objectMean).sum();
         double total = totalGeneric + totalConcrete;
         int angleGeneric = (int) Math.round((totalGeneric / total) * 360);
         int angleConcrete = 360 - angleGeneric;
