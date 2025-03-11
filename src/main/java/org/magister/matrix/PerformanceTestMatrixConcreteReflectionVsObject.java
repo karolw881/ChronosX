@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
+
 @Getter
 @Setter
 public class PerformanceTestMatrixConcreteReflectionVsObject extends PerformanceTestMatrix {
-    private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "GenericOfReflectionVsObject/";
-    private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "GenericOfReflectionVsObject/";
-    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "GenericOfReflectionVsObject/";
+    private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
     private static final int RUNS = PerformanceTestMatrix.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestMatrix.DIMENSIONS;
     //  private final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -195,8 +196,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-5d %20.2f %20.2f %20d %20.2f %20.2f %20.2f %20d %20.2f %10.2f\n",
                     sr.operation, sr.dimension,
-                    sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                    sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev,
+                    sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
+                    sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev,
                     sr.ratio);
         }
         System.out.println("=========================================================================================");
@@ -296,8 +297,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             for (StatisticsResult sr : aggregatedResults) {
                 writer.write(String.format(
                         "%s\t%d\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\n",
-                        sr.operation, sr.dimension, sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                        sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev, sr.ratio
+                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
+                        sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio
                 ));
             }
         } catch (IOException e) {

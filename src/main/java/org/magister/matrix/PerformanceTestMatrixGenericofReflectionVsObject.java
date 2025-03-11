@@ -2,6 +2,8 @@ package org.magister.matrix;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.Styler;
 import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
@@ -12,13 +14,16 @@ import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
+
+
+
 @Getter
 @Setter
 public class PerformanceTestMatrixGenericofReflectionVsObject extends PerformanceTestMatrix {
 
-    private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "ConcreteOfReflectionVsObject/";
-    private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "ConcreteOfReflectionVsObject/";
-    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "GenericOfReflectionVsObject/";
+    private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "GenericOfReflectionVsObject/";
+    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "GenericOfReflectionVsObject/";
     private static final int RUNS = PerformanceTestMatrix.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestMatrix.DIMENSIONS;
   //  private final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -31,10 +36,15 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
 
 
-    public void runTest() {
+    public void runTest() throws IOException {
         // Czyszczenie poprzednich wyników
         aggregatedResults.clear();
         performTestGeneric();
+       // createLineChartForMedian(aggregatedResults , "a" , "b" , "c");
+       // showOrSaveLineChartForMean(aggregatedResults);
+       // createBarChartForRatio(aggregatedResults , "a" , "b" , "c");
+        showOrSaveBarChartForRatio(aggregatedResults );
+        showOrSaveChartRatioVsDim(aggregatedResults);
 
     }
 
@@ -175,8 +185,8 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-5d %20.2f %20.2f %20d %20.2f %20.2f %20.2f %20d %20.2f %10.2f\n",
                     sr.operation, sr.dimension,
-                    sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                    sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev,
+                    sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
+                    sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev,
                     sr.ratio);
         }
         System.out.println("=========================================================================================");
@@ -348,7 +358,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             writer.write(String.format("Max: %d ns\n", (long) genericStats.getMax()));
             writer.write(String.format("Standard Deviation: %.2f ns\n", genericStd));
             writer.write("\n");
-            writer.write("Statistics for generic Reflect implementation (Matrix<Integer>:\n");
+            writer.write("Statistics for generic object implementation (Matrix<Integer>:\n");
             writer.write(String.format("Mean: %.2f ns\n", concreteMean));
             writer.write(String.format("Median: %.2f ns\n", concreteMedian));
             writer.write(String.format("Mode: %d ns\n", concreteMode));
@@ -374,12 +384,100 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             for (StatisticsResult sr : aggregatedResults) {
                 writer.write(String.format(
                         "%s\t%d\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\n",
-                        sr.operation, sr.dimension, sr.genericMean, sr.genericMedian, sr.genericMode, sr.genericStdDev,
-                        sr.concreteMean, sr.concreteMedian, sr.concreteMode, sr.concreteStdDev, sr.ratio
+                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
+                        sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio
                 ));
             }
         } catch (IOException e) {
             System.err.println("Error saving aggregated statistics: " + e.getMessage());
         }
     }
+
+
+
+
+
+    public static CategoryChart createBarChartForRatio(List<StatisticsResult> results,
+                                                       String chartTitle,
+                                                       String xAxisTitle,
+                                                       String yAxisTitle) {
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        chart.getStyler().setXAxisLabelRotation(90);
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+
+        List<String> xLabels = results.stream()
+                .map(r -> "(D=" + r.dimension + ")(Op=" + r.operation+")")
+                .toList();
+
+        List<Double> ratioValues = results.stream().map(r -> r.ratio).toList();
+
+        chart.addSeries("Gen Ref/Gen Obj Ratio", xLabels, ratioValues);
+
+        return chart;
+    }
+
+    public static void showOrSaveBarChartForRatio(List<StatisticsResult> results) throws IOException {
+        CategoryChart chart = createBarChartForRatio(
+                results,
+                "Porównanie Mean (Gen Ref vs. Gen Obj)",
+                "Wymiar",
+                "Czas [ns]"
+        );
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR+"ratio_bar_chart.png", BitmapEncoder.BitmapFormat.PNG);
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
+    public static XYChart createChartRatioVsDim(List<StatisticsResult> results,
+                                                String chartTitle,
+                                                String xAxisTitle,
+                                                String yAxisTitle) {
+        // Filtruj wyniki, zostawiając tylko operacje "add"
+        List<StatisticsResult> addResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .toList();
+
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Na osi X umieszczamy ratio, a na osi Y wymiar (dim)
+        double[] xData = addResults.stream().mapToDouble(r -> r.ratio).toArray();
+        double[] yData = addResults.stream().mapToDouble(r -> r.dimension).toArray();
+
+        chart.addSeries("Dim vs. Ratio", xData, yData);
+
+        return chart;
+    }
+
+    public static void showOrSaveChartRatioVsDim(List<StatisticsResult> results) throws IOException {
+        XYChart chart = createChartRatioVsDim(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji add",
+                "Ratio (Gen Ref / Gen Obj)",
+                "Wymiar (Dim)"
+        );
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chart.png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
+
+
 }

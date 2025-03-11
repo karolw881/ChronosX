@@ -3,29 +3,29 @@ package org.magister.helper;
  public  class StatisticsResult {
     public String operation;
     public  int dimension;
-    public   double genericMean;
-     public   double  genericMedian;
-     public long genericMode;
-     public double genericStdDev;
-     public double concreteMean;
-     public double concreteMedian;
-     public long concreteMode;
-     public double concreteStdDev;
+    public   double reflectMean;
+     public   double reflectMedian;
+     public long reflectMode;
+     public double reflectStdDev;
+     public double objectMean;
+     public double objectMedian;
+     public long objectMode;
+     public double objectStdDev;
      public double ratio;
 
-    public StatisticsResult(String operation, int dimension, double genericMean, double genericMedian, long genericMode,
-                            double genericStdDev, double concreteMean, double concreteMedian, long concreteMode,
-                            double concreteStdDev, double ratio) {
+    public StatisticsResult(String operation, int dimension, double reflectMean, double reflectMedian, long reflectMode,
+                            double reflectStdDev, double objectMean, double objectMedian, long objectMode,
+                            double objectStdDev, double ratio) {
         this.operation = operation;
         this.dimension = dimension;
-        this.genericMean = genericMean;
-        this.genericMedian = genericMedian;
-        this.genericMode = genericMode;
-        this.genericStdDev = genericStdDev;
-        this.concreteMean = concreteMean;
-        this.concreteMedian = concreteMedian;
-        this.concreteMode = concreteMode;
-        this.concreteStdDev = concreteStdDev;
+        this.reflectMean = reflectMean;
+        this.reflectMedian = reflectMedian;
+        this.reflectMode = reflectMode;
+        this.reflectStdDev = reflectStdDev;
+        this.objectMean = objectMean;
+        this.objectMedian = objectMedian;
+        this.objectMode = objectMode;
+        this.objectStdDev = objectStdDev;
         this.ratio = ratio;
     }
 }
