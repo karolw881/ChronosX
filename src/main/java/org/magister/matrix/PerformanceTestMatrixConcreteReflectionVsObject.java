@@ -43,8 +43,15 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             System.out.println("Testing matrix of dimension " + dim + "x" + dim);
 
             // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
-            Matrix1 matrixConcrete1 = createRandomMatrix1(dim, 0L);
-            Matrix1 matrixConcrete2 = createRandomMatrix1(dim, 1L);
+         //   Matrix1 matrixConcrete1 = createRandomMatrix1(dim, 0L);
+          //  Matrix1 matrixConcrete2 = createRandomMatrix1(dim, 1L);
+
+
+
+            Matrix1Generator matrix1Generator = new Matrix1Generator();
+            Matrix1 matrixConcrete1 = matrix1Generator.createIdentityMatrix(dim);
+            Matrix1 matrixConcrete2 = matrix1Generator.createIdentityMatrix(dim);
+
 
             // Tworzenie katalogów wejściowych, wyjściowych, wykresów oraz dodatkowego katalogu "wyniki"
             createDirectoriesIfNotExists(INPUT_DIR);
@@ -61,10 +68,10 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
 
 
-            aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+             aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
              aggregatedResults.add(testSubstractConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
              aggregatedResults.add(testMultiplyConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-            // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+             // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
 
         }
 
@@ -201,6 +208,11 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
                     sr.ratio);
         }
         System.out.println("=========================================================================================");
+    }
+
+    @Override
+    StatisticsResult calculateAndSaveStatistics(List<Long> genericReflectTimes, List<Long> GenericObjectTimes, String filename, String operation, int dimension, KindOfMatrix kind) {
+        return null;
     }
 
     private void createDirectoriesIfNotExists(String path) {

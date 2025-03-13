@@ -1,0 +1,18 @@
+Statistics for generic Reflect implementation (Matrix<Integer>):
+Mean: 3202,95 ns
+Median: 2600,00 ns
+Mode: 2600 ns
+Min: 2200 ns
+Max: 18800 ns
+Standard Deviation: 2413,52 ns
+
+Statistics for generic object implementation (Matrix<Integer>:
+Mean: 1474,00 ns
+Median: 1499,00 ns
+Mode: 1500 ns
+Min: 1000 ns
+Max: 3600 ns
+Standard Deviation: 371,39 ns
+
+Ratio of mean times (generic reflect /generic object): 2,17
+Performance difference: Concrete implementation is 2,17 times faster than generic

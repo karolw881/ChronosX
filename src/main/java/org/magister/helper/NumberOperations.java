@@ -7,4 +7,5 @@ public interface NumberOperations<T extends Number> {
     T divide(T a, T b);
     T zero();
     T one();
+    T valueOf(int value);
 }

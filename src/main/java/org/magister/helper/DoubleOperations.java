@@ -33,4 +33,9 @@ public class DoubleOperations implements NumberOperations<Double> {
     public Double one() {
         return 1.0;
     }
+
+    @Override
+    public Double valueOf(int value) {
+        return Double.valueOf(value);
+    }
 }
