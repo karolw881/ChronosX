@@ -25,8 +25,14 @@ public class Main {
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
         performanceTestMatrixGenericofReflectionVsObject.runTest();
 
+
+
+
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-     //   performanceTestMatrixConcreteReflectionVsObject.runTest();
+       // performanceTestMatrixConcreteReflectionVsObject.runTest();
+
+
+
 
 
 

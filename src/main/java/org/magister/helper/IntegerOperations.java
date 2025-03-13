@@ -35,4 +35,9 @@ public class IntegerOperations implements NumberOperations<Integer> {
     public Integer one() {
         return 1;
     }
+
+    @Override
+    public Integer valueOf(int value) {
+        return Integer.valueOf(value);
+    }
 }
