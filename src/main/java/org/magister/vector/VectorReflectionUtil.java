@@ -21,7 +21,7 @@ public class VectorReflectionUtil {
      * @param <T>           typ elementów wektora
      * @return wynik operacji jako nowy wektor
      */
-    public static <T extends Number > Vector<T> performOperation(Vector<T> vector1, Vector<T> vector2, String operationName) {
+    public static <T extends Number > Vector<T> performOperationReflectVector(Vector<T> vector1, Vector<T> vector2, String operationName) {
         try {
             Method method = Vector.class.getMethod(operationName, Vector.class);
             Vector<T> result = (Vector<T>) method.invoke(vector1, vector2);
@@ -32,23 +32,17 @@ public class VectorReflectionUtil {
         }
     }
 
-    /**
-     * Wywołuje metodę dotProduct na wektorach za pomocą refleksji.
-     *
-     * @param vector1 pierwszy wektor
-     * @param vector2 drugi wektor
-     * @param <T>     typ elementów wektora
-     * @return iloczyn skalarny jako obiekt typu T
-     */
-    public static <T extends Number> T calculateDotProduct(Vector<T> vector1, Vector<T> vector2) {
+
+    public static Vector1 performOperationReflectVector1(Vector1 vector1, Vector1 vector2, String operation){
         try {
-            Method method = Vector.class.getMethod("dotProduct", Vector.class);
-            T result = (T) method.invoke(vector1, vector2);
+            Method method = Vector1.class.getMethod(operation, Vector.class);
+            Vector1 result = (Vector1) method.invoke(vector1, vector2);
             return result;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Błąd podczas obliczania iloczynu skalarnego wektorów za pomocą refleksji: "
-                    + e.getMessage(), e);
+            throw new RuntimeException("Błąd podczas wykonywania operacji '" + operation +
+                    "' na wektorach za pomocą refleksji: " + e.getMessage(), e);
         }
     }
+
 }
 

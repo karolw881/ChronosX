@@ -2,6 +2,9 @@ package org.magister.matrix;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.Styler;
+import org.magister.helper.IntegerOperations;
 import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
@@ -11,6 +14,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.magister.matrix.PerformanceTestMatrixGenericofReflectionVsObject.showOrSaveBarChartForRatioWithKind;
 
 
 @Getter
@@ -31,61 +38,82 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
 
 
-    public void runTest() {
+    public void runTest() throws IOException {
 
         aggregatedResults.clear();
         performTestConcrete();
-    }
-
-    public void performTestConcrete() {
-        // Testujemy dla każdego wymiaru macierzy
-        for (int dim : DIMENSIONS) {
-            System.out.println("Testing matrix of dimension " + dim + "x" + dim);
-
-            // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
-         //   Matrix1 matrixConcrete1 = createRandomMatrix1(dim, 0L);
-          //  Matrix1 matrixConcrete2 = createRandomMatrix1(dim, 1L);
 
 
+        for(KindOfMatrix kindOfMatrix : KindOfMatrix.values()){
 
-            Matrix1Generator matrix1Generator = new Matrix1Generator();
-            Matrix1 matrixConcrete1 = matrix1Generator.createIdentityMatrix(dim);
-            Matrix1 matrixConcrete2 = matrix1Generator.createIdentityMatrix(dim);
-
-
-            // Tworzenie katalogów wejściowych, wyjściowych, wykresów oraz dodatkowego katalogu "wyniki"
-            createDirectoriesIfNotExists(INPUT_DIR);
-            createDirectoriesIfNotExists(OUTPUT_DIR);
-            createDirectoriesIfNotExists(CHARTS_DIR);
-            createDirectoriesIfNotExists("wyniki");
-
-            // Zapisujemy macierze wejściowe do plików
-            saveMatrix1ToFile( matrixConcrete1, INPUT_DIR + "matrix1_concrete" + dim + ".txt");
-            saveMatrix1ToFile(matrixConcrete2, INPUT_DIR + "matrix2_concrete" + dim + ".txt");
-
-            // Porównanie i zapis macierzy
-            //  saveMatrixComparerToFile(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
-
-
-
-             aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-             aggregatedResults.add(testSubstractConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-             aggregatedResults.add(testMultiplyConcreteObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
-             // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+            showOrSaveBarChartForRatioWithKind(aggregatedResults,kindOfMatrix);
 
         }
 
+        showOrSaveChartRatioVsDim2ForAdd(aggregatedResults);
+        showOrSaveChartRatioVsDim2ForSub(aggregatedResults);
+        showOrSaveChartRatioVsDim2ForMultiply(aggregatedResults);
+
+
+    }
+
+
+    public void performTestConcrete() {
+        createDirectoriesIfNotExists(INPUT_DIR);
+        createDirectoriesIfNotExists(OUTPUT_DIR);
+        createDirectoriesIfNotExists(CHARTS_DIR);
+
+
+
+        // Utworz instancje
+        Matrix1Generator generator = new Matrix1Generator();
+
+
+
+        // Iterujemy po wszystkich typach macierzy
+        for (KindOfMatrix kind : KindOfMatrix.values()) {
+            // Testujemy dla każdego wymiaru macierzy
+            for (int dim : DIMENSIONS) {
+                System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
+
+
+                Matrix1 matrixConcreteFirst = generator.createMatrix1(kind,dim,0L);
+                Matrix1 matrixConcreteSecond = generator.createMatrix1(kind,dim,1L);
+
+
+
+
+                // Zapisujemy macierze wejściowe do plików
+                saveMatrix1ToFile(matrixConcreteFirst, INPUT_DIR + "matrix1_concrete_" + kind.toString().toLowerCase() + "_" + dim + ".txt");
+                saveMatrix1ToFile(matrixConcreteSecond, INPUT_DIR + "matrix2_concrete_" +  kind.toString().toLowerCase() + "_" +dim + ".txt");
+
+                // Porównanie i zapis macierzy
+                //  saveMatrixComparerToFile(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
+
+
+                aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
+                aggregatedResults.add(testSubstractConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
+                aggregatedResults.add(testMultiplyConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
+                // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+
+            }
+        }
         // Wyświetlamy i zapisujemy zagregowane statystyki
         displayDetailedStatistics();
         saveAggregatedStatisticsToFile();
 
-        // Generowanie wykresów (jeśli wymagane)
-        // generateCharts();
     }
+
+
+
+
+
+
 
     private StatisticsResult testMultiplyConcreteObjectVsReflect(Matrix1 matrixConcrete1,
                                                                  Matrix1 matrixConcrete2,
-                                                                 int dim) {
+                                                                 int dim ,
+                                                                 KindOfMatrix kindOfMatrix) {
         List<Long> reflectionTimes = new ArrayList<>();
         List<Long> objectTimes = new ArrayList<>();
 
@@ -113,7 +141,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_of_reflection_and_object_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim);
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
         System.out.println("multiply results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
@@ -121,7 +149,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
     private StatisticsResult testSubstractConcreteObjectVsReflect(Matrix1 matrixConcrete1,
                                                                   Matrix1 matrixConcrete2,
-                                                                  int dim) {
+                                                                  int dim,
+                                                                  KindOfMatrix kindOfMatrix) {
         List<Long> reflectionTimes = new ArrayList<>();
         List<Long> objectTimes = new ArrayList<>();
 
@@ -149,7 +178,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         String resultsFilename = OUTPUT_DIR + "matrix_performance_subtract_of_reflection_and_object_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_subtract_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim);
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim,kindOfMatrix);
         System.out.println("subtract results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
@@ -157,7 +186,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
     private StatisticsResult testAddConcreteObjectVsReflect(Matrix1 matrixConcrete1,
                                                             Matrix1 matrixConcrete2,
-                                                            int dim) {
+                                                            int dim,
+                                                            KindOfMatrix kindOfMatrix) {
         List<Long> reflectionTimes = new ArrayList<>();
         List<Long> objectTimes = new ArrayList<>();
 
@@ -185,7 +215,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_and_object_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "add", dim);
+        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "" +
+                "Add", dim,kindOfMatrix);
         System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
@@ -210,10 +241,6 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         System.out.println("=========================================================================================");
     }
 
-    @Override
-    StatisticsResult calculateAndSaveStatistics(List<Long> genericReflectTimes, List<Long> GenericObjectTimes, String filename, String operation, int dimension, KindOfMatrix kind) {
-        return null;
-    }
 
     private void createDirectoriesIfNotExists(String path) {
         File directory = new File(path);
@@ -258,7 +285,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
     @Override
     StatisticsResult calculateAndSaveStatistics(List<Long> genericReflectTimes, List<Long> GenericObjectTimes,
-                                                String filename, String operation, int dimension) {
+                                                String filename, String operation, int dimension , KindOfMatrix kind) {
         DoubleSummaryStatistics genericStats = genericReflectTimes.stream().mapToDouble(Long::doubleValue).summaryStatistics();
         DoubleSummaryStatistics concreteStats = GenericObjectTimes.stream().mapToDouble(Long::doubleValue).summaryStatistics();
 
@@ -281,7 +308,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             writer.write(String.format("Max: %d ns\n", (long) genericStats.getMax()));
             writer.write(String.format("Standard Deviation: %.2f ns\n", genericStd));
             writer.write("\n");
-            writer.write("Statistics for generic Reflect implementation (Matrix<Integer>:\n");
+            writer.write("Statistics for generic object implementation (Matrix<Integer>:\n");
             writer.write(String.format("Mean: %.2f ns\n", concreteMean));
             writer.write(String.format("Median: %.2f ns\n", concreteMedian));
             writer.write(String.format("Mode: %d ns\n", concreteMode));
@@ -296,7 +323,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             System.err.println("Error saving statistics to file: " + e.getMessage());
         }
         return new StatisticsResult(operation, dimension, genericMean, genericMedian, genericMode, genericStd,
-                concreteMean, concreteMedian, concreteMode, concreteStd, ratio);
+                concreteMean, concreteMedian, concreteMode, concreteStd, ratio , kind);
     }
 
 
@@ -317,4 +344,682 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             System.err.println("Error saving aggregated statistics: " + e.getMessage());
         }
     }
+
+
+    public static XYChart createChartRatioVsDim(List<StatisticsResult> results,
+                                                String chartTitle,
+                                                String xAxisTitle,
+                                                String yAxisTitle) {
+        // Filtruj wyniki, zostawiając tylko operacje "add"
+        List<StatisticsResult> addResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .toList();
+
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Na osi X umieszczamy ratio, a na osi Y wymiar (dim)
+        double[] xData = addResults.stream().mapToDouble(r -> r.ratio).toArray();
+        double[] yData = addResults.stream().mapToDouble(r -> r.dimension).toArray();
+
+        chart.addSeries("Dim vs. Ratio", xData, yData);
+
+        return chart;
+    }
+
+    public static void showOrSaveChartRatioVsDim(List<StatisticsResult> results) throws IOException {
+        XYChart chart = createChartRatioVsDim(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji add",
+                "Ratio (Gen Ref / Gen Obj)",
+                "Wymiar (Dim)"
+        );
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chart.png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+    public static CategoryChart createBarChartForRatioWithKind(List<StatisticsResult> results,
+                                                               String chartTitle,
+                                                               String xAxisTitle,
+                                                               String yAxisTitle) {
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+        chart.getStyler().setXAxisLabelRotation(90);
+
+        // Grupujemy wyniki po rodzaju macierzy
+        Map<KindOfMatrix, List<StatisticsResult>> groupedByKind = results.stream()
+                .collect(Collectors.groupingBy(r -> r.kindOfMatrix));
+
+        // Dla każdej grupy (danego KindOfMatrix) tworzymy osobną serię
+        for (Map.Entry<KindOfMatrix, List<StatisticsResult>> entry : groupedByKind.entrySet()) {
+            KindOfMatrix kind = entry.getKey();
+            List<StatisticsResult> kindResults = entry.getValue();
+
+            // Etykiety na osi X
+            List<String> xLabels = kindResults.stream()
+                    // .map(r -> "(D=" + r.dimension + ")(Op=" + r.operation + ")" + r.kindOfMatrix)
+                    .map(r ->  "" + r.kindOfMatrix)
+                    .toList();
+
+            // Wartości ratio (Gen Ref / Gen Obj)
+            List<Double> ratioValues = kindResults.stream()
+                    .map(r -> r.ratio)
+                    .toList();
+
+            // Dodajemy serię na wykresie
+            chart.addSeries(kind.name(), xLabels, ratioValues);
+        }
+
+        return chart;
+    }
+
+
+
+    public static XYChart createChartRatioVsDimWithKind(List<StatisticsResult> results,
+                                                        String chartTitle,
+                                                        String xAxisTitle,
+                                                        String yAxisTitle) {
+        // Przykład: filtrujemy tylko operację "add"
+        List<StatisticsResult> addResults = results.stream()
+                .filter(r -> "add".equalsIgnoreCase(r.operation))
+                .toList();
+
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Grupujemy po rodzaju macierzy
+        Map<KindOfMatrix, List<StatisticsResult>> groupedByKind = addResults.stream()
+                .collect(Collectors.groupingBy(r -> r.kindOfMatrix));
+
+        // Dla każdej grupy tworzymy serię
+        for (Map.Entry<KindOfMatrix, List<StatisticsResult>> entry : groupedByKind.entrySet()) {
+            KindOfMatrix kind = entry.getKey();
+            List<StatisticsResult> kindResults = entry.getValue();
+
+            double[] xData = kindResults.stream()
+                    .mapToDouble(r -> r.ratio)
+                    .toArray();
+
+            double[] yData = kindResults.stream()
+                    .mapToDouble(r -> r.dimension)
+                    .toArray();
+
+            // Dodajemy serię z nazwą równą rodzajowi macierzy
+            chart.addSeries(kind.name(), xData, yData);
+        }
+
+        return chart;
+    }
+
+    public static void showOrSaveChartRatioVsDimWithKind(List<StatisticsResult> results) throws IOException {
+        XYChart chart = createChartRatioVsDimWithKind(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji add (z podziałem na KindOfMatrix)",
+                "Ratio (Gen Ref / Gen Obj)",
+                "Wymiar (Dim)"
+        );
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chart_by_kind.png", BitmapEncoder.BitmapFormat.PNG);
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
+    public static XYChart createChartRatioVsDim(
+            List<StatisticsResult> results,
+            KindOfMatrix kind,
+            String chartTitle,
+            String xAxisTitle,
+            String yAxisTitle
+    ) {
+        // Filtrujemy wyniki, zostawiając tylko operację "add"
+        List<StatisticsResult> addResults = results.stream()
+                .filter(r -> "add".equalsIgnoreCase(r.operation))
+                .toList();
+
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                // Dodajemy informację o rodzaju macierzy w tytule
+                .title(chartTitle + " - " + kind)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Przygotowujemy dane: ratio -> oś X, dimension -> oś Y
+        double[] xData = addResults.stream()
+                .mapToDouble(r -> r.ratio)
+                .toArray();
+
+        double[] yData = addResults.stream()
+                .mapToDouble(r -> r.dimension)
+                .toArray();
+
+        // Dodajemy serię
+        chart.addSeries("Dim vs. Ratio", xData, yData);
+
+        return chart;
+    }
+
+    public static void showOrSaveChartRatioVsDim(List<StatisticsResult> results, KindOfMatrix kind) throws IOException {
+        XYChart chart = createChartRatioVsDim(
+                results,
+                kind,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji add",
+                "Ratio (Gen Ref / Gen Obj)",
+                "Wymiar (Dim)"
+        );
+        // Zapis do pliku z informacją o rodzaju macierzy w nazwie
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
+    /**
+     * BAR CHART WITH KIND
+     */
+
+
+    /**
+     *
+     * @param results
+     * @param kind
+     * @param chartTitle
+     * @param xAxisTitle
+     * @param yAxisTitle
+     * @return
+     */
+
+
+    public static CategoryChart createBarChartForRatioWithKind(
+            List<StatisticsResult> results,
+            KindOfMatrix kind,
+            String chartTitle,
+            String xAxisTitle,
+            String yAxisTitle
+    ) {
+        // Filtruj wyniki tylko dla wskazanego rodzaju macierzy
+        List<StatisticsResult> filteredResults = results.stream()
+                .filter(r -> r.kindOfMatrix == kind)
+                .collect(Collectors.toList());
+
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle + " - " + kind)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+        chart.getStyler().setXAxisLabelRotation(90);
+
+        // Używaj przefiltrowanych wyników
+        List<String> xLabels = filteredResults.stream()
+                .map(r -> "(D=" + r.dimension + ")(Op=" + r.operation + ")")
+                .toList();
+
+        List<Double> ratioValues = filteredResults.stream()
+                .map(r -> r.ratio)
+                .toList();
+
+        chart.addSeries("Gen Ref/Gen Obj Ratio - " + kind, xLabels, ratioValues);
+
+        return chart;
+    }
+
+    /**
+     * @param results
+     * @param kind
+     * @throws IOException
+     */
+
+    public static void showOrSaveBarChartForRatioWithKind(List<StatisticsResult> results, KindOfMatrix kind) throws IOException {
+        // Tworzymy wykres z uwzględnieniem rodzaju macierzy w tytule
+        CategoryChart chart = createBarChartForRatioWithKind(
+                results,
+                kind,
+                "Porównanie Mean (Gen Ref vs. Gen Obj)",
+                "Wymiar",
+                "Czas [ns]"
+        );
+        // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
+    }
+
+
+    /**
+     *
+     * @param results
+     * @param chartTitle
+     * @param xAxisTitle
+     * @param yAxisTitle
+     * @return
+     */
+
+
+    public static CategoryChart createBarChartForRatio(List<StatisticsResult> results,
+                                                       String chartTitle,
+                                                       String xAxisTitle,
+                                                       String yAxisTitle) {
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        chart.getStyler().setXAxisLabelRotation(90);
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+
+        List<String> xLabels = results.stream()
+                .map(r -> "(D=" + r.dimension + ")(Op=" + r.operation+")")
+                .toList();
+
+        List<Double> ratioValues = results.stream().map(r -> r.ratio).toList();
+
+        chart.addSeries("Gen Ref/Gen Obj Ratio", xLabels, ratioValues);
+
+        return chart;
+    }
+
+
+    /**
+     *
+     * @param results
+     * @throws IOException
+     */
+
+
+    public static void showOrSaveBarChartForRatio(List<StatisticsResult> results) throws IOException {
+        CategoryChart chart = createBarChartForRatio(
+                results,
+                "Porównanie Mean (Gen Ref vs. Gen Obj)",
+                "Wymiar",
+                "Czas [ns]"
+        );
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR+"ratio_bar_chart.png", BitmapEncoder.BitmapFormat.PNG);
+
+    }
+
+
+    /**
+     * TESTUJEMY dodawanie antysymetryczne
+     * @param results
+     * @param chartTitle
+     * @param xAxisTitle
+     * @param yAxisTitle
+     * @return
+     */
+
+    public static XYChart createChartRatioVsDim2ForAdd(List<StatisticsResult> results,
+                                                       String chartTitle,
+                                                       String xAxisTitle,
+                                                       String yAxisTitle) {
+
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Osobne serie dla każdego typu macierzy
+
+               /*
+    RANDOM,           // Losowa macierz
+    IDENTITY,         // Macierz jednostkowa (tożsamościowa)
+    DIAGONAL,         // Macierz diagonalna
+    SYMMETRIC,        // Macierz symetryczna
+    ANTISYMMETRIC,    // Macierz antysymetryczna (skew-symetryczna)
+    LOWER_TRIANGULAR, // Macierz trójkątna dolna
+    UPPER_TRIANGULAR  // Macierz trójkątna górna
+         */
+
+
+
+        List<StatisticsResult> radomResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.RANDOM)
+                .toList();
+
+        List<StatisticsResult> identityResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.IDENTITY)
+                .toList();
+
+        List<StatisticsResult> diagResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.DIAGONAL)
+                .toList();
+
+        List<StatisticsResult> symetricResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.SYMMETRIC)
+                .toList();
+
+        List<StatisticsResult> antiResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.ANTISYMMETRIC)
+                .toList();
+
+
+        List<StatisticsResult> lowTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.LOWER_TRIANGULAR)
+                .toList();
+
+        List<StatisticsResult> upperTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("add"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.UPPER_TRIANGULAR)
+                .toList();
+
+
+
+
+
+
+        // Dodaj serie osobno
+
+        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                radomResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("IDENTITYC", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                identityResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("DIAGONAL", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                diagResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("ANTISYMMETRIC", antiResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                antiResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("SYMMETRIC", symetricResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                symetricResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+        chart.addSeries("LOWER_TRIANGULAR", lowTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                lowTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("UPPER_TRIANGULAR", upperTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                upperTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+
+
+
+
+        return chart;
+    }
+
+
+
+    public static XYChart createChartRatioVsDim2ForSub(List<StatisticsResult> results,
+                                                       String chartTitle,
+                                                       String xAxisTitle,
+                                                       String yAxisTitle) {
+
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Osobne serie dla każdego typu macierzy
+
+               /*
+    RANDOM,           // Losowa macierz
+    IDENTITY,         // Macierz jednostkowa (tożsamościowa)
+    DIAGONAL,         // Macierz diagonalna
+    SYMMETRIC,        // Macierz symetryczna
+    ANTISYMMETRIC,    // Macierz antysymetryczna (skew-symetryczna)
+    LOWER_TRIANGULAR, // Macierz trójkątna dolna
+    UPPER_TRIANGULAR  // Macierz trójkątna górna
+         */
+
+
+
+        List<StatisticsResult> radomResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.RANDOM)
+                .toList();
+
+        List<StatisticsResult> identityResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.IDENTITY)
+                .toList();
+
+        List<StatisticsResult> diagResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.DIAGONAL)
+                .toList();
+
+        List<StatisticsResult> symetricResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.SYMMETRIC)
+                .toList();
+
+        List<StatisticsResult> antiResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.ANTISYMMETRIC)
+                .toList();
+
+
+        List<StatisticsResult> lowTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.LOWER_TRIANGULAR)
+                .toList();
+
+        List<StatisticsResult> upperTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("subtract"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.UPPER_TRIANGULAR)
+                .toList();
+
+
+
+
+
+
+        // Dodaj serie osobno
+
+        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                radomResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("IDENTITYC", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                identityResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("DIAGONAL", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                diagResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("ANTISYMMETRIC", antiResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                antiResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("SYMMETRIC", symetricResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                symetricResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+        chart.addSeries("LOWER_TRIANGULAR", lowTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                lowTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("UPPER_TRIANGULAR", upperTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                upperTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+
+
+
+
+        return chart;
+    }
+
+    public static void showOrSaveChartRatioVsDim2ForAdd(List<StatisticsResult> results) throws IOException {
+        XYChart chart = createChartRatioVsDim2ForAdd(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji add",
+                "Wymiar (Dim)" ,
+                "Ratio (Concrete Ref / concrete Obj)"
+        );
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinearAdd.png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
+    public static void showOrSaveChartRatioVsDim2ForSub(List<StatisticsResult> results) throws IOException {
+        XYChart chart = createChartRatioVsDim2ForSub(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji sub",
+                "Wymiar (Dim)" ,
+                "Ratio (Concrete Ref / concrete Obj)"
+        );
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinearSub.png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
+
+    public static XYChart createChartRatioVsDim2ForMult(List<StatisticsResult> results,
+                                                        String chartTitle,
+                                                        String xAxisTitle,
+                                                        String yAxisTitle) {
+
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Osobne serie dla każdego typu macierzy
+
+               /*
+    RANDOM,           // Losowa macierz
+    IDENTITY,         // Macierz jednostkowa (tożsamościowa)
+    DIAGONAL,         // Macierz diagonalna
+    SYMMETRIC,        // Macierz symetryczna
+    ANTISYMMETRIC,    // Macierz antysymetryczna (skew-symetryczna)
+    LOWER_TRIANGULAR, // Macierz trójkątna dolna
+    UPPER_TRIANGULAR  // Macierz trójkątna górna
+         */
+
+
+
+        List<StatisticsResult> radomResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.RANDOM)
+                .toList();
+
+        List<StatisticsResult> identityResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.IDENTITY)
+                .toList();
+
+        List<StatisticsResult> diagResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.DIAGONAL)
+                .toList();
+
+        List<StatisticsResult> symetricResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.SYMMETRIC)
+                .toList();
+
+        List<StatisticsResult> antiResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.ANTISYMMETRIC)
+                .toList();
+
+
+        List<StatisticsResult> lowTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.LOWER_TRIANGULAR)
+                .toList();
+
+        List<StatisticsResult> upperTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.UPPER_TRIANGULAR)
+                .toList();
+
+
+
+
+
+
+        // Dodaj serie osobno
+
+        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                radomResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("IDENTITYC", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                identityResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("DIAGONAL", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                diagResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("ANTISYMMETRIC", antiResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                antiResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("SYMMETRIC", symetricResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                symetricResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+        chart.addSeries("LOWER_TRIANGULAR", lowTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                lowTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("UPPER_TRIANGULAR", upperTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                upperTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+
+
+
+
+        return chart;
+    }
+
+
+    public static void showOrSaveChartRatioVsDim2ForMultiply(List<StatisticsResult> results) throws IOException {
+        XYChart chart = createChartRatioVsDim2ForMult(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji multiply",
+                "Wymiar (Dim)" ,
+                "Ratio (Concrete Ref / concrete Obj)"
+        );
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinearmultiply.png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+
 }

@@ -29,7 +29,7 @@ public  class PerformanceTestMatrix {
     // Matrix dimensions to test
    // protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 , 1000, 2000 };
    // protected static final int[] DIMENSIONS = {  100,50,10,6,5,4,3,2,1 };
-    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 ,10 , 20  };
+    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 ,10 , 20 , 50 , 100  };
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -375,6 +375,10 @@ public  class PerformanceTestMatrix {
         return new StatisticsResult(operation, dimension, genericMean, genericMedian, genericMode, genericStd,
                 concreteMean, concreteMedian, concreteMode, concreteStd, ratio);
     }
+
+
+
+
 
     /**
      * Calculate median from a list of values.

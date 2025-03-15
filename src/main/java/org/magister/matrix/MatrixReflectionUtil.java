@@ -31,26 +31,4 @@ public class MatrixReflectionUtil {
     }
 
 
-
-
-    // Sprawdzenie odwracalności za pomocą refleksji
-    public static <T extends Number> boolean checkInvertibility(Matrix<T> matrix) {
-        try {
-            Method method = Matrix.class.getMethod("isInvertible");
-            return (boolean) method.invoke(matrix);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Błąd podczas sprawdzania odwracalności za pomocą refleksji: " + e.getMessage(), e);
-        }
-    }
-
-    // Obliczenie wyznacznika za pomocą refleksji
-    public static <T extends Number> T calculateDeterminant(Matrix<T> matrix) {
-        try {
-            Method method = Matrix.class.getMethod("determinant");
-            T result = (T) method.invoke(matrix);
-            return result;
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Błąd podczas obliczania wyznacznika za pomocą refleksji: " + e.getMessage(), e);
-        }
-    }
 }

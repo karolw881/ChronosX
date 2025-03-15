@@ -2,7 +2,6 @@ package org.magister.vector;
 
 
 import org.magister.helper.IntegerOperations;
-import org.magister.matrix.PerformanceTestMatrix;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -61,7 +60,7 @@ public class PerformanceTestVector {
         // Warm-up (3 razy, aby wyrzucić wpływ cold startu)
         for (int i = 0; i < 3; i++) {
             vector1.addVector(vector2);
-            VectorReflectionUtil.performOperation(vector1, vector2, "addVector");
+            VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "addVector");
         }
 
         // Pomiary RUNS razy
@@ -72,7 +71,7 @@ public class PerformanceTestVector {
             directTimes.add(endDirect - startDirect);
 
             long startReflection = System.nanoTime();
-            Vector<Integer> resultReflection = VectorReflectionUtil.performOperation(vector1, vector2, "addVector");
+            Vector<Integer> resultReflection = VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "addVector");
             long endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
         }
@@ -97,7 +96,7 @@ public class PerformanceTestVector {
         // Warm-up
         for (int i = 0; i < 3; i++) {
             vector1.subtractVector2(vector2);
-            VectorReflectionUtil.performOperation(vector1, vector2, "subtractVector2");
+            VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "subtractVector2");
         }
 
         // Pomiary
@@ -108,7 +107,7 @@ public class PerformanceTestVector {
             directTimes.add(endDirect - startDirect);
 
             long startReflection = System.nanoTime();
-            Vector<Integer> resultReflection = VectorReflectionUtil.performOperation(vector1, vector2, "subtractVector2");
+            Vector<Integer> resultReflection = VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "subtractVector2");
             long endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
         }

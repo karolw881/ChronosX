@@ -29,7 +29,7 @@ public class Main {
 
 
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-       // performanceTestMatrixConcreteReflectionVsObject.runTest();
+        performanceTestMatrixConcreteReflectionVsObject.runTest();
 
 
 
