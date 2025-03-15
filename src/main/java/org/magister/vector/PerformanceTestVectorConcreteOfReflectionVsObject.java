@@ -1,4 +1,7 @@
 package org.magister.vector;
 
-public class PerformanceTestVectorConcreteOfReflectionVsObject {
+public class PerformanceTestVectorConcreteOfReflectionVsObject extends PerformanceTestVector {
+
+
+
 }
