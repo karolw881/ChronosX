@@ -18,7 +18,7 @@ public class Vector<T extends Number> {
     }
 
     // Metoda dodawania wektorów (element-wise)
-    public Vector<T> addVector(Vector<T> other) {
+    public Vector<T> add(Vector<T> other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
@@ -44,11 +44,11 @@ public class Vector<T extends Number> {
 
     // Metoda 1: odejmowanie przez dodanie przeciwnego wektora
     public Vector<T> subtractVector1(Vector<T> other) {
-        return this.addVector(other.opposite());
+        return this.add(other.opposite());
     }
 
     // Metoda 2: bezpośrednie odejmowanie elementów
-    public Vector<T> subtractVector2(Vector<T> other) {
+    public Vector<T> subtruct(Vector<T> other) {
         if (this.coordinates.length != other.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }

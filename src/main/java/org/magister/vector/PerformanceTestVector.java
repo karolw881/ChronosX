@@ -2,31 +2,32 @@ package org.magister.vector;
 
 
 import org.magister.helper.IntegerOperations;
+import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class PerformanceTestVector {
+public class PerformanceTestVector implements VtPerformance {
 
     // Directory constants
-    private static final String INPUT_DIR = "test_dataG/input/vector/input";
-    private static final String OUTPUT_DIR = "test_dataG/output/vector/output";
+    protected static final String INPUT_DIR = "test_dataGG/input/vector/input";
+    protected static final String OUTPUT_DIR = "test_dataGG/output/vector/output";
+
+    protected static final String CHARTS_DIR = "test_dataGG/output/vector/output/charts";
+
     // Number of test runs for each case
-    private static final int RUNS = 100;
-    private static final Random random = new Random(42);
+    protected static final int RUNS = 100;
+    protected static final Random random = new Random(42);
     // Vector dimensions (wymiar wektora)
-    private static final int[] DIMENSIONS = {10, 50, 100, 200};
+    protected static final int[] DIMENSIONS = {10, 50, 100, 200};
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
-   // protected final List<StatisticResult> aggregatedResults = new ArrayList<>();
+    protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
     /**
      * Metoda główna wykonująca testy wydajności dla wektorów.
      */
@@ -59,14 +60,14 @@ public class PerformanceTestVector {
 
         // Warm-up (3 razy, aby wyrzucić wpływ cold startu)
         for (int i = 0; i < 3; i++) {
-            vector1.addVector(vector2);
+            vector1.add(vector2);
             VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "addVector");
         }
 
         // Pomiary RUNS razy
         for (int i = 0; i < RUNS; i++) {
             long startDirect = System.nanoTime();
-            Vector<Integer> resultDirect = vector1.addVector(vector2);
+            Vector<Integer> resultDirect = vector1.add(vector2);
             long endDirect = System.nanoTime();
             directTimes.add(endDirect - startDirect);
 
@@ -95,14 +96,14 @@ public class PerformanceTestVector {
 
         // Warm-up
         for (int i = 0; i < 3; i++) {
-            vector1.subtractVector2(vector2);
+            vector1.subtruct(vector2);
             VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "subtractVector2");
         }
 
         // Pomiary
         for (int i = 0; i < RUNS; i++) {
             long startDirect = System.nanoTime();
-            Vector<Integer> resultDirect = vector1.subtractVector2(vector2);
+            Vector<Integer> resultDirect = vector1.subtruct(vector2);
             long endDirect = System.nanoTime();
             directTimes.add(endDirect - startDirect);
 
@@ -136,7 +137,7 @@ public class PerformanceTestVector {
     /**
      * Zapisuje wektor do pliku tekstowego.
      */
-    private <T extends Number> void saveVectorToFile(Vector<T> vector, String filename) {
+    <T extends Number> void saveVectorToFile(Vector<T> vector, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("Vector Dimension: " + vector.getCoordinates().length + "\n\n");
             for (T coordinate : vector.getCoordinates()) {
@@ -150,7 +151,7 @@ public class PerformanceTestVector {
     /**
      * Upewnia się, że katalogi wejściowe i wyjściowe istnieją.
      */
-    private void createDirectories() {
+    public void createDirectories() {
         try {
             Files.createDirectories(Paths.get(INPUT_DIR));
             Files.createDirectories(Paths.get(OUTPUT_DIR));
@@ -162,7 +163,7 @@ public class PerformanceTestVector {
     /**
      * Zapisuje surowe wyniki czasowe do pliku.
      */
-    private void saveResultsToFile(String filename, List<Long> directTimes, List<Long> reflectionTimes) {
+    void saveResultsToFile(String filename, List<Long> directTimes, List<Long> reflectionTimes) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("Direct Time (ns)\tReflection Time (ns)\n");
             writer.write("----------------\t-------------------\n");
@@ -212,7 +213,7 @@ public class PerformanceTestVector {
     /**
      * Oblicza medianę z listy wartości.
      */
-    private double calculateMedian(List<Long> values) {
+    double calculateMedian(List<Long> values) {
         List<Long> sorted = values.stream().sorted().collect(Collectors.toList());
         int size = sorted.size();
         if (size % 2 == 0) {
@@ -223,9 +224,9 @@ public class PerformanceTestVector {
     }
 
     /**
-     * Oblicza odchylenie standardowe z listy wartości.
+     * Oblicza odchylenie standardowe z listy wartości. wersja populacyjna
      */
-    private double calculateStandardDeviation(List<Long> values) {
+    double calculateStandardDeviation(List<Long> values) {
         double mean = values.stream().mapToDouble(Long::doubleValue).average().orElse(0.0);
         double variance = values.stream()
                 .mapToDouble(v -> Math.pow(v - mean, 2))
@@ -233,5 +234,13 @@ public class PerformanceTestVector {
         return Math.sqrt(variance);
     }
 
+    long calculateMode(List<Long> values) {
+        Map<Long, Long> freq = values.stream()
+                .collect(Collectors.groupingBy(v -> v, Collectors.counting()));
+        return freq.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(0L);
+    }
 
 }
