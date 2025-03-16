@@ -34,7 +34,6 @@ public class Vector<T extends Number> {
     // Metoda obliczania przeciwnego wektora (negacja) poprzez: 0 - coordinate
     public Vector<T> opposite() {
         int n = this.coordinates.length;
-        @SuppressWarnings("unchecked")
         T[] result = (T[]) new Number[n];
         for (int i = 0; i < n; i++) {
             result[i] = operations.subtract(operations.zero(), this.coordinates[i]);
@@ -73,14 +72,14 @@ public class Vector<T extends Number> {
     }
 
     // Iloczyn skalarny (dot product): suma iloczynów odpowiadających sobie współrzędnych
-    public T dotProduct(Vector<T> other) {
-        if (this.coordinates.length != other.coordinates.length) {
+    public T dotProduct(Vector<T> vector) {
+        if (this.coordinates.length != vector.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
         int n = this.coordinates.length;
         T sum = operations.zero();
         for (int i = 0; i < n; i++) {
-            T product = operations.multiply(this.coordinates[i], other.coordinates[i]);
+            T product = operations.multiply(this.coordinates[i], vector.coordinates[i]);
             sum = operations.add(sum, product);
         }
         return sum;

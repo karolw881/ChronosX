@@ -320,10 +320,13 @@ public  class PerformanceTestMatrix {
      */
     protected void saveResultsToFile(String filename, List<Long> genericTimes, List<Long> concreteTimes) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Generic Time\tConcrete Time\n");
-            writer.write("-----------\t-------------\n");
+            // Nagłówki
+            writer.write(String.format("%-15s %-15s%n", "Direct Time (ns)", "Reflection Time (ns)"));
+            writer.write(String.format("%-15s %-15s%n", "---------------", "-------------------"));
+
+            // Dane
             for (int i = 0; i < genericTimes.size(); i++) {
-                writer.write(genericTimes.get(i) + "\t\t" + concreteTimes.get(i) + "\n");
+                writer.write(String.format("%-15d %-15d%n", genericTimes.get(i), concreteTimes.get(i)));
             }
         } catch (IOException e) {
             System.err.println("Error saving results to file: " + e.getMessage());
@@ -579,7 +582,7 @@ public  class PerformanceTestMatrix {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
 
-        // Marginesy wykresu
+        // Marginesy wykresusa
         int leftMargin = 80, rightMargin = 40, topMargin = 40, bottomMargin = 80;
         int chartWidth = width - leftMargin - rightMargin;
         int chartHeight = height - topMargin - bottomMargin;
