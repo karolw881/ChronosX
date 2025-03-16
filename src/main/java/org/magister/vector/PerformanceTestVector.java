@@ -38,15 +38,15 @@ public class PerformanceTestVector implements VtPerformance {
             System.out.println("Testing vector of dimension " + dim);
 
             // Tworzymy dwa losowe wektory
-            Vector<Integer> vector1 = createRandomVector(dim);
-            Vector<Integer> vector2 = createRandomVector(dim);
+        //    Vector<Integer> vector1 = createRandomVector(dim);
+        //    Vector<Integer> vector2 = createRandomVector(dim);
 
             // Zapisujemy wektory do pliku (opcjonalnie)
-            saveVectorToFile(vector1, INPUT_DIR + "vector1_" + dim + ".txt");
-            saveVectorToFile(vector2, INPUT_DIR + "vector2_" + dim + ".txt");
+         //   saveVectorToFile(vector1, INPUT_DIR + "vector1_" + dim + ".txt");
+          //  saveVectorToFile(vector2, INPUT_DIR + "vector2_" + dim + ".txt");
 
-            testAdd(vector1, vector2, dim);
-            testSubtract(vector1, vector2, dim);
+          //  testAdd(vector1, vector2, dim);
+         //   testSubtract(vector1, vector2, dim);
             // Dodatkowe operacje można dodać analogicznie
         }
     }
@@ -163,12 +163,15 @@ public class PerformanceTestVector implements VtPerformance {
     /**
      * Zapisuje surowe wyniki czasowe do pliku.
      */
-    void saveResultsToFile(String filename, List<Long> directTimes, List<Long> reflectionTimes) {
+    protected void saveResultsToFile(String filename, List<Long> genericTimes, List<Long> concreteTimes) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Direct Time (ns)\tReflection Time (ns)\n");
-            writer.write("----------------\t-------------------\n");
-            for (int i = 0; i < directTimes.size(); i++) {
-                writer.write(directTimes.get(i) + "\t\t" + reflectionTimes.get(i) + "\n");
+            // Nagłówki
+            writer.write(String.format("%-15s %-15s%n", "Direct Time (ns)", "Reflection Time (ns)"));
+            writer.write(String.format("%-15s %-15s%n", "---------------", "-------------------"));
+
+            // Dane
+            for (int i = 0; i < genericTimes.size(); i++) {
+                writer.write(String.format("%-15d %-15d%n", genericTimes.get(i), concreteTimes.get(i)));
             }
         } catch (IOException e) {
             System.err.println("Error saving results to file: " + e.getMessage());

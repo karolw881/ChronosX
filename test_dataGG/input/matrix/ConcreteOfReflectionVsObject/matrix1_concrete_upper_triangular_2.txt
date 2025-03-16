@@ -1,4 +1,0 @@
-Matrix Dimension: 2x2
-
-0	8	
-0	9	

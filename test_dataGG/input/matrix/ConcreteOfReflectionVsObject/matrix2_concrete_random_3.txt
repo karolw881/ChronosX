@@ -1,5 +1,0 @@
-Matrix Dimension: 3x3
-
-5	8	7	
-3	4	4	
-4	6	8	
