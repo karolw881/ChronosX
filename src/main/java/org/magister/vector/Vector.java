@@ -1,7 +1,4 @@
 package org.magister.vector;
-
-
-
 import org.magister.helper.NumberOperations;
 
 public class Vector<T extends Number> {
@@ -18,15 +15,14 @@ public class Vector<T extends Number> {
     }
 
     // Metoda dodawania wektorów (element-wise)
-    public Vector<T> add(Vector<T> other) {
-        if (this.coordinates.length != other.coordinates.length) {
+    public Vector<T> add(Vector<T> vector) {
+        if (this.coordinates.length != vector.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
         int n = this.coordinates.length;
-        @SuppressWarnings("unchecked")
         T[] result = (T[]) new Number[n]; // tworzenie tablicy – kompromis ze względu na ograniczenia Javy
         for (int i = 0; i < n; i++) {
-            result[i] = operations.add(this.coordinates[i], other.coordinates[i]);
+            result[i] = operations.add(this.coordinates[i], vector.coordinates[i]);
         }
         return new Vector<>(result, operations);
     }
@@ -42,20 +38,19 @@ public class Vector<T extends Number> {
     }
 
     // Metoda 1: odejmowanie przez dodanie przeciwnego wektora
-    public Vector<T> subtractVector1(Vector<T> other) {
-        return this.add(other.opposite());
+    public Vector<T> subtractVectorNegativeAdd(Vector<T> vector) {
+        return this.add(vector.opposite());
     }
 
     // Metoda 2: bezpośrednie odejmowanie elementów
-    public Vector<T> subtruct(Vector<T> other) {
-        if (this.coordinates.length != other.coordinates.length) {
+    public Vector<T> subtruct(Vector<T> vector) {
+        if (this.coordinates.length != vector.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
         int n = this.coordinates.length;
-        @SuppressWarnings("unchecked")
         T[] result = (T[]) new Number[n];
         for (int i = 0; i < n; i++) {
-            result[i] = operations.subtract(this.coordinates[i], other.coordinates[i]);
+            result[i] = operations.subtract(this.coordinates[i], vector.coordinates[i]);
         }
         return new Vector<>(result, operations);
     }
