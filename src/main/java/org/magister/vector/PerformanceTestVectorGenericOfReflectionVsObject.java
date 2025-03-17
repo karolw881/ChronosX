@@ -45,6 +45,11 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
         // rysuj wykresy
         showOrSaveChartRatioVsDim2(aggregatedResults, "add");
         showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
+        showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
+        showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
+        showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
+        showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
+
 
     }
 
@@ -86,7 +91,7 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
                 aggregatedResults.add(testVectorGenericObjectVsReflect(vectorGenericFirst,vectorGenericSecond,dim , kind ,"multiplyByScalar"));
                 aggregatedResults.add(testVectorGenericObjectVsReflect(vectorGenericFirst,vectorGenericSecond,dim , kind ,"dotProduct"));
                 aggregatedResults.add(testVectorGenericObjectVsReflect(vectorGenericFirst,vectorGenericSecond,dim , kind ,"opposite"));
-              //  aggregatedResults.add(testVectorGenericObjectVsReflect(vectorGenericFirst,vectorGenericSecond,dim , kind ,"subtractVector1")); // odejmowanie przeciwnym dodawaniem
+               aggregatedResults.add(testVectorGenericObjectVsReflect(vectorGenericFirst,vectorGenericSecond,dim , kind ,"subtractVectorNegativeAdd")); // odejmowanie przeciwnym dodawaniem
 
 
             }
@@ -147,10 +152,14 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
             vector1.multiplyByScalar(1);
         }else if (operation.equals("opposite"))
             vector1.opposite();
+        else if (operation.equals("subtractVectorNegativeAdd")) {
+            vector1.subtractVectorNegativeAdd(vector1);
+
+        }
     }
 
     private void performReflectionOperation(Vector<Integer> vector1, Vector<Integer> vector2, String operation) {
-        if (operation.equals("add") || operation.equals("subtruct") ) {
+        if (operation.equals("add") || operation.equals("subtruct") || operation.equals("subtractVectorNegativeAdd") ) {
             VectorReflectionUtil.performOperationReflectVector(vector1, vector2, operation);
         } else if (operation.equals("dotProduct")) {
             VectorReflectionUtil.performOperationReflectVectorForDotProduct(vector1, vector2, operation);
@@ -379,17 +388,6 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
                 .yAxisTitle(yAxisTitle)
                 .build();
 
-        // Osobne serie dla każdego typu macierzy
-
-               /*
-    RANDOM,           // Losowa macierz
-    IDENTITY,         // Macierz jednostkowa (tożsamościowa)
-    DIAGONAL,         // Macierz diagonalna
-    SYMMETRIC,        // Macierz symetryczna
-    ANTISYMMETRIC,    // Macierz antysymetryczna (skew-symetryczna)
-    LOWER_TRIANGULAR, // Macierz trójkątna dolna
-    UPPER_TRIANGULAR  // Macierz trójkątna górna
-         */
 
 
         List<StatisticsResult> radomResults = results.stream()
@@ -397,7 +395,7 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
                 .filter(r -> r.kindOfVector == KindOfVector.RANDOM)
                 .toList();
 
-        System.out.println("aaa" + whatoperation);
+        System.out.println("Bede rysowac dla : " + whatoperation);
 
         List<StatisticsResult> identityResults = results.stream()
                 .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
