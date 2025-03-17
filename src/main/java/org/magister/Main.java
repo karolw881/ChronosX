@@ -6,6 +6,7 @@ import org.magister.matrix.PerformanceTestMatrix;
 import org.magister.matrix.PerformanceTestMatrixConcreteReflectionVsObject;
 import org.magister.matrix.PerformanceTestMatrixGenericofReflectionVsObject;
 import org.magister.vector.PerformanceTestVector;
+import org.magister.vector.PerformanceTestVectorConcreteOfReflectionVsObject;
 import org.magister.vector.PerformanceTestVectorGenericOfReflectionVsObject;
 
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class Main {
         performanceTestVectorGenericOfReflectionVsObject.runTest();
 
 
+        PerformanceTestVectorConcreteOfReflectionVsObject performanceTestVectorConcreteOfReflectionVsObject = new PerformanceTestVectorConcreteOfReflectionVsObject();
+
+        performanceTestVectorConcreteOfReflectionVsObject.runTest();
 
     }
 }
