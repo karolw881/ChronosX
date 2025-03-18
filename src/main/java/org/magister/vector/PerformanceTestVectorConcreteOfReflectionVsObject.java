@@ -39,7 +39,7 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
             showOrSaveBarChartForRatioWithKind(aggregatedResults, kind);
         }
 
-        // rysuj wykresy
+        //   rysuj wykresy
         showOrSaveChartRatioVsDim2(aggregatedResults, "add");
         showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
         showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
