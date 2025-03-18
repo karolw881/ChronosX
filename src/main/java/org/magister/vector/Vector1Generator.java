@@ -11,6 +11,7 @@ public class Vector1Generator {
      * Generuje wektor losowy o podanym wymiarze
      * @param dimension
      * @param seed
+     *
      * @return
      */
 
