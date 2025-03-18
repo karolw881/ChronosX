@@ -12,6 +12,7 @@ public class Vector1Generator {
      * @param dimension
      * @param seed
      *
+     *
      * @return
      */
 
