@@ -117,7 +117,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         List<Long> reflectionTimes = new ArrayList<>();
         List<Long> objectTimes = new ArrayList<>();
 
-        // Warm-up – wykonywane kilka razy przed pomiarem
+        //   Warm-up – wykonywane kilka razy przed pomiarem
         for (int i = 0; i < 3; i++) {
             matrixConcrete1.multiply(matrixConcrete2);
             MatrixReflectionUtil.performOperation2(matrixConcrete1, matrixConcrete2 , "multiply");
