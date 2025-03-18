@@ -17,7 +17,6 @@ public class VectorGenerator<T extends Number> {
     /**
      * Generuje wektor na podstawie przekazanego typu z enuma KindOfVector.
      *
-     *
      * @param kind rodzaj wektora
      * @param dimension wymiar wektora
      * @param seed ziarno dla generatora liczb losowych

@@ -40,7 +40,6 @@ public class Vector1Generator {
      *   // Generuje wektor, w którym wszystkie elementy są równe 1
      * @param dimension
      * @return
-     *
      */
 
 
