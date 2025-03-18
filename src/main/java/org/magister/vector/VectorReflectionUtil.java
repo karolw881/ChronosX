@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- *
  * Klasa pomocnicza do wykonywania operacji na wektorach za pomocą refleksji.
  */
 public class VectorReflectionUtil {
@@ -81,10 +80,9 @@ public class VectorReflectionUtil {
 
 
 
-
     public static Vector1 performOperationReflectVector1(Vector1 vector1, Vector1 vector2, String operation){
         try {
-            Method method = Vector1.class.getMethod(operation, Vector1.class);
+            Method method = Vector1.class.getMethod(operation, Vector.class);
             Vector1 result = (Vector1) method.invoke(vector1, vector2);
             return result;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
@@ -93,38 +91,5 @@ public class VectorReflectionUtil {
         }
     }
 
-    public static int performOperationReflectVectorForDotProduct1(Vector1 vector1, Vector1 vector2, String operation) {
-        try {
-            Method method = Vector1.class.getMethod(operation, Vector1.class);
-            int result = (int) method.invoke(vector1, vector2);
-            return result;
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Błąd podczas wykonywania operacji '" + operation +
-                    "' na wektorach za pomocą refleksji: " + e.getMessage(), e);
-        }
-    }
-
-    public static Vector1 performOperationReflectVectorForScalar1(Vector1 vector1, int i, String operation) {
-        try {
-            Method method = Vector1.class.getMethod(operation, int.class);
-            Vector1 result = (Vector1) method.invoke(vector1, i);
-            return result;
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Błąd podczas wykonywania operacji '" + operation +
-                    "' na wektorze za pomocą refleksji: " + e.getMessage(), e);
-
-        }
-    }
-
-    public static Vector1 performOperationReflectVectorForOpposite1(Vector1 vector1, String operation) {
-            try {
-                Method method = Vector1.class.getMethod(operation);
-                Vector1 result = (Vector1) method.invoke(vector1);
-                return result;
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException("Błąd podczas wykonywania operacji '" + operation  +
-                        "' na wektorze za pomocą refleksji: " + e.getMessage(), e);
-            }
-        }
 }
 

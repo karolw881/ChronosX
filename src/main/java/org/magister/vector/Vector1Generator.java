@@ -11,6 +11,8 @@ public class Vector1Generator {
      * Generuje wektor losowy o podanym wymiarze
      * @param dimension
      * @param seed
+     *
+     *
      * @return
      */
 
@@ -40,7 +42,6 @@ public class Vector1Generator {
      *   // Generuje wektor, w którym wszystkie elementy są równe 1
      * @param dimension
      * @return
-     *
      */
 
 
@@ -50,19 +51,6 @@ public class Vector1Generator {
             data[i] = 1;
         }
         return new Vector1(data);
-    }
-
-    public Vector1 createVector1(KindOfVector kind, int dimension, long seed) {
-        switch (kind) {
-            case RANDOM:
-                return createRandomVector1(dimension, seed);
-            case ZERO:
-                return createZeroVector1(dimension);
-            case ONES:
-                return createOnesVector1(dimension);
-            default:
-                throw new IllegalArgumentException("Nieznany typ wektora: " + kind);
-        }
     }
 
 

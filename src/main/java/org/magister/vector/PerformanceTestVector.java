@@ -124,7 +124,7 @@ public class PerformanceTestVector implements VtPerformance {
     }
 
     /**
-     *  Tworzy losowy wektor o zadanym wymiarze z wartościami z zakresu 0-10.
+     * Tworzy losowy wektor o zadanym wymiarze z wartościami z zakresu 0-10.
      */
     private Vector<Integer> createRandomVector(int dimension) {
         Integer[] data = new Integer[dimension];
