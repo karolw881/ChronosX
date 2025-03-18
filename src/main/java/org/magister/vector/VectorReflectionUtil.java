@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
+ *
  * Klasa pomocnicza do wykonywania operacji na wektorach za pomocą refleksji.
  */
 public class VectorReflectionUtil {

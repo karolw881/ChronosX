@@ -14,7 +14,7 @@ public class Vector<T extends Number> {
         return coordinates;
     }
 
-    // Metoda dodawania wektorów (element-wise)
+    //   Metoda dodawania wektorów (element-wise)
     public Vector<T> add(Vector<T> vector) {
         if (this.coordinates.length != vector.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");

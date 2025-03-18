@@ -8,3 +8,6 @@ public enum KindOfVector {
     ONES,     // Wektor, w którym wszystkie elementy są równe 1
 
 }
+
+
+//

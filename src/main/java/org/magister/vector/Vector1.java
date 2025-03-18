@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-// Implementacja konkretna dla liczb całkowitych
+//  Implementacja konkretna dla liczb całkowitych
 public class Vector1 {
     private int[] coordinates;
 
