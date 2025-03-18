@@ -53,5 +53,18 @@ public class Vector1Generator {
         return new Vector1(data);
     }
 
+    public Vector1 createVector1(KindOfVector kind, int dimension, long seed) {
+        switch (kind) {
+            case RANDOM:
+                return createRandomVector1(dimension, seed);
+            case ZERO:
+                return createZeroVector1(dimension);
+            case ONES:
+                return createOnesVector1(dimension);
+            default:
+                throw new IllegalArgumentException("Nieznany typ wektora: " + kind);
+        }
+    }
+
 
 }

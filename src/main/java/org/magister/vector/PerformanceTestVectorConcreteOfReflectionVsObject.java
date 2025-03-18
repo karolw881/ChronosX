@@ -30,8 +30,6 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
 
     }
 
-
-
     public void runTest() throws IOException {
         aggregatedResults.clear(); // Czyszczenie poprzednich wyników
         performTestConcrete();
