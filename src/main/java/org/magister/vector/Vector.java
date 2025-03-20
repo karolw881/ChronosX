@@ -2,8 +2,8 @@ package org.magister.vector;
 import org.magister.helper.NumberOperations;
 
 public class Vector<T extends Number> {
-    private T[] coordinates;
-    private NumberOperations<T> operations;
+    private final T[] coordinates;
+    private final NumberOperations<T> operations;
 
     public Vector(T[] coordinates, NumberOperations<T> operations) {
         this.coordinates = coordinates.clone();

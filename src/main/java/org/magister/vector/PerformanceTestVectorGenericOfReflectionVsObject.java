@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
+import org.magister.helper.CalculationStatistic;
 import org.magister.helper.IntegerOperations;
 import org.magister.helper.StatisticsResult;
 
@@ -96,14 +97,15 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
 
             }
             // Wyświetlamy i zapisujemy zagregowane statystyki
-            displayDetailedStatistics();
-            saveAggregatedStatisticsToFile();
+            CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR ,aggregatedResults);
         }
 
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        displayDetailedStatistics();
-        saveAggregatedStatisticsToFile();
-        saveStatisticsByOperation();
+        // Wyświetlamy i zapisujemy zagregowane statystyki
+        CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR ,aggregatedResults);
+       // saveStatisticsByOperation();
 
     }
 
@@ -125,7 +127,7 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
 
         // Główne pomiary
         for (int i = 0; i < RUNS; i++) {
-            // Pomiar operacji refleksyjnej
+            // Pomiar operacji refleksyjnej]
             long startReflection = System.nanoTime();
             performReflectionOperation(vectorGenericFirst, vectorGenericSecond, operation);
             long endReflection = System.nanoTime();
@@ -175,7 +177,7 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
         saveResultsToFile(resultsFilename, objectTimes, reflectionTimes);
 
         String statsFilename = OUTPUT_DIR + "vector_statistics_" + operation + "_of_reflection_generic" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
 
         System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
@@ -200,8 +202,8 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
             for (StatisticsResult sr : aggregatedResults) {
                 writer.write(String.format(
                         "%-15s %-5d %12.2f %14.2f %12d %14.2f %12.2f %14.2f %12d %14.2f %10.2f%n",
-                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
-                        sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio
+                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectStdDev,
+                        sr.objectMean, sr.objectMedian,  sr.objectStdDev, sr.ratio
                 ));
             }
         } catch (IOException e) {
@@ -307,60 +309,13 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
                 "Con_Mean(ns)", "Con_Median(ns)", "Con_Mode(ns)", "Con_StdDev(ns)", "Ratio");
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-8d %-15.2f %-15.2f %-15d %-15.2f %-15.2f %-15.2f %-15d %-15.2f %-10.2f\n",
-                    sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
-                    sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio);
+                    sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectStdDev,
+                    sr.objectMean, sr.objectMedian, sr.objectStdDev, sr.ratio);
         }
         System.out.println("==================================\n");
     }
 
-    private StatisticsResult calculateAndSaveStatistics(List<Long> genericReflectTimes,
-                                                        List<Long> GenericObjectTimes,
-                                                        String filename,
-                                                        String operation,
-                                                        int dim, KindOfVector kind) {
-        DoubleSummaryStatistics genericStats = genericReflectTimes.stream().mapToDouble(Long::doubleValue).
-                summaryStatistics();
-        DoubleSummaryStatistics concreteStats = GenericObjectTimes.stream().mapToDouble(Long::doubleValue).
-                summaryStatistics();
 
-        double genericMean = genericStats.getAverage();
-        double concreteMean = concreteStats.getAverage();
-        double genericMedian = calculateMedian(genericReflectTimes);
-        double concreteMedian = calculateMedian(GenericObjectTimes);
-        long genericMode = calculateMode(genericReflectTimes);
-        long concreteMode = calculateMode(GenericObjectTimes);
-        double genericStd = calculateStandardDeviation(genericReflectTimes);
-        double concreteStd = calculateStandardDeviation(GenericObjectTimes);
-        double ratio = genericMean / concreteMean;
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Statistics for generic Reflect implementation (Vector<Integer>):\n");
-            writer.write(String.format("Mean: %.2f ns\n", genericMean));
-            writer.write(String.format("Median: %.2f ns\n", genericMedian));
-            writer.write(String.format("Mode: %d ns\n", genericMode));
-            writer.write(String.format("Min: %d ns\n", (long) genericStats.getMin()));
-            writer.write(String.format("Max: %d ns\n", (long) genericStats.getMax()));
-            writer.write(String.format("Standard Deviation: %.2f ns\n", genericStd));
-            writer.write("\n");
-            writer.write("Statistics for generic object implementation (Vector<Integer>:\n");
-            writer.write(String.format("Mean: %.2f ns\n", concreteMean));
-            writer.write(String.format("Median: %.2f ns\n", concreteMedian));
-            writer.write(String.format("Mode: %d ns\n", concreteMode));
-            writer.write(String.format("Min: %d ns\n", (long) concreteStats.getMin()));
-            writer.write(String.format("Max: %d ns\n", (long) concreteStats.getMax()));
-            writer.write(String.format("Standard Deviation: %.2f ns\n", concreteStd));
-            writer.write("\n");
-            writer.write(String.format("Ratio of mean times (generic reflect /generic object): %.2f\n", ratio));
-            writer.write(String.format("Performance difference: Concrete implementation is %.2f times faster than generic\n",
-                    (ratio > 1) ? ratio : 1 / ratio));
-        } catch (IOException e) {
-            System.err.println("Error saving statistics to file: " + e.getMessage());
-        }
-        return new StatisticsResult(operation, dim, genericMean, genericMedian, genericMode, genericStd,
-                concreteMean, concreteMedian, concreteMode, concreteStd, ratio, kind);
-
-
-    }
 
     private void createDirectoriesIfNotExists(String path) {
         File directory = new File(path);

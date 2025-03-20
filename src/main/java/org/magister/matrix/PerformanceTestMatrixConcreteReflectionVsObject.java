@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
+import org.magister.helper.CalculationStatistic;
 import org.magister.helper.IntegerOperations;
 import org.magister.helper.StatisticsResult;
 
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.magister.matrix.PerformanceTestMatrixGenericofReflectionVsObject.showOrSaveBarChartForRatioWithKind;
 
 
 @Getter
@@ -28,12 +28,10 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
     private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
     private static final int RUNS = PerformanceTestMatrix.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestMatrix.DIMENSIONS;
-    //  private final List<StatisticsResult> aggregatedResults = new ArrayList<>();
+
 
     public PerformanceTestMatrixConcreteReflectionVsObject() {
-        // Używamy metod odziedziczonych do tworzenia katalogów
         createDirectories();
-        //   performTest();
     }
 
 
@@ -50,12 +48,121 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
         }
 
-        showOrSaveChartRatioVsDim2ForAdd(aggregatedResults);
-        showOrSaveChartRatioVsDim2ForSub(aggregatedResults);
-        showOrSaveChartRatioVsDim2ForMultiply(aggregatedResults);
+        showOrSaveChartRatioVsDimWithOperation(aggregatedResults , "add");
+        showOrSaveChartRatioVsDimWithOperation(aggregatedResults,"subtract");
+        showOrSaveChartRatioVsDimWithOperation(aggregatedResults , "multiply");
 
 
     }
+
+
+    private static XYChart createChartRatioVsDimWithOperation(List<StatisticsResult> results, String chartTitle, String xAxisTitle, String yAxisTitle, String operation) {
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Osobne serie dla każdego typu macierzy
+
+               /*
+    RANDOM,           // Losowa macierz
+    IDENTITY,         // Macierz jednostkowa (tożsamościowa)
+    DIAGONAL,         // Macierz diagonalna
+    SYMMETRIC,        // Macierz symetryczna
+    ANTISYMMETRIC,    // Macierz antysymetryczna (skew-symetryczna)
+    LOWER_TRIANGULAR, // Macierz trójkątna dolna
+    UPPER_TRIANGULAR  // Macierz trójkątna górna
+         */
+
+
+
+        List<StatisticsResult> radomResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.RANDOM)
+                .toList();
+
+        List<StatisticsResult> identityResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.IDENTITY)
+                .toList();
+
+        List<StatisticsResult> diagResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.DIAGONAL)
+                .toList();
+
+        List<StatisticsResult> symetricResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.SYMMETRIC)
+                .toList();
+
+        List<StatisticsResult> antiResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.ANTISYMMETRIC)
+                .toList();
+
+
+        List<StatisticsResult> lowTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.LOWER_TRIANGULAR)
+                .toList();
+
+        List<StatisticsResult> upperTriaResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfMatrix == KindOfMatrix.UPPER_TRIANGULAR)
+                .toList();
+
+
+
+
+
+
+        // Dodaj serie osobno
+
+        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                radomResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("IDENTITYC", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                identityResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("DIAGONAL", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                diagResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("ANTISYMMETRIC", antiResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                antiResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("SYMMETRIC", symetricResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                symetricResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+
+        chart.addSeries("LOWER_TRIANGULAR", lowTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                lowTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        chart.addSeries("UPPER_TRIANGULAR", upperTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                upperTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
+
+        return chart;
+
+    }
+
+    public static void showOrSaveChartRatioVsDimWithOperation(List<StatisticsResult> results , String operation ) throws IOException {
+        XYChart chart = createChartRatioVsDimWithOperation(
+                results,
+                "Wykres: Ratio (x) vs. Dim (y) dla operacji " + operation,
+                "Wymiar (Dim)" ,
+                "Ratio (Gen Ref / Gen Obj)"
+                , operation
+        );
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
 
 
     public void performTestConcrete() {
@@ -87,20 +194,18 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
                 saveMatrix1ToFile(matrixConcreteFirst, INPUT_DIR + "matrix1_concrete_" + kind.toString().toLowerCase() + "_" + dim + ".txt");
                 saveMatrix1ToFile(matrixConcreteSecond, INPUT_DIR + "matrix2_concrete_" +  kind.toString().toLowerCase() + "_" +dim + ".txt");
 
-                // Porównanie i zapis macierzy
-                //  saveMatrixComparerToFile(dim, matrixGenericReflectFirst, matrixGenericReflectSecond);
-
-
                 aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
                 aggregatedResults.add(testSubstractConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
                 aggregatedResults.add(testMultiplyConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
-                // aggregatedResults.add(testDivideGenericObjectVsReflect(matrixConcrete1, matrixConcrete2, dim));
+
 
             }
+
+            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults);
         }
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        displayDetailedStatistics();
-        saveAggregatedStatisticsToFile();
+        CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+        CalculationStatistic.saveAggregatedStatisticsToFile();
 
     }
 
@@ -141,7 +246,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_of_reflection_and_object_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
         System.out.println("multiply results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
@@ -178,7 +283,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         String resultsFilename = OUTPUT_DIR + "matrix_performance_subtract_of_reflection_and_object_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_subtract_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim,kindOfMatrix);
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim,kindOfMatrix);
         System.out.println("subtract results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
@@ -215,8 +320,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_and_object_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "" +
-                "Add", dim,kindOfMatrix);
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Add", dim,kindOfMatrix);
         System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
@@ -234,8 +338,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-5d %20.2f %20.2f %20d %20.2f %20.2f %20.2f %20d %20.2f %10.2f\n",
                     sr.operation, sr.dimension,
-                    sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
-                    sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev,
+                    sr.reflectMean, sr.reflectMedian,  sr.reflectStdDev,
+                    sr.objectMean, sr.objectMedian,  sr.objectStdDev,
                     sr.ratio);
         }
         System.out.println("=========================================================================================");
@@ -284,50 +388,6 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
 
     @Override
-    StatisticsResult calculateAndSaveStatistics(List<Long> genericReflectTimes, List<Long> GenericObjectTimes,
-                                                String filename, String operation, int dimension , KindOfMatrix kind) {
-        DoubleSummaryStatistics genericStats = genericReflectTimes.stream().mapToDouble(Long::doubleValue).summaryStatistics();
-        DoubleSummaryStatistics concreteStats = GenericObjectTimes.stream().mapToDouble(Long::doubleValue).summaryStatistics();
-
-        double genericMean = genericStats.getAverage();
-        double concreteMean = concreteStats.getAverage();
-        double genericMedian = calculateMedian(genericReflectTimes);
-        double concreteMedian = calculateMedian(GenericObjectTimes);
-        long genericMode = calculateMode(genericReflectTimes);
-        long concreteMode = calculateMode(GenericObjectTimes);
-        double genericStd = calculateStandardDeviation(genericReflectTimes);
-        double concreteStd = calculateStandardDeviation(GenericObjectTimes);
-        double ratio = genericMean / concreteMean;
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Statistics for generic Reflect implementation (Matrix<Integer>):\n");
-            writer.write(String.format("Mean: %.2f ns\n", genericMean));
-            writer.write(String.format("Median: %.2f ns\n", genericMedian));
-            writer.write(String.format("Mode: %d ns\n", genericMode));
-            writer.write(String.format("Min: %d ns\n", (long) genericStats.getMin()));
-            writer.write(String.format("Max: %d ns\n", (long) genericStats.getMax()));
-            writer.write(String.format("Standard Deviation: %.2f ns\n", genericStd));
-            writer.write("\n");
-            writer.write("Statistics for generic object implementation (Matrix<Integer>:\n");
-            writer.write(String.format("Mean: %.2f ns\n", concreteMean));
-            writer.write(String.format("Median: %.2f ns\n", concreteMedian));
-            writer.write(String.format("Mode: %d ns\n", concreteMode));
-            writer.write(String.format("Min: %d ns\n", (long) concreteStats.getMin()));
-            writer.write(String.format("Max: %d ns\n", (long) concreteStats.getMax()));
-            writer.write(String.format("Standard Deviation: %.2f ns\n", concreteStd));
-            writer.write("\n");
-            writer.write(String.format("Ratio of mean times (generic reflect /generic object): %.2f\n", ratio));
-            writer.write(String.format("Performance difference: Concrete implementation is %.2f times faster than generic\n",
-                    (ratio > 1) ? ratio : 1 / ratio));
-        } catch (IOException e) {
-            System.err.println("Error saving statistics to file: " + e.getMessage());
-        }
-        return new StatisticsResult(operation, dimension, genericMean, genericMedian, genericMode, genericStd,
-                concreteMean, concreteMedian, concreteMode, concreteStd, ratio , kind);
-    }
-
-
-    @Override
     void saveAggregatedStatisticsToFile() {
         String filename = CHARTS_DIR + "/aggregated_concrete_statistics.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
@@ -336,8 +396,8 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             for (StatisticsResult sr : aggregatedResults) {
                 writer.write(String.format(
                         "%s\t%d\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\n",
-                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
-                        sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio
+                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian,  sr.reflectStdDev,
+                        sr.objectMean, sr.objectMedian, sr.objectStdDev, sr.ratio
                 ));
             }
         } catch (IOException e) {
@@ -877,149 +937,17 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         return chart;
     }
 
-    public static void showOrSaveChartRatioVsDim2ForAdd(List<StatisticsResult> results) throws IOException {
-        XYChart chart = createChartRatioVsDim2ForAdd(
-                results,
-                "Wykres: Ratio (x) vs. Dim (y) dla operacji add",
-                "Wymiar (Dim)" ,
-                "Ratio (Concrete Ref / concrete Obj)"
-        );
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinearAdd.png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
-    }
-
-
-    public static void showOrSaveChartRatioVsDim2ForSub(List<StatisticsResult> results) throws IOException {
-        XYChart chart = createChartRatioVsDim2ForSub(
-                results,
-                "Wykres: Ratio (x) vs. Dim (y) dla operacji sub",
-                "Wymiar (Dim)" ,
-                "Ratio (Concrete Ref / concrete Obj)"
-        );
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinearSub.png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
-    }
-
-
-
-    public static XYChart createChartRatioVsDim2ForMult(List<StatisticsResult> results,
-                                                        String chartTitle,
-                                                        String xAxisTitle,
-                                                        String yAxisTitle) {
-
-        // Tworzymy wykres XY
-        XYChart chart = new XYChartBuilder()
-                .width(1800)
-                .height(1000)
-                .title(chartTitle)
-                .xAxisTitle(xAxisTitle)
-                .yAxisTitle(yAxisTitle)
-                .build();
-
-        // Osobne serie dla każdego typu macierzy
-
-               /*
-    RANDOM,           // Losowa macierz
-    IDENTITY,         // Macierz jednostkowa (tożsamościowa)
-    DIAGONAL,         // Macierz diagonalna
-    SYMMETRIC,        // Macierz symetryczna
-    ANTISYMMETRIC,    // Macierz antysymetryczna (skew-symetryczna)
-    LOWER_TRIANGULAR, // Macierz trójkątna dolna
-    UPPER_TRIANGULAR  // Macierz trójkątna górna
-         */
-
-
-
-        List<StatisticsResult> radomResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.RANDOM)
-                .toList();
-
-        List<StatisticsResult> identityResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.IDENTITY)
-                .toList();
-
-        List<StatisticsResult> diagResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.DIAGONAL)
-                .toList();
-
-        List<StatisticsResult> symetricResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.SYMMETRIC)
-                .toList();
-
-        List<StatisticsResult> antiResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.ANTISYMMETRIC)
-                .toList();
-
-
-        List<StatisticsResult> lowTriaResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.LOWER_TRIANGULAR)
-                .toList();
-
-        List<StatisticsResult> upperTriaResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase("multiply"))
-                .filter(r -> r.kindOfMatrix == KindOfMatrix.UPPER_TRIANGULAR)
-                .toList();
 
 
 
 
 
 
-        // Dodaj serie osobno
-
-        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                radomResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("IDENTITYC", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                identityResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("DIAGONAL", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                diagResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("ANTISYMMETRIC", antiResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                antiResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("SYMMETRIC", symetricResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                symetricResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-
-        chart.addSeries("LOWER_TRIANGULAR", lowTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                lowTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("UPPER_TRIANGULAR", upperTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                upperTriaResults.stream().mapToDouble(r -> r.ratio).toArray());
 
 
 
 
 
-
-        return chart;
-    }
-
-
-    public static void showOrSaveChartRatioVsDim2ForMultiply(List<StatisticsResult> results) throws IOException {
-        XYChart chart = createChartRatioVsDim2ForMult(
-                results,
-                "Wykres: Ratio (x) vs. Dim (y) dla operacji multiply",
-                "Wymiar (Dim)" ,
-                "Ratio (Concrete Ref / concrete Obj)"
-        );
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinearmultiply.png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
-    }
 
 
 }

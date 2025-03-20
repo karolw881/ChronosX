@@ -6,6 +6,7 @@ package org.magister.matrix;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.magister.helper.IntegerOperations;
 import org.magister.helper.NumberOperations;
 
 // Implementacja generyczna z użyciem refleksji
@@ -20,15 +21,16 @@ public class Matrix<T extends Number> {
     private int rows;
     private int cols;
 
-    // Konstruktor przyjmujący dwuwymiarową tablicę i operacje
 
-    public Matrix(T[][] data, NumberOperations<T> operations) {
+
+    public Matrix(T[][] data, NumberOperations<T> operations ) {
         if (data == null || data.length == 0 || data[0].length == 0) {
             throw new IllegalArgumentException("Dane macierzy nie mogą być puste");
         }
         this.rows = data.length;
         this.cols = data[0].length;
         this.operations = operations;
+
 
         // Kopiowanie danych aby uniknąć modyfikacji zewnętrznej
         this.data = (T[][]) new Number[rows][cols];
@@ -107,11 +109,21 @@ public class Matrix<T extends Number> {
 
 
     // Metoda dzielenia macierzy: A / B = A * B^{-1}
-    public Matrix<T> divide(Matrix<T> matrix) {
-        return this.multiply(matrix.inverse());
-    }
 
+
+    public Matrix<T> divide(Matrix<T> matrix) {
+        if (!matrix.determinant().equals(operations.zero())) {
+       //     System.out.println("dzielenie" + operations.one());
+            return this.multiply(matrix.inverse());
+        } else{
+           // System.out.println(" blad w dzielniu ");
+           // throw new RuntimeException("blad w dzieleniu");
+            return null;
+        }
+
+    }
     // Metoda obliczania macierzy odwrotnej (Gauss-Jordan elimination)
+
     public Matrix<T> inverse() {
         if (rows != cols) {
             throw new IllegalArgumentException("Macierz musi być kwadratowa, aby obliczyć odwrotność");
@@ -120,9 +132,7 @@ public class Matrix<T extends Number> {
         // Tworzymy rozszerzoną macierz [A | I]
         T[][] augmented = (T[][]) new Number[n][2 * n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                augmented[i][j] = data[i][j];
-            }
+            System.arraycopy(data[i], 0, augmented[i], 0, n);
             for (int j = n; j < 2 * n; j++) {
                 augmented[i][j] = (j - n == i) ? operations.one() : operations.zero();
             }
@@ -165,9 +175,7 @@ public class Matrix<T extends Number> {
         // Wyodrębniamy macierz odwrotną (prawa połowa rozszerzonej macierzy)
         T[][] invData = (T[][]) new Number[n][n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                invData[i][j] = augmented[i][j + n];
-            }
+            System.arraycopy(augmented[i], 0 + n, invData[i], 0, n);
         }
         return new Matrix<>(invData, operations);
     }

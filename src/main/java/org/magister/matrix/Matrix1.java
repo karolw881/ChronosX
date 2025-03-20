@@ -174,9 +174,7 @@ public class Matrix1 {
         // Tworzymy rozszerzoną macierz [A | I]
         int[][] augmented = new int[n][2 * n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                augmented[i][j] = data[i][j];
-            }
+            System.arraycopy(data[i], 0, augmented[i], 0, n);
             for (int j = n; j < 2 * n; j++) {
                 augmented[i][j] = (j - n == i) ? 1 : 0;
             }
@@ -237,9 +235,7 @@ public class Matrix1 {
         // Wyodrębniamy macierz odwrotną (prawa połowa rozszerzonej macierzy)
         int[][] invData = new int[n][n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                invData[i][j] = augmented[i][j + n];
-            }
+            System.arraycopy(augmented[i], 0 + n, invData[i], 0, n);
         }
 
         return new Matrix1(invData);
