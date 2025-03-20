@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 import org.magister.helper.CalculationStatistic;
-import org.magister.helper.IntegerOperations;
 import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
@@ -13,7 +12,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -204,7 +202,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults);
         }
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+        CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
         CalculationStatistic.saveAggregatedStatisticsToFile();
 
     }

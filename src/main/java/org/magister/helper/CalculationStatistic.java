@@ -353,7 +353,7 @@ public class CalculationStatistic {
                 kindOfMatrix);
     }
 
-    public  static void displayDetailedStatistics(List<StatisticsResult> aggregatedResults) {
+    public  static void displayDetailedStatisticsByMatrixKind(List<StatisticsResult> aggregatedResults) {
         System.out.println("\n===== AGREGOWANE STATYSTYKI =====");
         System.out.printf("%-10s %-5s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
                 "Operacja", "Dim",
@@ -361,11 +361,11 @@ public class CalculationStatistic {
                 "Ref_CV(%)", "Ref_Skew", "Ref_Kurt",
                 "Obj_Mean(ns)", "Obj_Median(ns)", "Obj_StdDev(ns)", "Obj_Q1(ns)", "Obj_Q3(ns)", "Obj_IQR(ns)",
                 "Obj_CV(%)", "Obj_Skew", "Obj_Kurt",
-                "Ratio");
+                "Ratio" , "Kind od matrix");
 
 
         for (StatisticsResult sr : aggregatedResults) {
-            System.out.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f\n",
+            System.out.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
                     sr.operation,
                     sr.dimension,
                     // Statystyki refleksyjne
@@ -389,7 +389,53 @@ public class CalculationStatistic {
                     sr.objectSkewness,
                     sr.objectKurtosis,
                     // Dodatkowe pole
-                    sr.ratio);
+                    sr.ratio , sr.kindOfMatrix.toString());
+        }
+
+        System.out.println("==================================\n");
+    }
+
+
+
+    public static void displayDetailedStatisticsByOperation(List<StatisticsResult> aggregatedResults, String operation) {
+        System.out.println("\n===== AGREGOWANE STATYSTYKI DLA OPERACJI: " + operation + " =====");
+        System.out.printf("%-10s %-5s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
+                "Operacja", "Dim",
+                "Ref_Mean(ns)", "Ref_Median(ns)", "Ref_StdDev(ns)", "Ref_Q1(ns)", "Ref_Q3(ns)", "Ref_IQR(ns)",
+                "Ref_CV(%)", "Ref_Skew", "Ref_Kurt",
+                "Obj_Mean(ns)", "Obj_Median(ns)", "Obj_StdDev(ns)", "Obj_Q1(ns)", "Obj_Q3(ns)", "Obj_IQR(ns)",
+                "Obj_CV(%)", "Obj_Skew", "Obj_Kurt",
+                "Ratio", "Kind of Matrix");
+
+        // Filtrowanie wyników na podstawie operacji
+        for (StatisticsResult sr : aggregatedResults) {
+            if (sr.operation.equalsIgnoreCase(operation)) {
+                System.out.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
+                        sr.operation,
+                        sr.dimension,
+                        // Statystyki refleksyjne
+                        sr.reflectMean,
+                        sr.reflectMedian,
+                        sr.reflectStdDev,
+                        sr.reflectQ1,
+                        sr.reflectQ3,
+                        sr.reflectIQR,
+                        sr.reflectCV,
+                        sr.reflectSkewness,
+                        sr.reflectKurtosis,
+                        // Statystyki obiektowe
+                        sr.objectMean,
+                        sr.objectMedian,
+                        sr.objectStdDev,
+                        sr.objectQ1,
+                        sr.objectQ3,
+                        sr.objectIQR,
+                        sr.objectCV,
+                        sr.objectSkewness,
+                        sr.objectKurtosis,
+                        // Dodatkowe pole
+                        sr.ratio, sr.kindOfMatrix.toString());
+            }
         }
 
         System.out.println("==================================\n");

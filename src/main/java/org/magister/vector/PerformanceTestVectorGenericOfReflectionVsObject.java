@@ -15,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,13 +96,13 @@ public class PerformanceTestVectorGenericOfReflectionVsObject extends Performanc
 
             }
             // Wyświetlamy i zapisujemy zagregowane statystyki
-            CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+            CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
             CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR ,aggregatedResults);
         }
 
         // Wyświetlamy i zapisujemy zagregowane statystyki
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+        CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
         CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR ,aggregatedResults);
        // saveStatisticsByOperation();
 
