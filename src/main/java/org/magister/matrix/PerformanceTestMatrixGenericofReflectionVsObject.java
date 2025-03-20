@@ -2,14 +2,10 @@ package org.magister.matrix;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.knowm.xchart.*;
-import org.knowm.xchart.style.Styler;
 import org.magister.helper.CalculationStatistic;
 import org.magister.helper.IntegerOperations;
 import org.magister.helper.StatisticsResult;
 import org.magister.helper.Vizualization;
-import org.magister.vector.Vector;
-import org.magister.vector.VectorReflectionUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,7 +39,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.getName();
-            if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix")) {
+            if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
             } else {
 
                 System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
@@ -51,9 +47,9 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "subtract", CHARTS_DIR, field.getName());
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "multiply", CHARTS_DIR, field.getName());
 
-                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , CHARTS_DIR  );
-                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"multiply" , CHARTS_DIR  );
-                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"subtract" , CHARTS_DIR  );
+                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , CHARTS_DIR , field.getName() );
+                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"multiply" , CHARTS_DIR, field.getName()   );
+                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"subtract" , CHARTS_DIR  , field.getName() );
 
             }
 
@@ -89,9 +85,12 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             // Wyświetlamy i zapisujemy zagregowane statystyki
             CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults);
         }
-
+        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add");
+        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract");
+        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply");
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        CalculationStatistic.displayDetailedStatistics(aggregatedResults);
+        CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
+
         CalculationStatistic.saveAggregatedStatisticsToFile();
 
     }
@@ -275,18 +274,18 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
                 "Obj_Mean(ns)", "Obj_Median(ns)", "Obj_Mode(ns)", "Obj_StdDev(ns)",
                 "Obj_Q1(ns)", "Obj_Q3(ns)", "Obj_IQR(ns)", "Obj_CV(%)", "Obj_Skew", "Obj_Kurt",
                 "Obj_Mom3", "Obj_Mom4",
-                "Ratio");
+                "Ratio","Kind of matrix");
 
         // Iteracja po wynikach i wypisanie wierszy tabeli
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-5d %15.2f %15.2f %15d %15.2f %10.2f %10.2f %10.2f %10.2f %10.4f %10.4f %10.4f %10.4f " +
-                            "%15.2f  %15.2f %10.2f %10.2f %10.2f %10.2f %10.4f %10.4f %10.4f %10.4f %10.2f\n",
+                            "%15.2f  %15.2f %10.2f %10.2f %10.2f %10.2f %10.4f %10.4f %10.4f %10.4f %10.2f %s  \n",
                     sr.operation, sr.dimension,
                     sr.reflectMean, sr.reflectMedian, sr.reflectStdDev,
                     sr.reflectQ1, sr.reflectQ3, sr.reflectIQR, sr.reflectCV, sr.reflectSkewness, sr.reflectKurtosis,
                     sr.objectMean, sr.objectMedian, sr.objectStdDev,
                     sr.objectQ1, sr.objectQ3, sr.objectIQR, sr.objectCV, sr.objectSkewness, sr.objectKurtosis,
-                    sr.ratio);
+                    sr.ratio , sr.kindOfMatrix.toString() );
         }
         System.out.println("=========================================================================================");
     }

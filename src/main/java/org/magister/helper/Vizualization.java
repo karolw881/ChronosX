@@ -5,6 +5,7 @@ import org.knowm.xchart.style.Styler;
 import org.magister.matrix.KindOfMatrix;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,22 +110,7 @@ public class Vizualization {
 
 
 
-    public static void showOrSaveChartRatioVsDimWithOperation(List<StatisticsResult> results ,
-                                                              String operation,
-                                                              String CHARTS_DIR ) throws IOException {
-        XYChart chart = createChartRatioVsDimWithOperation(
-                results,
-                "Wykres: Ratio (x) vs. Dim (y) dla operacji " + operation,
-                "Wymiar (Dim)" ,
-                "Ratio (Gen Ref / Gen Obj)"
-                , operation
-        );
 
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
-    }
 
     private static XYChart createChartRatioVsDimWithOperation(List<StatisticsResult> results,
                                                               String chartTitle,
@@ -143,6 +129,7 @@ public class Vizualization {
         // Osobne serie dla każdego typu macierzy
 
                /*
+    RANDOM,           // Losowa macierz
     RANDOM,           // Losowa macierz
     IDENTITY,         // Macierz jednostkowa (tożsamościowa)
     DIAGONAL,         // Macierz diagonalna
@@ -386,18 +373,18 @@ public class Vizualization {
      * @param CHARTS_DIR katalog, do którego zostanie zapisany wykres
      * @throws IOException przy błędach zapisu pliku
      */
-    public static void showOrSaveBarChartForOperation(List<StatisticsResult> results, String operation, String CHARTS_DIR) throws IOException {
+    public static void showOrSaveBarChartForOperation(List<StatisticsResult> results, String operation, String CHARTS_DIR, String statisticType) throws IOException {
         CategoryChart chart = createBarChartForOperation(
                 results,
                 operation,
                 "Wykres słupkowy dla operacji " + operation,
                 "Wymiar (Dim)",
-                "Wartość (np. czas [ns] lub ratio)"
+                "Wartość (np. czas [ns] lub ratio)",
+                statisticType // Przekazujemy nowy parametr
         );
         // Nazwa pliku zawiera nazwę operacji
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "bar_chartOO_" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "bar_chartOO_" + operation + "_" + statisticType + ".png", BitmapEncoder.BitmapFormat.PNG);
     }
-
     /**
      * Tworzy wykres słupkowy, w którym dla podanej operacji są oddzielnie wyświetlone serie dla
      * każdego rodzaju macierzy (KindOfMatrix). Oś X zawiera wymiar macierzy, a oś Y – wartość statystyki.
@@ -414,7 +401,8 @@ public class Vizualization {
             String operation,
             String chartTitle,
             String xAxisTitle,
-            String yAxisTitle
+            String yAxisTitle,
+            String statisticType // Nowy parametr
     ) {
         CategoryChart chart = new CategoryChartBuilder()
                 .width(1800)
@@ -443,19 +431,14 @@ public class Vizualization {
                     .map(r -> "D=" + r.dimension)
                     .collect(Collectors.toList());
 
-            // Na osi Y pobieramy przykładowo wartość ratio – możesz zmienić na inną statystykę
-            List<Double> values = filteredResults.stream()
-                    .map(r -> r.ratio)
-                    .collect(Collectors.toList());
+            // Używamy metody getStatisticsValues do pobrania wartości
+            double[] values = getStatisticsValues(filteredResults, statisticType);
 
-            chart.addSeries(kind.toString(), xLabels, values);
+            chart.addSeries(kind.toString(), xLabels, Arrays.stream(values).boxed().collect(Collectors.toList()));
         }
 
         return chart;
     }
-
-
-
 
 
 }
