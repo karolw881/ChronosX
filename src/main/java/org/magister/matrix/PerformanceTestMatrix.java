@@ -1,5 +1,7 @@
 package org.magister.matrix;
 
+import org.magister.bubbleSort.KindOfBubbleSort;
+import org.magister.helper.CalculationStatistic;
 import org.magister.helper.IntegerOperations;
 import org.magister.helper.StatisticsResult;
 
@@ -19,9 +21,9 @@ import javax.imageio.ImageIO;
 
 public  class PerformanceTestMatrix {
     // Directory constants
-    protected static final String INPUT_DIR = "test_dataGG/input/matrix/";
-    protected static final String OUTPUT_DIR = "test_dataGG/output/matrix/";
-    protected static final String CHARTS_DIR = "test_dataGG/output/matrix/wykres/";
+    protected static final String INPUT_DIR = "test_dataSem2/input/matrix/";
+    protected static final String OUTPUT_DIR = "test_dataSem2/output/matrix/";
+    protected static final String CHARTS_DIR = "test_dataSem2/output/matrix/wykres/";
 
     // Number of test runs for each case
     protected static final int RUNS = 100;
@@ -29,7 +31,7 @@ public  class PerformanceTestMatrix {
     // Matrix dimensions to test
    // protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 , 1000, 2000 };
    // protected static final int[] DIMENSIONS = {  100,50,10,6,5,4,3,2,1 };
-    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 ,10 , 20 , 50 , 100  };
+    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5  , 10 , 20 , 30    };
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
@@ -60,12 +62,12 @@ public  class PerformanceTestMatrix {
             porownajIMZapiszMacierze(dim, matrix1Generic, matrix1Concrete);
 
             // Test operacji i agregacja statystyk
-            aggregatedResults.add(testAdd(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
+           // aggregatedResults.add(testAdd(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
 
             // Zapisz macierze wejściowe do plików
-            aggregatedResults.add(testSubtract(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
-            aggregatedResults.add(testMultiply(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
-            aggregatedResults.add(testAddGenericObjectVsReflect(matrix1Generic, matrix2Generic ,  matrix1Concrete , matrix1Concrete ,   dim));
+          //  aggregatedResults.add(testSubtract(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
+        //    aggregatedResults.add(testMultiply(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
+           // aggregatedResults.add(testAddGenericObjectVsReflect(matrix1Generic, matrix2Generic ,  matrix1Concrete , matrix1Concrete ,   dim));
 
         }
 
@@ -110,107 +112,15 @@ public  class PerformanceTestMatrix {
         String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_generic" + dim + ".txt";
         saveResultsToFile(resultsFilename, objectTester, reflectionTester);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_generic" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(objectTester, reflectionTester, statsFilename, "Add", dim);
+
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(objectTester, reflectionTester, statsFilename, "Add", dim,        KindOfBubbleSort.SORTED);
         System.out.println("Addition results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
     }
 
 
-    StatisticsResult testAdd(Matrix<Integer> matrix1, Matrix<Integer> matrix2,
-                             Matrix1 matrix1Concrete, Matrix1 matrix2Concrete, int dim) {
-        List<Long> genericTimes = new ArrayList<>();
-        List<Long> concreteTimes = new ArrayList<>();
 
-        // Warm-up runs
-        for (int i = 0; i < 3; i++) {
-            matrix1.add(matrix2);
-            matrix1Concrete.add(matrix2Concrete);
-        }
 
-        // Measured runs
-        for (int i = 0; i < RUNS; i++) {
-            long startGeneric = System.nanoTime();
-            matrix1.add(matrix2);
-            long endGeneric = System.nanoTime();
-            genericTimes.add(endGeneric - startGeneric);
-
-            long startConcrete = System.nanoTime();
-            matrix1Concrete.add(matrix2Concrete);
-            long endConcrete = System.nanoTime();
-            concreteTimes.add(endConcrete - startConcrete);
-        }
-
-        String resultsFilename = OUTPUT_DIR + "matrix_performance_add_" + dim + ".txt";
-        saveResultsToFile(resultsFilename, genericTimes, concreteTimes);
-        String statsFilename = OUTPUT_DIR + "matrix_statistics_add_" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(genericTimes, concreteTimes, statsFilename, "Add", dim);
-        System.out.println("Addition results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
-    }
-
-    StatisticsResult testSubtract(Matrix<Integer> matrix1, Matrix<Integer> matrix2,
-                                  Matrix1 matrix1Concrete, Matrix1 matrix2Concrete, int dim) {
-        List<Long> genericTimes = new ArrayList<>();
-        List<Long> concreteTimes = new ArrayList<>();
-
-        // Warm-up runs
-        for (int i = 0; i < 3; i++) {
-            matrix1.subtract(matrix2);
-            matrix1Concrete.subtract(matrix2Concrete);
-        }
-
-        // Measured runs
-        for (int i = 0; i < RUNS; i++) {
-            long startGeneric = System.nanoTime();
-            matrix1.subtract(matrix2);
-            long endGeneric = System.nanoTime();
-            genericTimes.add(endGeneric - startGeneric);
-
-            long startConcrete = System.nanoTime();
-            matrix1Concrete.subtract(matrix2Concrete);
-            long endConcrete = System.nanoTime();
-            concreteTimes.add(endConcrete - startConcrete);
-        }
-
-        String resultsFilename = OUTPUT_DIR + "matrix_performance_subtract_" + dim + ".txt";
-        saveResultsToFile(resultsFilename, genericTimes, concreteTimes);
-        String statsFilename = OUTPUT_DIR + "matrix_statistics_subtract_" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(genericTimes, concreteTimes, statsFilename, "Subtract", dim);
-        System.out.println("Subtraction results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
-    }
-
-    StatisticsResult testMultiply(Matrix<Integer> matrix1, Matrix<Integer> matrix2,
-                                  Matrix1 matrix1Concrete, Matrix1 matrix2Concrete, int dim) {
-        List<Long> genericTimes = new ArrayList<>();
-        List<Long> concreteTimes = new ArrayList<>();
-
-        // Warm-up runs
-        for (int i = 0; i < 3; i++) {
-            matrix1.multiply(matrix2);
-            matrix1Concrete.multiply(matrix2Concrete);
-        }
-
-        // Measured runs
-        for (int i = 0; i < RUNS; i++) {
-            long startGeneric = System.nanoTime();
-            matrix1.multiply(matrix2);
-            long endGeneric = System.nanoTime();
-            genericTimes.add(endGeneric - startGeneric);
-
-            long startConcrete = System.nanoTime();
-            matrix1Concrete.multiply(matrix2Concrete);
-            long endConcrete = System.nanoTime();
-            concreteTimes.add(endConcrete - startConcrete);
-        }
-
-        String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_" + dim + ".txt";
-        saveResultsToFile(resultsFilename, genericTimes, concreteTimes);
-        String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_" + dim + ".txt";
-        StatisticsResult stats = calculateAndSaveStatistics(genericTimes, concreteTimes, statsFilename, "Multiply", dim);
-        System.out.println("Multiplication results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
-    }
 
     /**
      * Create a random matrix of specified dimension (generic implementation) using provided seed.
@@ -333,93 +243,10 @@ public  class PerformanceTestMatrix {
         }
     }
 
-    /**
-     * Oblicza statystyki (średnia, mediana, moda, odchylenie standardowe) i zapisuje wyniki do pliku.
-     * Zwraca obiekt StatisticsResult z zagregowanymi danymi.
-     */
-    StatisticsResult calculateAndSaveStatistics(List<Long> genericTimes, List<Long> concreteTimes,
-                                                String filename, String operation, int dimension) {
-        DoubleSummaryStatistics genericStats = genericTimes.stream().mapToDouble(Long::doubleValue).summaryStatistics();
-        DoubleSummaryStatistics concreteStats = concreteTimes.stream().mapToDouble(Long::doubleValue).summaryStatistics();
-
-        double genericMean = genericStats.getAverage();
-        double concreteMean = concreteStats.getAverage();
-        double genericMedian = calculateMedian(genericTimes);
-        double concreteMedian = calculateMedian(concreteTimes);
-        long genericMode = calculateMode(genericTimes);
-        long concreteMode = calculateMode(concreteTimes);
-        double genericStd = calculateStandardDeviation(genericTimes);
-        double concreteStd = calculateStandardDeviation(concreteTimes);
-        double ratio = genericMean / concreteMean;
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Statistics for generic implementation (Matrix<Integer>):\n");
-            writer.write(String.format("Mean: %.2f ns\n", genericMean));
-            writer.write(String.format("Median: %.2f ns\n", genericMedian));
-            writer.write(String.format("Mode: %d ns\n", genericMode));
-            writer.write(String.format("Min: %d ns\n", (long) genericStats.getMin()));
-            writer.write(String.format("Max: %d ns\n", (long) genericStats.getMax()));
-            writer.write(String.format("Standard Deviation: %.2f ns\n", genericStd));
-            writer.write("\n");
-            writer.write("Statistics for concrete implementation (Matrix1):\n");
-            writer.write(String.format("Mean: %.2f ns\n", concreteMean));
-            writer.write(String.format("Median: %.2f ns\n", concreteMedian));
-            writer.write(String.format("Mode: %d ns\n", concreteMode));
-            writer.write(String.format("Min: %d ns\n", (long) concreteStats.getMin()));
-            writer.write(String.format("Max: %d ns\n", (long) concreteStats.getMax()));
-            writer.write(String.format("Standard Deviation: %.2f ns\n", concreteStd));
-            writer.write("\n");
-            writer.write(String.format("Ratio of mean times (generic/concrete): %.2f\n", ratio));
-            writer.write(String.format("Performance difference: Concrete implementation is %.2f times faster than generic\n",
-                    (ratio > 1) ? ratio : 1 / ratio));
-        } catch (IOException e) {
-            System.err.println("Error saving statistics to file: " + e.getMessage());
-        }
-        return new StatisticsResult(operation, dimension, genericMean, genericMedian, genericMode, genericStd,
-                concreteMean, concreteMedian, concreteMode, concreteStd, ratio);
-    }
 
 
 
 
-
-    /**
-     * Calculate median from a list of values.
-     */
-    double calculateMedian(List<Long> values) {
-        List<Long> sorted = values.stream().sorted().collect(Collectors.toList());
-        int size = sorted.size();
-        if (size % 2 == 0) {
-            return (sorted.get(size / 2 - 1) + sorted.get(size / 2)) / 2.0;
-        } else {
-            return sorted.get(size / 2);
-        }
-    }
-
-    /**
-     * Calculate mode (najczęściej występującą wartość) z listy wartości.
-     */
-    long calculateMode(List<Long> values) {
-        Map<Long, Long> freq = values.stream()
-                .collect(Collectors.groupingBy(v -> v, Collectors.counting()));
-        return freq.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse(0L);
-    }
-
-    /**
-     * Calculate standard deviation from a list of values.
-     */
-    double calculateStandardDeviation(List<Long> values) {
-        double mean = values.stream().mapToLong(Long::longValue).average().orElse(0.0);
-        double variance = values.stream().mapToDouble(v -> Math.pow(v - mean, 2)).average().orElse(0.0);
-        return Math.sqrt(variance);
-    }
-
-    /**
-     * Wyświetl w konsoli zagregowane statystyki w sformatowanej tabeli.
-     */
     void displayDetailedStatistics() {
         System.out.println("\n===== AGREGOWANE STATYSTYKI =====");
         System.out.printf("%-10s %-8s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-10s\n",
@@ -427,8 +254,8 @@ public  class PerformanceTestMatrix {
                 "Con_Mean(ns)", "Con_Median(ns)", "Con_Mode(ns)", "Con_StdDev(ns)", "Ratio");
         for (StatisticsResult sr : aggregatedResults) {
             System.out.printf("%-10s %-8d %-15.2f %-15.2f %-15d %-15.2f %-15.2f %-15.2f %-15d %-15.2f %-10.2f\n",
-                    sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
-                    sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio);
+                    sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian,  sr.reflectStdDev,
+                    sr.objectMean, sr.objectMedian,  sr.objectStdDev, sr.ratio);
         }
         System.out.println("==================================\n");
     }
@@ -449,8 +276,8 @@ public  class PerformanceTestMatrix {
             for (StatisticsResult sr : aggregatedResults) {
                 writer.write(String.format(
                         "%s\t%d\t%.2f\t%.2f\t%d\t%.2f\t%.2f\t%.2f\t%d\t%.2f\t%.2f\n",
-                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectMode, sr.reflectStdDev,
-                        sr.objectMean, sr.objectMedian, sr.objectMode, sr.objectStdDev, sr.ratio
+                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian,  sr.reflectStdDev,
+                        sr.objectMean, sr.objectMedian,  sr.objectStdDev, sr.ratio
                 ));
             }
         } catch (IOException e) {

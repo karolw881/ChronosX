@@ -6,29 +6,25 @@ import java.lang.reflect.Method;
  * Implementacja z użyciem refleksji
  */
 
-public class BubbleSort< T extends Number > {
-    public Object[] sort(Object[] arr, String compareMethodName) throws Exception {
+public class BubbleSort<T extends Number & Comparable<T>> {
+
+    public T[] sort(T[] arr) {
         int n = arr.length;
         boolean swapped;
-
-        // Pobieranie metody porównującej przez refleksję
-        Method compareMethod = arr[0].getClass().getMethod(compareMethodName, arr[0].getClass());
 
         for (int i = 0; i < n - 1; i++) {
             swapped = false;
             for (int j = 0; j < n - i - 1; j++) {
-                // Wywołanie metody porównującej przez refleksję
-                Integer result = (Integer) compareMethod.invoke(arr[j], arr[j + 1]);
-
-                if (result > 0) {
-                    // Zamiana miejscami
-                    Object temp = arr[j];
+                // Porównanie elementów przy użyciu compareTo()
+                if (arr[j].compareTo(arr[j + 1]) > 0) {
+                    // Zamiana elementów miejscami
+                    T temp = arr[j];
                     arr[j] = arr[j + 1];
                     arr[j + 1] = temp;
                     swapped = true;
                 }
             }
-            if (!swapped) {
+            if (!swapped) { // Jeśli podczas przejścia nie było zamiany, sortowanie jest zakończone
                 break;
             }
         }

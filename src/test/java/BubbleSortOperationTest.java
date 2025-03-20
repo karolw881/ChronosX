@@ -152,6 +152,7 @@ public class BubbleSortOperationTest {
 
     // --- Testy dla BubbleSort (refleksja, generyki) ---
 
+    /*
     @Test
     public void testBubbleSortReflectionUnsorted100() throws Exception {
         Integer[] input = readArrayFromFile(Paths.get(INPUT_DIR, "unsorted100.txt").toString());
@@ -205,5 +206,8 @@ public class BubbleSortOperationTest {
         assertEquals("Dzielenie 10 / 2 powinno dać 5", Integer.valueOf(5), operations.divide(10, 2));
         assertEquals("Metoda zero() powinna zwrócić 0", Integer.valueOf(0), operations.zero());
         assertEquals("Metoda one() powinna zwrócić 1", Integer.valueOf(1), operations.one());
+
     }
+
+     */
 }

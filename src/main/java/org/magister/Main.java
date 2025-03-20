@@ -20,22 +20,27 @@ public class Main {
        //  performanceTestBubbleSort.performTests();
 
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
-      //  performanceTestMatrixGenericofReflectionVsObject.runTest();
+
+        /**
+         * Tutaj pytanie z DZIELENIEM   odkomentowac do pokazania !!!!!!!
+         */
+
+          performanceTestMatrixGenericofReflectionVsObject.runTest();
 
 
 
 
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-      //  performanceTestMatrixConcreteReflectionVsObject.runTest();
+     //   performanceTestMatrixConcreteReflectionVsObject.runTest();
 
 
         PerformanceTestVectorGenericOfReflectionVsObject performanceTestVectorGenericOfReflectionVsObject = new PerformanceTestVectorGenericOfReflectionVsObject();
-        performanceTestVectorGenericOfReflectionVsObject.runTest();
+        //performanceTestVectorGenericOfReflectionVsObject.runTest();
 
 
         PerformanceTestVectorConcreteOfReflectionVsObject performanceTestVectorConcreteOfReflectionVsObject = new PerformanceTestVectorConcreteOfReflectionVsObject();
 
-        performanceTestVectorConcreteOfReflectionVsObject.runTest();
+        //performanceTestVectorConcreteOfReflectionVsObject.runTest();
 
     }
 }
