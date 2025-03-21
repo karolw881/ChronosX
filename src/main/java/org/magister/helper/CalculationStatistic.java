@@ -41,7 +41,7 @@ public class CalculationStatistic {
         // Podstawowe statystyki
         double reflectMean = reflectStats.getMean();
         double objectMean = objectStats.getMean();
-        double reflectMedian = new Median().evaluate(reflectArray);
+        double reflectMedian = new    Median().evaluate(reflectArray);
         double objectMedian = new Median().evaluate(objectArray);
         double reflectStdDev = reflectStats.getStandardDeviation();
         double objectStdDev = objectStats.getStandardDeviation();
@@ -290,14 +290,6 @@ public class CalculationStatistic {
         // Współczynnik zmienności (CV)
         double reflectCV = (reflectStd / reflectMean) * 100;
         double objectCV = (objectStd / objectMean) * 100;
-
-        // Momenty centralne
-        double reflectCentralMoment3 = Descriptive.moment(reflectColtList, (int) reflectMean, 3);
-        double objectCentralMoment3 = Descriptive.moment(objectColtList, (int) objectMean, 3);
-        double reflectCentralMoment4 = Descriptive.moment(reflectColtList, (int) reflectMean, 4);
-        double objectCentralMoment4 = Descriptive.moment(objectColtList, (int) objectMean, 4);
-
-        // Stosunek średnich czasów
         double ratio = reflectMean / objectMean;
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
@@ -397,7 +389,7 @@ public class CalculationStatistic {
 
 
 
-    public static void displayDetailedStatisticsByOperation(List<StatisticsResult> aggregatedResults, String operation) {
+    public static void displayDetailedStatisticsByOperation(List<StatisticsResult> aggregatedResults, String operation , String whatKind) {
         System.out.println("\n===== AGREGOWANE STATYSTYKI DLA OPERACJI: " + operation + " =====");
         System.out.printf("%-10s %-5s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
                 "Operacja", "Dim",
@@ -409,7 +401,7 @@ public class CalculationStatistic {
 
         // Filtrowanie wyników na podstawie operacji
         for (StatisticsResult sr : aggregatedResults) {
-            if (sr.operation.equalsIgnoreCase(operation)) {
+            if (sr.operation.equalsIgnoreCase(operation) && whatKind.equals("matrix")) {
                 System.out.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
                         sr.operation,
                         sr.dimension,
@@ -434,14 +426,71 @@ public class CalculationStatistic {
                         sr.objectSkewness,
                         sr.objectKurtosis,
                         // Dodatkowe pole
-                        sr.ratio, sr.kindOfMatrix.toString());
+                        sr.ratio,
+                        sr.kindOfMatrix.toString());
+            } else if (sr.operation.equalsIgnoreCase(operation) && whatKind.equals("vector")) {
+                System.out.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
+                        sr.operation,
+                        sr.dimension,
+                        // Statystyki refleksyjne
+                        sr.reflectMean,
+                        sr.reflectMedian,
+                        sr.reflectStdDev,
+                        sr.reflectQ1,
+                        sr.reflectQ3,
+                        sr.reflectIQR,
+                        sr.reflectCV,
+                        sr.reflectSkewness,
+                        sr.reflectKurtosis,
+                        // Statystyki obiektowe
+                        sr.objectMean,
+                        sr.objectMedian,
+                        sr.objectStdDev,
+                        sr.objectQ1,
+                        sr.objectQ3,
+                        sr.objectIQR,
+                        sr.objectCV,
+                        sr.objectSkewness,
+                        sr.objectKurtosis,
+                        // Dodatkowe pole
+                        sr.ratio,
+                        sr.kindOfVector.toString());
+            }
+
+            else if (sr.operation.equalsIgnoreCase(operation) && whatKind.equals("bubble")) {
+                System.out.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
+                        sr.operation,
+                        sr.dimension,
+                        // Statystyki refleksyjne
+                        sr.reflectMean,
+                        sr.reflectMedian,
+                        sr.reflectStdDev,
+                        sr.reflectQ1,
+                        sr.reflectQ3,
+                        sr.reflectIQR,
+                        sr.reflectCV,
+                        sr.reflectSkewness,
+                        sr.reflectKurtosis,
+                        // Statystyki obiektowe
+                        sr.objectMean,
+                        sr.objectMedian,
+                        sr.objectStdDev,
+                        sr.objectQ1,
+                        sr.objectQ3,
+                        sr.objectIQR,
+                        sr.objectCV,
+                        sr.objectSkewness,
+                        sr.objectKurtosis,
+                        // Dodatkowe pole
+                        sr.ratio,
+                        sr.kindOfBubbleSort.toString());
             }
         }
 
         System.out.println("==================================\n");
     }
 
-    public static void saveStatisticsByOperation(String chartsDir, List<StatisticsResult> aggregatedResults) {
+    public static void saveStatisticsByOperation(String chartsDir, List<StatisticsResult> aggregatedResults , String whatKind) {
         String filename = chartsDir + "/statistics_by_operation.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("======================================\n\n");
@@ -469,9 +518,23 @@ public class CalculationStatistic {
                     writer.write(String.format("     Skewness=%.4f, Kurtosis=%.4f\n",
                             sr.objectSkewness, sr.objectKurtosis));
 
-                    // Dodatkowe informacje
-                    writer.write(String.format("Ratio: %.2f, KindOfMatrix: %s\n", sr.ratio, sr.kindOfMatrix));
-                    writer.write("--------------------------------------------------\n");
+
+                    if (whatKind.equals("matrix") ) {
+                        // Dodatkowe informacje
+                        writer.write(String.format("Ratio: %.2f, KindOfMatrix: %s\n", sr.ratio, sr.kindOfMatrix));
+                        writer.write("--------------------------------------------------\n");
+                    } else if (whatKind.equals("vector")) {
+                        // Dodatkowe informacje
+                        writer.write(String.format("Ratio: %.2f, KindOfMatrix: %s\n", sr.ratio, sr.kindOfVector));
+                        writer.write("--------------------------------------------------\n");
+
+                    } else if (whatKind.equals("bubble")) {
+
+                        writer.write(String.format("Ratio: %.2f, KindOfMatrix: %s\n", sr.ratio, sr.kindOfBubbleSort));
+                        writer.write("--------------------------------------------------\n");
+
+                    }
+
                 }
                 writer.write("\n");
             }
