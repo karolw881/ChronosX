@@ -19,29 +19,37 @@ public class Main {
         PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
        //  performanceTestBubbleSort.performTests();
 
-        PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
 
         /**
-         * Tutaj pytanie z DZIELENIEM   odkomentowac do pokazania !!!!!!!
+         * Matrix Generic
          */
 
-          performanceTestMatrixGenericofReflectionVsObject.runTest();
+
+        PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
+        //performanceTestMatrixGenericofReflectionVsObject.runTest();
 
 
-
+        /**
+         * Matrix Concrete
+         */
 
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-     //   performanceTestMatrixConcreteReflectionVsObject.runTest();
+    //    performanceTestMatrixConcreteReflectionVsObject.runTest();
 
+
+        /**
+         * Vector Generic
+         */
 
         PerformanceTestVectorGenericOfReflectionVsObject performanceTestVectorGenericOfReflectionVsObject = new PerformanceTestVectorGenericOfReflectionVsObject();
-        //performanceTestVectorGenericOfReflectionVsObject.runTest();
+        performanceTestVectorGenericOfReflectionVsObject.runTest();
 
 
+        /**
+         * Vector Concrete
+         */
         PerformanceTestVectorConcreteOfReflectionVsObject performanceTestVectorConcreteOfReflectionVsObject = new PerformanceTestVectorConcreteOfReflectionVsObject();
-
         //performanceTestVectorConcreteOfReflectionVsObject.runTest();
-
     }
 }
 

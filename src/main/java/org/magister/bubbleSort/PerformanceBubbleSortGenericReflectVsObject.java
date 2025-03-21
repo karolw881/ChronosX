@@ -42,8 +42,8 @@ public class PerformanceBubbleSortGenericReflectVsObject {
         for (KindOfBubbleSort  kind : KindOfBubbleSort.values()) {
             showOrSaveBarChartForRatioWithOrder(aggregatedResults, kind);
         }
-        CalculationStatistic.saveStatisticsByOperation(CHARTS_DIR , aggregatedResults);
-        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults);
+        CalculationStatistic.saveStatisticsByOperation(CHARTS_DIR , aggregatedResults , "bubble");
+        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults , "bubble");
     }
 
 

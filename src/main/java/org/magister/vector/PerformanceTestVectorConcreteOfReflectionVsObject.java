@@ -22,7 +22,7 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
     private static final String CHARTS_DIR = PerformanceTestVector.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
     private static final int RUNS = PerformanceTestVector.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestVector.DIMENSIONS;
-    //  private final List<StatisticsResult> aggregatedResults = new ArrayList<>();
+
 
 
 
@@ -42,9 +42,9 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
         showOrSaveChartRatioVsDim2(aggregatedResults, "add");
         showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
         showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
-       showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
+        showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
         showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
-       showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
+        showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
 
 
     }

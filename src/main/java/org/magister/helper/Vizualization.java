@@ -3,6 +3,7 @@ package org.magister.helper;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 import org.magister.matrix.KindOfMatrix;
+import org.magister.vector.KindOfVector;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -213,6 +214,9 @@ public class Vizualization {
 
     }
 
+
+
+
     public static void showOrSaveChartRatioVsDimWithOperationStat(List<StatisticsResult> results,
                                                               String operation,
                                                               String CHARTS_DIR,
@@ -307,7 +311,8 @@ public class Vizualization {
 
         chart.addSeries("UPPER_TRIANGULAR", upperTriaResults.stream().mapToDouble(r -> r.dimension).toArray(),
                 getStatisticsValues(upperTriaResults, whatkindofstatist));
-
+        System.out.println( whatkindofstatist  );
+        System.out.println("-------------------");
         return chart;
     }
 
@@ -321,13 +326,13 @@ public class Vizualization {
 
             if (type.equals("ratio")) {
                 return r.ratio;
-            } else if (type.equals("objectMean")) {
+            } else if (type.equals("objectmean")) {
                 return r.objectMean;
-            } else if (type.equals("reflectMean")) {
+            } else if (type.equals("reflectmean")) {
                 return r.reflectMean;
-            } else if (type.equals("objectMedian")) {
+            } else if (type.equals("objectmedian")) {
                 return r.objectMedian;
-            } else if (type.equals("reflectionMedian")) {
+            } else if (type.equals("reflectmedian")) {
                 return r.reflectMedian;
             } else if (type.equals("reflectstddev")) {
                 return r.reflectStdDev;
@@ -358,7 +363,9 @@ public class Vizualization {
             } else if (type.equals("objectkurtosis")) {
                 return r.objectKurtosis;
             }else {
-                return r.ratio; // Domyślnie zwraca ratio
+                System.out.println("aaaaa");
+                return Double.parseDouble(null);
+
             }
         }).toArray();
     }
@@ -427,6 +434,248 @@ public class Vizualization {
             }
 
             // Na osi X pojawią się etykiety z wymiarem macierzy
+            List<String> xLabels = filteredResults.stream()
+                    .map(r -> "D=" + r.dimension)
+                    .collect(Collectors.toList());
+
+            // Używamy metody getStatisticsValues do pobrania wartości
+            double[] values = getStatisticsValues(filteredResults, statisticType);
+
+            chart.addSeries(kind.toString(), xLabels, Arrays.stream(values).boxed().collect(Collectors.toList()));
+        }
+
+        return chart;
+    }
+
+
+    /**
+     * Vector Bar Chart
+     */
+
+    public static void showOrSaveBarChartForRatioWithKindForVector(List<StatisticsResult> results, KindOfVector kind , String CHARTS_DIR ) throws IOException {
+        // Tworzymy wykres z uwzględnieniem rodzaju macierzy w tytule
+        CategoryChart chart = createBarChartForRatioWithKindForVector(
+                results,
+                kind,
+                "Porównanie Mean (Gen Ref vs. Gen Obj)",
+                "Wymiar",
+                "Czas [ns]"
+        );
+        // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
+    }
+
+    /**
+     *
+     * @param results
+     * @param kind
+     * @param chartTitle
+     * @param xAxisTitle
+     * @param yAxisTitle
+     * @return
+     */
+
+
+    public static CategoryChart createBarChartForRatioWithKindForVector(
+            List<StatisticsResult> results,
+            KindOfVector kind,
+            String chartTitle,
+            String xAxisTitle,
+            String yAxisTitle
+    ) {
+        // Filtruj wyniki tylko dla wskazanego rodzaju macierzy
+        List<StatisticsResult> filteredResults = results.stream()
+                .filter(r -> r.kindOfVector == kind)
+                .collect(Collectors.toList());
+
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle + " - " + kind)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+        chart.getStyler().setXAxisLabelRotation(90);
+
+        // Używaj przefiltrowanych wyników
+        List<String> xLabels = filteredResults.stream()
+                .map(r -> "(D=" + r.dimension + ")(Op=" + r.operation + ")")
+                .toList();
+
+        List<Double> ratioValues = filteredResults.stream()
+                .map(r -> r.ratio)
+                .toList();
+
+        chart.addSeries("Gen Ref/Gen Obj Ratio - " + kind, xLabels, ratioValues);
+
+        return chart;
+    }
+
+
+
+
+    /**
+     * V E C T O R
+     */
+
+    /**
+     * Execute a function for  a Chart - Linear for  DiffrenStatistictVsDimWithOperationForVector
+     * @param results
+     * @param operation
+     * @param CHARTS_DIR
+     * @param whatkindofstatist
+     * @throws IOException
+     */
+
+
+    public static void showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(List<StatisticsResult> results,
+                                                                                   String operation,
+                                                                                   String CHARTS_DIR,
+                                                                                   String whatkindofstatist) throws IOException {
+        XYChart chart = createChartDiffrentStatisticsVsDimWithOperationForVector(
+                results,
+                "Wykres: " + whatkindofstatist + " (x) vs. Dim (y) dla operacji " + operation,
+                "Wymiar (Dim)",
+                whatkindofstatist,
+                operation,
+                whatkindofstatist
+        );
+
+        // Zapis do pliku:
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "DiffrenStatistictVsDimWithOperationForVector\\" + whatkindofstatist + "_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
+        // Lub wyświetlenie w okienku Swing:
+        // new SwingWrapper<>(chart).displayChart();
+    }
+
+    /**
+     *  Create a Chart - Linear for  DiffrenStatistictVsDimWithOperationForVector
+     * @param results
+     * @param chartTitle
+     * @param xAxisTitle
+     * @param yAxisTitle
+     * @param operation
+     * @param whatkindofstatist
+     * @return
+     */
+
+    private static XYChart createChartDiffrentStatisticsVsDimWithOperationForVector(List<StatisticsResult> results,
+                                                                                    String chartTitle,
+                                                                                    String xAxisTitle,
+                                                                                    String yAxisTitle,
+                                                                                    String operation,
+                                                                                    String whatkindofstatist) {
+        // Tworzymy wykres XY
+        XYChart chart = new XYChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        // Osobne serie dla każdego typu macierzy
+
+        List<StatisticsResult> radomResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfVector == KindOfVector.RANDOM)
+                .toList();
+
+        List<StatisticsResult> zeroResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfVector == KindOfVector.ZERO)
+                .toList();
+
+        List<StatisticsResult> onesResults = results.stream()
+                .filter(r -> r.operation.equalsIgnoreCase(operation))
+                .filter(r -> r.kindOfVector == KindOfVector.ONES)
+                .toList();
+
+
+
+        // Dynamicznie wybieramy pole na podstawie parametru whatkindofstatist
+        // Dodaj serie osobno z wykorzystaniem refleksji lub switch
+
+        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                getStatisticsValues(radomResults, whatkindofstatist));
+
+        chart.addSeries("Zero", zeroResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                getStatisticsValues(zeroResults, whatkindofstatist));
+
+        chart.addSeries("Ones", onesResults.stream().mapToDouble(r -> r.dimension).toArray(),
+                getStatisticsValues(onesResults, whatkindofstatist));
+        System.out.println( whatkindofstatist  );
+        System.out.println("-------------------");
+        return chart;
+    }
+
+
+    /**
+     *
+     * @param results
+     * @param operation
+     * @param CHARTS_DIR
+     * @param statisticType
+     * @throws IOException
+     */
+
+    public static void showOrSaveBarChartForOperationVector(List<StatisticsResult> results, String operation, String CHARTS_DIR, String statisticType) throws IOException {
+        CategoryChart chart = createBarChartForOperationVector(
+                results,
+                operation,
+                "Wykres słupkowy dla operacji " + operation,
+                "Wymiar (Dim)",
+                "Wartość (np. czas [ns] lub ratio)",
+                statisticType // Przekazujemy nowy parametr
+        );
+        // Nazwa pliku zawiera nazwę operacji
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "bar_chartOO_" + operation + "_" + statisticType + ".png", BitmapEncoder.BitmapFormat.PNG);
+    }
+
+    /**
+     * Tworzy wykres słupkowy, w którym dla podanej operacji są oddzielnie wyświetlone serie dla
+     * każdego rodzaju wektora (KindOfVector). Oś X zawiera wymiar wektora, a oś Y – wartość statystyki.
+     *
+     * @param results    lista wyników statystycznych
+     * @param operation  operacja (np. "add", "multiply", "subtract")
+     * @param chartTitle tytuł wykresu
+     * @param xAxisTitle tytuł osi X
+     * @param yAxisTitle tytuł osi Y
+     * @param statisticType typ statystyki do wyświetlenia
+     * @return skonfigurowany wykres słupkowy (CategoryChart)
+     */
+    public static CategoryChart createBarChartForOperationVector(
+            List<StatisticsResult> results,
+            String operation,
+            String chartTitle,
+            String xAxisTitle,
+            String yAxisTitle,
+            String statisticType // Parametr określający typ statystyki
+    ) {
+        CategoryChart chart = new CategoryChartBuilder()
+                .width(1800)
+                .height(1000)
+                .title(chartTitle)
+                .xAxisTitle(xAxisTitle)
+                .yAxisTitle(yAxisTitle)
+                .build();
+
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+        chart.getStyler().setXAxisLabelRotation(90);
+
+        // Dla każdego rodzaju wektora dodajemy osobną serię
+        for (KindOfVector kind : KindOfVector.values()) {
+            List<StatisticsResult> filteredResults = results.stream()
+                    .filter(r -> r.operation.equalsIgnoreCase(operation))
+                    .filter(r -> r.kindOfVector == kind)
+                    .collect(Collectors.toList());
+
+            if (filteredResults.isEmpty()) {
+                continue; // pomijamy, gdy nie ma danych dla danego rodzaju
+            }
+
+            // Na osi X pojawią się etykiety z wymiarem wektora
             List<String> xLabels = filteredResults.stream()
                     .map(r -> "D=" + r.dimension)
                     .collect(Collectors.toList());

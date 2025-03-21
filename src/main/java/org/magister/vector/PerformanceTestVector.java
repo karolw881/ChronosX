@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 public class PerformanceTestVector implements VtPerformance {
 
     // Directory constants
-    protected static final String INPUT_DIR = "test_dataGG/input/vector/input";
-    protected static final String OUTPUT_DIR = "test_dataGG/output/vector/output";
+    protected static final String INPUT_DIR = "test_dataSem2/input/vector/input";
+    protected static final String OUTPUT_DIR = "test_dataSem2/output/vector/output";
 
-    protected static final String CHARTS_DIR = "test_dataGG/output/vector/output/charts";
+    protected static final String CHARTS_DIR = "test_dataSem2/output/vector/output/charts";
 
     // Number of test runs for each case
     protected static final int RUNS = 100;
@@ -155,6 +155,8 @@ public class PerformanceTestVector implements VtPerformance {
         try {
             Files.createDirectories(Paths.get(INPUT_DIR));
             Files.createDirectories(Paths.get(OUTPUT_DIR));
+            Files.createDirectories(Paths.get(CHARTS_DIR));
+
         } catch (IOException e) {
             System.err.println("Error creating directories: " + e.getMessage());
         }

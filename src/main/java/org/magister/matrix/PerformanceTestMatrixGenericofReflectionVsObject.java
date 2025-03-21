@@ -42,7 +42,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
             } else {
 
-                System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
+               // System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "add", CHARTS_DIR, field.getName());
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "subtract", CHARTS_DIR, field.getName());
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "multiply", CHARTS_DIR, field.getName());
@@ -50,7 +50,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , CHARTS_DIR , field.getName() );
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"multiply" , CHARTS_DIR, field.getName()   );
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"subtract" , CHARTS_DIR  , field.getName() );
-
+                //System.out.println(field.getName());
             }
 
         }
@@ -83,15 +83,15 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
             }
             // Wyświetlamy i zapisujemy zagregowane statystyki
-            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults);
+            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "matrix");
         }
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add");
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract");
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply");
+        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
+        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" , "matrix");
+        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix" );
         // Wyświetlamy i zapisujemy zagregowane statystyki
         CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
 
-        CalculationStatistic.saveAggregatedStatisticsToFile();
+
 
     }
 
@@ -100,7 +100,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
 
 
-    private StatisticsResult testGenericObjectVsReflect(
+        private StatisticsResult testGenericObjectVsReflect(
             Matrix<Integer> matrix1,
             Matrix<Integer> matrix2,
             int dim, KindOfMatrix kind, String whatOperation) {
