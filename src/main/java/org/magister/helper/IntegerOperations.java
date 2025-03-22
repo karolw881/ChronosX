@@ -3,41 +3,45 @@ package org.magister.helper;
 /**
  * Implementacja operacji dla Integer
  */
-
-public class IntegerOperations implements NumberOperations<Integer> {
+public class IntegerOperations implements NumberOperations<Numberxx> {
     @Override
-    public Integer add(Integer a, Integer b) {
-        return a + b;
+    public Numberxx add(Numberxx a, Numberxx b) {
+        // Assuming Numberxx has a method to get its value
+        int result = a.intValue() + b.intValue();
+        return Numberxx.valueOf(result);
     }
 
     @Override
-    public Integer subtract(Integer a, Integer b) {
-        return a - b;
+    public Numberxx subtract(Numberxx a, Numberxx b) {
+        int result = a.intValue() - b.intValue();
+        return Numberxx.valueOf(result);
     }
 
     @Override
-    public Integer multiply(Integer a, Integer b) {
-        return a * b;
+    public Numberxx multiply(Numberxx a, Numberxx b) {
+        int result = a.intValue() * b.intValue();
+        return Numberxx.valueOf(result);
     }
 
     @Override
-    public Integer divide(Integer a, Integer b) {
-        if (b == 0) throw new ArithmeticException("Dzielenie przez zero");
-        return a / b;
+    public Numberxx divide(Numberxx a, Numberxx b) {
+        if (b.intValue() == 0) throw new ArithmeticException("Dzielenie przez zero");
+        int result = a.intValue() / b.intValue();
+        return Numberxx.valueOf(result);
     }
 
     @Override
-    public Integer zero() {
-        return 0;
+    public Numberxx zero() {
+        return Numberxx.valueOf(0);
     }
 
     @Override
-    public Integer one() {
-        return 1;
+    public Numberxx one() {
+        return Numberxx.valueOf(1);
     }
 
     @Override
-    public Integer valueOf(int value) {
-        return Integer.valueOf(value);
+    public Numberxx valueOf(int value) {
+        return Numberxx.valueOf(value);
     }
 }

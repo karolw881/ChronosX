@@ -2,10 +2,7 @@ package org.magister.matrix;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.magister.helper.CalculationStatistic;
-import org.magister.helper.IntegerOperations;
-import org.magister.helper.StatisticsResult;
-import org.magister.helper.Vizualization;
+import org.magister.helper.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -63,14 +60,14 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         createDirectoriesIfNotExists(INPUT_DIR);
         createDirectoriesIfNotExists(OUTPUT_DIR);
         createDirectoriesIfNotExists(CHARTS_DIR);
-        MatrixGenerator<Integer> generator = new MatrixGenerator<>(new IntegerOperations());
+        MatrixGenerator<Numberxx> generator = new MatrixGenerator<>(new NumberxxOperations());
         for (KindOfMatrix kind : KindOfMatrix.values()) {
             System.out.println("Test dla typu macierzy: " + kind);
             for (int dim : DIMENSIONS) {
                 System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
 
-                Matrix<Integer> matrixGenericFirst = generator.createMatrix(kind, dim, 0L);
-                Matrix<Integer> matrixGenericSecond = generator.createMatrix(kind, dim, 1L);
+                Matrix<Numberxx> matrixGenericFirst = generator.createMatrix(kind, dim, 0L);
+                Matrix<Numberxx> matrixGenericSecond = generator.createMatrix(kind, dim, 1L);
 
                 String fileNameFirst = INPUT_DIR + "matrix1_" + kind.toString().toLowerCase() + "_" + dim + ".txt";
                 String fileNameSecond = INPUT_DIR + "matrix2_" + kind.toString().toLowerCase() + "_" + dim + ".txt";
@@ -101,8 +98,8 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
 
         private StatisticsResult testGenericObjectVsReflect(
-            Matrix<Integer> matrix1,
-            Matrix<Integer> matrix2,
+            Matrix<Numberxx> matrix1,
+            Matrix<Numberxx> matrix2,
             int dim, KindOfMatrix kind, String whatOperation) {
 
         List<Long> reflectionTimes = new ArrayList<>();
@@ -121,7 +118,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
     /**
      * Wykonuje operacje rozgrzewające przed właściwymi pomiarami
      */
-    private void performWarmup(Matrix<Integer> matrix1, Matrix<Integer> matrix2, String whatOperation) {
+    private void performWarmup(Matrix<Numberxx> matrix1, Matrix<Numberxx> matrix2, String whatOperation) {
         for (int i = 0; i < 3; i++) {
             // Wykonaj operację obiektową
             performObjectOperation(matrix1, matrix2, whatOperation);
@@ -134,8 +131,8 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
      * Wykonuje właściwe pomiary dla danej operacji
      */
     private void performMeasurements(
-            Matrix<Integer> matrix1,
-            Matrix<Integer> matrix2,
+            Matrix<Numberxx> matrix1,
+            Matrix<Numberxx> matrix2,
             String whatOperation,
             List<Long> reflectionTimes,
             List<Long> objectTimes) {
@@ -153,8 +150,8 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
      * Wykonuje pomiary dla operacji mnożenia
      */
     private void measureMultiplyOperation(
-            Matrix<Integer> matrix1,
-            Matrix<Integer> matrix2,
+            Matrix<Numberxx> matrix1,
+            Matrix<Numberxx> matrix2,
             String whatOperation,
             List<Long> reflectionTimes,
             List<Long> objectTimes) {
@@ -178,8 +175,8 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
      * Wykonuje pomiary dla operacji odejmowania
      */
     private void measureSubtractOperation(
-            Matrix<Integer> matrix1,
-            Matrix<Integer> matrix2,
+            Matrix<Numberxx> matrix1,
+            Matrix<Numberxx> matrix2,
             String whatOperation,
             List<Long> reflectionTimes,
             List<Long> objectTimes) {
@@ -203,8 +200,8 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
      * Wykonuje pomiary dla operacji dodawania
      */
     private void measureAddOperation(
-            Matrix<Integer> matrix1,
-            Matrix<Integer> matrix2,
+            Matrix<Numberxx> matrix1,
+            Matrix<Numberxx> matrix2,
             String whatOperation,
             List<Long> reflectionTimes,
             List<Long> objectTimes) {
@@ -227,7 +224,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
     /**
      * Wykonuje operację obiektową na podstawie nazwy operacji
      */
-    private void performObjectOperation(Matrix<Integer> matrix1, Matrix<Integer> matrix2, String whatOperation) {
+    private void performObjectOperation(Matrix<Numberxx> matrix1, Matrix<Numberxx> matrix2, String whatOperation) {
         if (whatOperation.equalsIgnoreCase("multiply")) {
             matrix1.multiply(matrix2);
         } else if (whatOperation.equalsIgnoreCase("subtract")) {

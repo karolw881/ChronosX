@@ -4,6 +4,7 @@ import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 import org.magister.helper.CalculationStatistic;
 import org.magister.helper.IntegerOperations;
+import org.magister.helper.Numberxx;
 import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;

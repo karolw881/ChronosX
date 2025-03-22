@@ -7,7 +7,17 @@ public class Numberxx extends Number {
         this.value = value;
     }
 
-    // Implementacja metod abstrakcyjnych z klasy Number
+    public static Numberxx valueOf(int value) {
+        return new Numberxx(value);
+    }
+
+    public static int nextInt(int bound) {
+        if (bound <= 0) {
+            throw new IllegalArgumentException("Bound must be positive");
+        }
+        return (int)(Math.random() * bound);
+    }
+
     @Override
     public int intValue() {
         return value;
@@ -33,7 +43,7 @@ public class Numberxx extends Number {
         return Integer.toString(value);
     }
 
-    // Przykładowe metody arytmetyczne
+    // Metody arytmetyczne
     public Numberxx add(Numberxx other) {
         return new Numberxx(this.value + other.value);
     }
@@ -51,5 +61,9 @@ public class Numberxx extends Number {
             throw new ArithmeticException("Dzielenie przez zero");
         }
         return new Numberxx(this.value / other.value);
+    }
+
+    public <T extends Number> T one() {
+        return (T) new Numberxx(1);
     }
 }

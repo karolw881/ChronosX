@@ -2,7 +2,8 @@ package org.magister.matrix;
 
 import org.magister.bubbleSort.KindOfBubbleSort;
 import org.magister.helper.CalculationStatistic;
-import org.magister.helper.IntegerOperations;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
 import org.magister.helper.StatisticsResult;
 
 import java.awt.Color;
@@ -49,8 +50,8 @@ public  class PerformanceTestMatrix {
 
             // Tworzymy macierze przy użyciu ustalonych ziaren:
             // seed 0 dla pierwszej macierzy oraz seed 1 dla drugiej
-            Matrix<Integer> matrix1Generic = createRandomMatrix(dim, 0L);
-            Matrix<Integer> matrix2Generic = createRandomMatrix(dim, 1L);
+            Matrix<Numberxx> matrix1Generic = createRandomMatrix(dim, 0L);
+            Matrix<Numberxx> matrix2Generic = createRandomMatrix(dim, 1L);
             Matrix1 matrix1Concrete = createRandomMatrix1(dim, 0L);
             Matrix1 matrix2Concrete = createRandomMatrix1(dim, 1L);
             saveMatrixToFile(matrix1Generic, INPUT_DIR + "matrix1_generic_" + dim + ".txt")  ;
@@ -59,7 +60,7 @@ public  class PerformanceTestMatrix {
             saveMatrix1ToFile(matrix2Concrete, INPUT_DIR + "matrix2_concrete_" + dim + ".txt");
 
             // Zapisz porównanie macierzy (porównujemy te utworzone z seed 0)
-            porownajIMZapiszMacierze(dim, matrix1Generic, matrix1Concrete);
+         //   porownajIMZapiszMacierze(dim, matrix1Generic, matrix1Concrete);
 
             // Test operacji i agregacja statystyk
            // aggregatedResults.add(testAdd(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
@@ -125,15 +126,15 @@ public  class PerformanceTestMatrix {
     /**
      * Create a random matrix of specified dimension (generic implementation) using provided seed.
      */
-    protected  Matrix<Integer> createRandomMatrix(int dimension, long seed) {
+    protected  Matrix<Numberxx> createRandomMatrix(int dimension, long seed) {
         Random randomLocal = new Random(seed);
-        Integer[][] data = new Integer[dimension][dimension];
+        Numberxx[][] data = new Numberxx[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                data[i][j] = randomLocal.nextInt(10);
+                data[i][j] = Numberxx.valueOf(Numberxx.nextInt(10));
             }
         }
-        return new Matrix<>(data, new IntegerOperations());
+        return new Matrix<>(data, new NumberxxOperations());
     }
 
     /**

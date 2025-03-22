@@ -1,0 +1,34 @@
+Advanced Statistics for generic Reflect implementation (Matrix<Integer>):
+Mean: 17145,00 ns
+Median: 17650,00 ns
+Min: 10200,00 ns
+Max: 34300,00 ns
+Standard Deviation: 5952,92 ns
+Q1 (25th percentile): 18675,00 ns
+Q3 (75th percentile): 11800,00 ns
+IQR: -6875,00 ns
+Coefficient of Variation: 34,72%
+Skewness: 0,8358
+Kurtosis: 0,6515
+3rd Central Moment: Infinity
+4th Central Moment: Infinity
+
+Advanced Statistics for generic Object implementation (Matrix<Integer>):
+Mean: 15345,00 ns
+Median: 16450,00 ns
+Min: 9800,00 ns
+Max: 63500,00 ns
+Standard Deviation: 6418,11 ns
+Q1 (25th percentile): 21025,00 ns
+Q3 (75th percentile): 9975,00 ns
+IQR: -11050,00 ns
+Coefficient of Variation: 41,83%
+Skewness: 4,3829
+Kurtosis: 31,6442
+3rd Central Moment: Infinity
+4th Central Moment: Infinity
+
+Ratio of mean times (reflect/object): 1,12
+Performance difference: Object implementation is 1,12 times faster than Reflection
+
+Kind of Vector: ONES
