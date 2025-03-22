@@ -1,7 +1,9 @@
 package org.magister.vector;
 
 
-import org.magister.helper.IntegerOperations;
+import org.magister.helper.NumberxxOperations;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
 import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
@@ -38,8 +40,8 @@ public class PerformanceTestVector implements VtPerformance {
             System.out.println("Testing vector of dimension " + dim);
 
             // Tworzymy dwa losowe wektory
-        //    Vector<Integer> vector1 = createRandomVector(dim);
-        //    Vector<Integer> vector2 = createRandomVector(dim);
+        //    Vector<Numberxx> vector1 = createRandomVector(dim);
+        //    Vector<Numberxx> vector2 = createRandomVector(dim);
 
             // Zapisujemy wektory do pliku (opcjonalnie)
          //   saveVectorToFile(vector1, INPUT_DIR + "vector1_" + dim + ".txt");
@@ -54,7 +56,7 @@ public class PerformanceTestVector implements VtPerformance {
     /**
      * Testuje operację dodawania wektorów.
      */
-    private void testAdd(Vector<Integer> vector1, Vector<Integer> vector2, int dim) {
+    private void testAdd(Vector<Numberxx> vector1, Vector<Numberxx> vector2, int dim) {
         List<Long> directTimes = new ArrayList<>();
         List<Long> reflectionTimes = new ArrayList<>();
 
@@ -67,12 +69,12 @@ public class PerformanceTestVector implements VtPerformance {
         // Pomiary RUNS razy
         for (int i = 0; i < RUNS; i++) {
             long startDirect = System.nanoTime();
-            Vector<Integer> resultDirect = vector1.add(vector2);
+            Vector<Numberxx> resultDirect = vector1.add(vector2);
             long endDirect = System.nanoTime();
             directTimes.add(endDirect - startDirect);
 
             long startReflection = System.nanoTime();
-            Vector<Integer> resultReflection = VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "addVector");
+            Vector<Numberxx> resultReflection = VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "addVector");
             long endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
         }
@@ -90,7 +92,7 @@ public class PerformanceTestVector implements VtPerformance {
     /**
      * Testuje operację odejmowania wektorów (bezpośrednie odejmowanie – subtractVector2).
      */
-    private void testSubtract(Vector<Integer> vector1, Vector<Integer> vector2, int dim) {
+    private void testSubtract(Vector<Numberxx> vector1, Vector<Numberxx> vector2, int dim) {
         List<Long> directTimes = new ArrayList<>();
         List<Long> reflectionTimes = new ArrayList<>();
 
@@ -103,12 +105,12 @@ public class PerformanceTestVector implements VtPerformance {
         // Pomiary
         for (int i = 0; i < RUNS; i++) {
             long startDirect = System.nanoTime();
-            Vector<Integer> resultDirect = vector1.subtruct(vector2);
+            Vector<Numberxx> resultDirect = vector1.subtruct(vector2);
             long endDirect = System.nanoTime();
             directTimes.add(endDirect - startDirect);
 
             long startReflection = System.nanoTime();
-            Vector<Integer> resultReflection = VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "subtractVector2");
+            Vector<Numberxx> resultReflection = VectorReflectionUtil.performOperationReflectVector(vector1, vector2, "subtractVector2");
             long endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
         }
@@ -126,13 +128,17 @@ public class PerformanceTestVector implements VtPerformance {
     /**
      * Tworzy losowy wektor o zadanym wymiarze z wartościami z zakresu 0-10.
      */
-    private Vector<Integer> createRandomVector(int dimension) {
-        Integer[] data = new Integer[dimension];
+
+    /*
+    private Vector<Numberxx> createRandomVector(int dimension) {
+        Numberxx[] data = new Numberxx[dimension];
         for (int i = 0; i < dimension; i++) {
             data[i] = random.nextInt(11);
         }
-        return new Vector<>(data, new IntegerOperations());
+        return new Vector<>(data, new NumberxxOperations());
     }
+
+     */
 
     /**
      * Zapisuje wektor do pliku tekstowego.

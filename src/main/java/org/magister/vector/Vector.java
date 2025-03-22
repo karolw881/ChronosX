@@ -1,13 +1,17 @@
 package org.magister.vector;
 import org.magister.helper.NumberOperations;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
+
+import java.lang.reflect.Array;
 
 public class Vector<T extends Number> {
     private final T[] coordinates;
-    private final NumberOperations<T> operations;
+    private final NumberxxOperations operations;
 
-    public Vector(T[] coordinates, NumberOperations<T> operations) {
+    public Vector(T[] coordinates, NumberxxOperations operations) {
         this.coordinates = coordinates.clone();
-        this.operations = operations;
+        this.operations = (NumberxxOperations) operations;
     }
 
     public T[] getCoordinates() {
@@ -20,9 +24,9 @@ public class Vector<T extends Number> {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
         int n = this.coordinates.length;
-        T[] result = (T[]) new Number[n]; // tworzenie tablicy – kompromis ze względu na ograniczenia Javy
+        T[] result = (T[]) new Numberxx[n]; // tworzenie tablicy – kompromis ze względu na ograniczenia Javy
         for (int i = 0; i < n; i++) {
-            result[i] = operations.add(this.coordinates[i], vector.coordinates[i]);
+            result[i] = (T) operations.add((Numberxx) this.coordinates[i], (Numberxx) vector.coordinates[i]);
         }
         return new Vector<>(result, operations);
     }
@@ -32,7 +36,7 @@ public class Vector<T extends Number> {
         int n = this.coordinates.length;
         T[] result = (T[]) new Number[n];
         for (int i = 0; i < n; i++) {
-            result[i] = operations.subtract(operations.zero(), this.coordinates[i]);
+            result[i] = (T) operations.subtract(operations.zero(), (Numberxx) this.coordinates[i]);
         }
         return new Vector<>(result, operations);
     }
@@ -50,32 +54,34 @@ public class Vector<T extends Number> {
         int n = this.coordinates.length;
         T[] result = (T[]) new Number[n];
         for (int i = 0; i < n; i++) {
-            result[i] = operations.subtract(this.coordinates[i], vector.coordinates[i]);
+            result[i] = (T) operations.subtract((Numberxx) this.coordinates[i], (Numberxx) vector.coordinates[i]);
         }
         return new Vector<>(result, operations);
     }
 
     // Mnożenie wektora przez skalar
-    public Vector<T> multiplyByScalar(T scalar) {
+    // And your Vector class method remains similar, using a reflection-safe array creation:
+    public Vector<T> multiplyByScalar(Numberxx scalar) {
         int n = this.coordinates.length;
         @SuppressWarnings("unchecked")
-        T[] result = (T[]) new Number[n];
+        T[] result = (T[]) Array.newInstance(coordinates.getClass().getComponentType(), n);
+
         for (int i = 0; i < n; i++) {
-            result[i] = operations.multiply(this.coordinates[i], scalar);
+            // Assuming operations.multiply returns a Numberxx that is castable to T
+            result[i] = (T) operations.multiply((Numberxx) this.coordinates[i], (Numberxx) scalar);
         }
         return new Vector<>(result, operations);
     }
-
     // Iloczyn skalarny (dot product): suma iloczynów odpowiadających sobie współrzędnych
     public T dotProduct(Vector<T> vector) {
         if (this.coordinates.length != vector.coordinates.length) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
         int n = this.coordinates.length;
-        T sum = operations.zero();
+        T sum = (T) operations.zero();
         for (int i = 0; i < n; i++) {
-            T product = operations.multiply(this.coordinates[i], vector.coordinates[i]);
-            sum = operations.add(sum, product);
+            T product = (T) operations.multiply((Numberxx) this.coordinates[i], (Numberxx) vector.coordinates[i]);
+            sum = (T) operations.add((Numberxx) sum, (Numberxx) product);
         }
         return sum;
     }

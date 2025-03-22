@@ -6,7 +6,6 @@ package org.magister.matrix;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.magister.helper.IntegerOperations;
 import org.magister.helper.NumberOperations;
 
 // Implementacja generyczna z użyciem refleksji

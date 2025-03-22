@@ -1,0 +1,518 @@
+======================================
+
+Wymiar: 50
+--------------------------------------------------
+Operacja: add
+Ref: Mean=22377,00 ns, Median=21400,00 ns, StdDev=5636,05 ns, Q1=23300,00 ns, Q3=24050,00 ns, IQR=750,00 ns, CV=25,19%
+     Skewness=3,6715, Kurtosis=17,6855
+Obj: Mean=20659,00 ns, Median=19300,00 ns, StdDev=5565,35 ns, Q1=23550,00 ns, Q3=21275,00 ns, IQR=-2275,00 ns, CV=26,94%
+     Skewness=2,2319, Kurtosis=5,9463
+Ratio: 1,08, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=24174,00 ns, Median=23250,00 ns, StdDev=7421,24 ns, Q1=21925,00 ns, Q3=24025,00 ns, IQR=2100,00 ns, CV=30,70%
+     Skewness=2,7549, Kurtosis=11,4506
+Obj: Mean=20811,00 ns, Median=20650,00 ns, StdDev=4896,48 ns, Q1=20475,00 ns, Q3=20175,00 ns, IQR=-300,00 ns, CV=23,53%
+     Skewness=1,2115, Kurtosis=4,0125
+Ratio: 1,16, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=22866,00 ns, Median=22250,00 ns, StdDev=3974,44 ns, Q1=21200,00 ns, Q3=21825,00 ns, IQR=625,00 ns, CV=17,38%
+     Skewness=2,3436, Kurtosis=7,0071
+Obj: Mean=20914,00 ns, Median=19350,00 ns, StdDev=5918,50 ns, Q1=18750,00 ns, Q3=26275,00 ns, IQR=7525,00 ns, CV=28,30%
+     Skewness=3,4346, Kurtosis=15,3973
+Ratio: 1,09, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=45539,00 ns, Median=39300,00 ns, StdDev=28529,30 ns, Q1=123375,00 ns, Q3=27525,00 ns, IQR=-95850,00 ns, CV=62,65%
+     Skewness=4,6172, Kurtosis=30,5247
+Obj: Mean=72213,00 ns, Median=36400,00 ns, StdDev=331395,67 ns, Q1=89450,00 ns, Q3=26250,00 ns, IQR=-63200,00 ns, CV=458,91%
+     Skewness=9,9601, Kurtosis=99,4569
+Ratio: 0,63, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=37216,00 ns, Median=29300,00 ns, StdDev=12724,57 ns, Q1=51400,00 ns, Q3=26750,00 ns, IQR=-24650,00 ns, CV=34,19%
+     Skewness=0,8573, Kurtosis=-0,4682
+Obj: Mean=35452,00 ns, Median=26450,00 ns, StdDev=17512,35 ns, Q1=39675,00 ns, Q3=27825,00 ns, IQR=-11850,00 ns, CV=49,40%
+     Skewness=3,4250, Kurtosis=18,0851
+Ratio: 1,05, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=45418,00 ns, Median=31900,00 ns, StdDev=27098,25 ns, Q1=50500,00 ns, Q3=80600,00 ns, IQR=30100,00 ns, CV=59,66%
+     Skewness=1,4902, Kurtosis=1,3293
+Obj: Mean=52744,00 ns, Median=33700,00 ns, StdDev=61009,91 ns, Q1=47475,00 ns, Q3=72750,00 ns, IQR=25275,00 ns, CV=115,67%
+     Skewness=5,4423, Kurtosis=33,2768
+Ratio: 0,86, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: add
+Ref: Mean=15165,00 ns, Median=14750,00 ns, StdDev=6429,56 ns, Q1=13300,00 ns, Q3=14200,00 ns, IQR=900,00 ns, CV=42,40%
+     Skewness=4,7159, Kurtosis=33,7596
+Obj: Mean=13750,00 ns, Median=13950,00 ns, StdDev=3825,24 ns, Q1=14175,00 ns, Q3=11825,00 ns, IQR=-2350,00 ns, CV=27,82%
+     Skewness=0,6699, Kurtosis=0,4734
+Ratio: 1,10, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=11154,00 ns, Median=11100,00 ns, StdDev=1546,74 ns, Q1=10700,00 ns, Q3=11725,00 ns, IQR=1025,00 ns, CV=13,87%
+     Skewness=2,7309, Kurtosis=12,2369
+Obj: Mean=10804,00 ns, Median=10400,00 ns, StdDev=3063,14 ns, Q1=9150,00 ns, Q3=12750,00 ns, IQR=3600,00 ns, CV=28,35%
+     Skewness=4,9336, Kurtosis=32,0876
+Ratio: 1,03, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=17904,00 ns, Median=16600,00 ns, StdDev=9072,29 ns, Q1=17875,00 ns, Q3=11125,00 ns, IQR=-6750,00 ns, CV=50,67%
+     Skewness=4,2234, Kurtosis=27,0715
+Obj: Mean=15394,00 ns, Median=15150,00 ns, StdDev=4208,84 ns, Q1=19550,00 ns, Q3=12425,00 ns, IQR=-7125,00 ns, CV=27,34%
+     Skewness=1,1238, Kurtosis=2,6370
+Ratio: 1,16, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=32323,00 ns, Median=30700,00 ns, StdDev=8275,64 ns, Q1=30750,00 ns, Q3=36275,00 ns, IQR=5525,00 ns, CV=25,60%
+     Skewness=4,7511, Kurtosis=31,5769
+Obj: Mean=30171,00 ns, Median=29900,00 ns, StdDev=4461,54 ns, Q1=29750,00 ns, Q3=44500,00 ns, IQR=14750,00 ns, CV=14,79%
+     Skewness=1,1043, Kurtosis=5,8301
+Ratio: 1,07, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=29238,00 ns, Median=29350,00 ns, StdDev=7261,81 ns, Q1=20725,00 ns, Q3=42000,00 ns, IQR=21275,00 ns, CV=24,84%
+     Skewness=0,4524, Kurtosis=0,2004
+Obj: Mean=27575,00 ns, Median=27150,00 ns, StdDev=7323,70 ns, Q1=19850,00 ns, Q3=27650,00 ns, IQR=7800,00 ns, CV=26,56%
+     Skewness=1,1464, Kurtosis=2,2619
+Ratio: 1,06, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=51964,00 ns, Median=46200,00 ns, StdDev=22284,65 ns, Q1=42075,00 ns, Q3=55125,00 ns, IQR=13050,00 ns, CV=42,88%
+     Skewness=5,7032, Kurtosis=36,6882
+Obj: Mean=48015,00 ns, Median=45250,00 ns, StdDev=10202,73 ns, Q1=40575,00 ns, Q3=42175,00 ns, IQR=1600,00 ns, CV=21,25%
+     Skewness=2,6711, Kurtosis=11,2598
+Ratio: 1,08, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: add
+Ref: Mean=10302,00 ns, Median=9100,00 ns, StdDev=3010,52 ns, Q1=8825,00 ns, Q3=13525,00 ns, IQR=4700,00 ns, CV=29,22%
+     Skewness=2,8380, Kurtosis=9,4490
+Obj: Mean=9685,00 ns, Median=8250,00 ns, StdDev=3923,88 ns, Q1=7475,00 ns, Q3=13900,00 ns, IQR=6425,00 ns, CV=40,52%
+     Skewness=3,4460, Kurtosis=14,3779
+Ratio: 1,06, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=11325,00 ns, Median=10400,00 ns, StdDev=3439,12 ns, Q1=12075,00 ns, Q3=10825,00 ns, IQR=-1250,00 ns, CV=30,37%
+     Skewness=3,1091, Kurtosis=11,3326
+Obj: Mean=10181,00 ns, Median=9050,00 ns, StdDev=4161,29 ns, Q1=11325,00 ns, Q3=14625,00 ns, IQR=3300,00 ns, CV=40,87%
+     Skewness=3,5816, Kurtosis=13,1031
+Ratio: 1,11, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=10111,00 ns, Median=9600,00 ns, StdDev=2937,46 ns, Q1=9850,00 ns, Q3=8950,00 ns, IQR=-900,00 ns, CV=29,05%
+     Skewness=7,0206, Kurtosis=55,4405
+Obj: Mean=9429,00 ns, Median=8900,00 ns, StdDev=2546,75 ns, Q1=8900,00 ns, Q3=7975,00 ns, IQR=-925,00 ns, CV=27,01%
+     Skewness=4,6710, Kurtosis=21,6146
+Ratio: 1,07, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=14884,00 ns, Median=10600,00 ns, StdDev=7100,37 ns, Q1=10525,00 ns, Q3=10350,00 ns, IQR=-175,00 ns, CV=47,70%
+     Skewness=2,0514, Kurtosis=4,6234
+Obj: Mean=13492,00 ns, Median=10150,00 ns, StdDev=5299,51 ns, Q1=10100,00 ns, Q3=9875,00 ns, IQR=-225,00 ns, CV=39,28%
+     Skewness=1,8331, Kurtosis=4,2497
+Ratio: 1,10, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=19102,00 ns, Median=18550,00 ns, StdDev=3573,81 ns, Q1=19775,00 ns, Q3=19275,00 ns, IQR=-500,00 ns, CV=18,71%
+     Skewness=2,9959, Kurtosis=10,7393
+Obj: Mean=18946,00 ns, Median=17600,00 ns, StdDev=5292,79 ns, Q1=18950,00 ns, Q3=21150,00 ns, IQR=2200,00 ns, CV=27,94%
+     Skewness=3,1671, Kurtosis=12,2674
+Ratio: 1,01, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=23702,00 ns, Median=25400,00 ns, StdDev=6301,07 ns, Q1=27150,00 ns, Q3=15875,00 ns, IQR=-11275,00 ns, CV=26,58%
+     Skewness=0,2428, Kurtosis=-0,3808
+Obj: Mean=22113,00 ns, Median=23750,00 ns, StdDev=6050,36 ns, Q1=26025,00 ns, Q3=15100,00 ns, IQR=-10925,00 ns, CV=27,36%
+     Skewness=0,4547, Kurtosis=0,1403
+Ratio: 1,07, KindOfMatrix: ONES
+--------------------------------------------------
+
+Wymiar: 100
+--------------------------------------------------
+Operacja: add
+Ref: Mean=20368,00 ns, Median=15400,00 ns, StdDev=10096,38 ns, Q1=34225,00 ns, Q3=13325,00 ns, IQR=-20900,00 ns, CV=49,57%
+     Skewness=2,6331, Kurtosis=9,5526
+Obj: Mean=18889,00 ns, Median=14350,00 ns, StdDev=9356,81 ns, Q1=21725,00 ns, Q3=16150,00 ns, IQR=-5575,00 ns, CV=49,54%
+     Skewness=4,3285, Kurtosis=28,3833
+Ratio: 1,08, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=36803,00 ns, Median=37750,00 ns, StdDev=10893,44 ns, Q1=24125,00 ns, Q3=47900,00 ns, IQR=23775,00 ns, CV=29,60%
+     Skewness=0,7196, Kurtosis=0,6626
+Obj: Mean=39363,00 ns, Median=34650,00 ns, StdDev=54809,24 ns, Q1=22300,00 ns, Q3=37625,00 ns, IQR=15325,00 ns, CV=139,24%
+     Skewness=9,5346, Kurtosis=93,7132
+Ratio: 0,93, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=38445,00 ns, Median=36550,00 ns, StdDev=21161,83 ns, Q1=25075,00 ns, Q3=51450,00 ns, IQR=26375,00 ns, CV=55,04%
+     Skewness=4,8998, Kurtosis=33,1895
+Obj: Mean=32726,00 ns, Median=31550,00 ns, StdDev=10465,47 ns, Q1=24625,00 ns, Q3=42275,00 ns, IQR=17650,00 ns, CV=31,98%
+     Skewness=1,3746, Kurtosis=3,6541
+Ratio: 1,17, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=80235,00 ns, Median=80050,00 ns, StdDev=22086,71 ns, Q1=85525,00 ns, Q3=88925,00 ns, IQR=3400,00 ns, CV=27,53%
+     Skewness=1,7614, Kurtosis=9,7491
+Obj: Mean=76235,00 ns, Median=76800,00 ns, StdDev=23009,33 ns, Q1=79150,00 ns, Q3=82300,00 ns, IQR=3150,00 ns, CV=30,18%
+     Skewness=2,8078, Kurtosis=17,8101
+Ratio: 1,05, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=94381,00 ns, Median=93850,00 ns, StdDev=31078,94 ns, Q1=151000,00 ns, Q3=85475,00 ns, IQR=-65525,00 ns, CV=32,93%
+     Skewness=0,5568, Kurtosis=-0,1393
+Obj: Mean=90928,00 ns, Median=93500,00 ns, StdDev=32467,07 ns, Q1=152600,00 ns, Q3=90425,00 ns, IQR=-62175,00 ns, CV=35,71%
+     Skewness=1,7753, Kurtosis=6,3677
+Ratio: 1,04, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=140685,00 ns, Median=136800,00 ns, StdDev=25342,75 ns, Q1=147700,00 ns, Q3=108600,00 ns, IQR=-39100,00 ns, CV=18,01%
+     Skewness=1,7671, Kurtosis=3,6693
+Obj: Mean=138366,00 ns, Median=134200,00 ns, StdDev=26265,66 ns, Q1=258425,00 ns, Q3=123700,00 ns, IQR=-134725,00 ns, CV=18,98%
+     Skewness=2,6967, Kurtosis=13,2088
+Ratio: 1,02, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: add
+Ref: Mean=32994,00 ns, Median=31150,00 ns, StdDev=6998,96 ns, Q1=29575,00 ns, Q3=28475,00 ns, IQR=-1100,00 ns, CV=21,21%
+     Skewness=3,8552, Kurtosis=19,0009
+Obj: Mean=32034,00 ns, Median=29750,00 ns, StdDev=13112,30 ns, Q1=27775,00 ns, Q3=27025,00 ns, IQR=-750,00 ns, CV=40,93%
+     Skewness=5,3384, Kurtosis=30,0890
+Ratio: 1,03, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=36331,00 ns, Median=33550,00 ns, StdDev=15730,94 ns, Q1=37025,00 ns, Q3=33750,00 ns, IQR=-3275,00 ns, CV=43,30%
+     Skewness=3,6553, Kurtosis=18,6770
+Obj: Mean=63187,00 ns, Median=31400,00 ns, StdDev=316839,41 ns, Q1=35550,00 ns, Q3=29325,00 ns, IQR=-6225,00 ns, CV=501,43%
+     Skewness=9,9884, Kurtosis=99,8427
+Ratio: 0,57, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=27475,00 ns, Median=23200,00 ns, StdDev=25369,60 ns, Q1=26025,00 ns, Q3=26600,00 ns, IQR=575,00 ns, CV=92,34%
+     Skewness=8,8695, Kurtosis=84,0223
+Obj: Mean=28440,00 ns, Median=21800,00 ns, StdDev=38111,48 ns, Q1=21700,00 ns, Q3=22650,00 ns, IQR=950,00 ns, CV=134,01%
+     Skewness=8,2968, Kurtosis=74,8204
+Ratio: 0,97, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=39601,00 ns, Median=38400,00 ns, StdDev=5378,30 ns, Q1=41900,00 ns, Q3=36800,00 ns, IQR=-5100,00 ns, CV=13,58%
+     Skewness=1,2695, Kurtosis=1,3750
+Obj: Mean=39394,00 ns, Median=36500,00 ns, StdDev=9632,83 ns, Q1=35525,00 ns, Q3=58800,00 ns, IQR=23275,00 ns, CV=24,45%
+     Skewness=2,4948, Kurtosis=6,5094
+Ratio: 1,01, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=37614,00 ns, Median=36000,00 ns, StdDev=9990,93 ns, Q1=35050,00 ns, Q3=43975,00 ns, IQR=8925,00 ns, CV=26,56%
+     Skewness=5,4695, Kurtosis=38,1413
+Obj: Mean=36488,00 ns, Median=34850,00 ns, StdDev=6946,03 ns, Q1=43600,00 ns, Q3=33075,00 ns, IQR=-10525,00 ns, CV=19,04%
+     Skewness=2,1126, Kurtosis=6,7370
+Ratio: 1,03, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=63839,00 ns, Median=54500,00 ns, StdDev=28335,35 ns, Q1=53200,00 ns, Q3=135025,00 ns, IQR=81825,00 ns, CV=44,39%
+     Skewness=3,7156, Kurtosis=15,2821
+Obj: Mean=63124,00 ns, Median=53100,00 ns, StdDev=31627,98 ns, Q1=49950,00 ns, Q3=70725,00 ns, IQR=20775,00 ns, CV=50,10%
+     Skewness=3,7166, Kurtosis=14,1502
+Ratio: 1,01, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: add
+Ref: Mean=17145,00 ns, Median=17650,00 ns, StdDev=5952,92 ns, Q1=18675,00 ns, Q3=11800,00 ns, IQR=-6875,00 ns, CV=34,72%
+     Skewness=0,8358, Kurtosis=0,6515
+Obj: Mean=15345,00 ns, Median=16450,00 ns, StdDev=6418,11 ns, Q1=21025,00 ns, Q3=9975,00 ns, IQR=-11050,00 ns, CV=41,83%
+     Skewness=4,3829, Kurtosis=31,6442
+Ratio: 1,12, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=20329,00 ns, Median=18950,00 ns, StdDev=13190,27 ns, Q1=20175,00 ns, Q3=19275,00 ns, IQR=-900,00 ns, CV=64,88%
+     Skewness=6,9230, Kurtosis=58,2736
+Obj: Mean=18164,00 ns, Median=17300,00 ns, StdDev=8819,30 ns, Q1=19250,00 ns, Q3=18650,00 ns, IQR=-600,00 ns, CV=48,55%
+     Skewness=5,1806, Kurtosis=31,3758
+Ratio: 1,12, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=15239,00 ns, Median=12000,00 ns, StdDev=5645,97 ns, Q1=19275,00 ns, Q3=13125,00 ns, IQR=-6150,00 ns, CV=37,05%
+     Skewness=1,5421, Kurtosis=2,5286
+Obj: Mean=13325,00 ns, Median=10800,00 ns, StdDev=4233,12 ns, Q1=21300,00 ns, Q3=10750,00 ns, IQR=-10550,00 ns, CV=31,77%
+     Skewness=1,5888, Kurtosis=3,7595
+Ratio: 1,14, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=38164,00 ns, Median=35150,00 ns, StdDev=13203,08 ns, Q1=35150,00 ns, Q3=34050,00 ns, IQR=-1100,00 ns, CV=34,60%
+     Skewness=6,9409, Kurtosis=58,6523
+Obj: Mean=36705,00 ns, Median=32950,00 ns, StdDev=14283,83 ns, Q1=34875,00 ns, Q3=30750,00 ns, IQR=-4125,00 ns, CV=38,92%
+     Skewness=5,3040, Kurtosis=33,0247
+Ratio: 1,04, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=38162,00 ns, Median=36550,00 ns, StdDev=6292,43 ns, Q1=34275,00 ns, Q3=39600,00 ns, IQR=5325,00 ns, CV=16,49%
+     Skewness=3,0324, Kurtosis=14,4668
+Obj: Mean=35952,00 ns, Median=34650,00 ns, StdDev=6225,87 ns, Q1=32575,00 ns, Q3=40300,00 ns, IQR=7725,00 ns, CV=17,32%
+     Skewness=1,8403, Kurtosis=5,1093
+Ratio: 1,06, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=56695,00 ns, Median=53350,00 ns, StdDev=10213,25 ns, Q1=57575,00 ns, Q3=61700,00 ns, IQR=4125,00 ns, CV=18,01%
+     Skewness=3,5060, Kurtosis=19,9107
+Obj: Mean=53340,00 ns, Median=50750,00 ns, StdDev=8932,43 ns, Q1=52950,00 ns, Q3=49150,00 ns, IQR=-3800,00 ns, CV=16,75%
+     Skewness=2,4255, Kurtosis=7,6587
+Ratio: 1,06, KindOfMatrix: ONES
+--------------------------------------------------
+
+Wymiar: 200
+--------------------------------------------------
+Operacja: add
+Ref: Mean=47668,00 ns, Median=46300,00 ns, StdDev=18984,81 ns, Q1=83725,00 ns, Q3=55625,00 ns, IQR=-28100,00 ns, CV=39,83%
+     Skewness=0,6170, Kurtosis=-0,6066
+Obj: Mean=45191,00 ns, Median=44250,00 ns, StdDev=16944,04 ns, Q1=83450,00 ns, Q3=49475,00 ns, IQR=-33975,00 ns, CV=37,49%
+     Skewness=0,5819, Kurtosis=-0,4568
+Ratio: 1,05, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=57320,00 ns, Median=55750,00 ns, StdDev=15474,25 ns, Q1=58000,00 ns, Q3=56725,00 ns, IQR=-1275,00 ns, CV=27,00%
+     Skewness=1,7493, Kurtosis=7,6823
+Obj: Mean=55936,00 ns, Median=55550,00 ns, StdDev=14142,88 ns, Q1=57950,00 ns, Q3=53125,00 ns, IQR=-4825,00 ns, CV=25,28%
+     Skewness=0,8963, Kurtosis=2,4916
+Ratio: 1,02, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=62162,00 ns, Median=63500,00 ns, StdDev=22536,70 ns, Q1=31400,00 ns, Q3=80275,00 ns, IQR=48875,00 ns, CV=36,25%
+     Skewness=0,0731, Kurtosis=-0,6315
+Obj: Mean=57714,00 ns, Median=59100,00 ns, StdDev=20073,85 ns, Q1=33525,00 ns, Q3=121200,00 ns, IQR=87675,00 ns, CV=34,78%
+     Skewness=0,2645, Kurtosis=0,7207
+Ratio: 1,08, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=110447,00 ns, Median=96850,00 ns, StdDev=40555,07 ns, Q1=86225,00 ns, Q3=81975,00 ns, IQR=-4250,00 ns, CV=36,72%
+     Skewness=2,9621, Kurtosis=13,5066
+Obj: Mean=103692,00 ns, Median=91900,00 ns, StdDev=27994,33 ns, Q1=100475,00 ns, Q3=81600,00 ns, IQR=-18875,00 ns, CV=27,00%
+     Skewness=1,3427, Kurtosis=2,3655
+Ratio: 1,07, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=214988,00 ns, Median=220200,00 ns, StdDev=64818,38 ns, Q1=296400,00 ns, Q3=219825,00 ns, IQR=-76575,00 ns, CV=30,15%
+     Skewness=4,0369, Kurtosis=30,9920
+Obj: Mean=219919,00 ns, Median=219900,00 ns, StdDev=53836,77 ns, Q1=313550,00 ns, Q3=266475,00 ns, IQR=-47075,00 ns, CV=24,48%
+     Skewness=1,2567, Kurtosis=4,8425
+Ratio: 0,98, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=283215,00 ns, Median=300100,00 ns, StdDev=73111,58 ns, Q1=317025,00 ns, Q3=328950,00 ns, IQR=11925,00 ns, CV=25,81%
+     Skewness=-0,0412, Kurtosis=-0,6024
+Obj: Mean=278417,00 ns, Median=294300,00 ns, StdDev=79578,06 ns, Q1=396600,00 ns, Q3=350875,00 ns, IQR=-45725,00 ns, CV=28,58%
+     Skewness=0,7266, Kurtosis=1,5630
+Ratio: 1,02, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: add
+Ref: Mean=47625,00 ns, Median=38150,00 ns, StdDev=18816,75 ns, Q1=33500,00 ns, Q3=38100,00 ns, IQR=4600,00 ns, CV=39,51%
+     Skewness=1,9193, Kurtosis=4,1972
+Obj: Mean=43746,00 ns, Median=35550,00 ns, StdDev=15231,17 ns, Q1=31550,00 ns, Q3=36400,00 ns, IQR=4850,00 ns, CV=34,82%
+     Skewness=1,2417, Kurtosis=0,3193
+Ratio: 1,09, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=43845,00 ns, Median=40750,00 ns, StdDev=9950,82 ns, Q1=41575,00 ns, Q3=42375,00 ns, IQR=800,00 ns, CV=22,70%
+     Skewness=2,9173, Kurtosis=11,0482
+Obj: Mean=40556,00 ns, Median=38600,00 ns, StdDev=7563,42 ns, Q1=35775,00 ns, Q3=36950,00 ns, IQR=1175,00 ns, CV=18,65%
+     Skewness=2,6577, Kurtosis=9,5748
+Ratio: 1,08, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=48859,00 ns, Median=45750,00 ns, StdDev=24965,70 ns, Q1=45050,00 ns, Q3=46350,00 ns, IQR=1300,00 ns, CV=51,10%
+     Skewness=6,1209, Kurtosis=45,5544
+Obj: Mean=45960,00 ns, Median=43550,00 ns, StdDev=18032,04 ns, Q1=43200,00 ns, Q3=44175,00 ns, IQR=975,00 ns, CV=39,23%
+     Skewness=6,1639, Kurtosis=51,2833
+Ratio: 1,06, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=74619,00 ns, Median=76350,00 ns, StdDev=21604,86 ns, Q1=39575,00 ns, Q3=73125,00 ns, IQR=33550,00 ns, CV=28,95%
+     Skewness=0,9398, Kurtosis=5,1090
+Obj: Mean=74671,00 ns, Median=74000,00 ns, StdDev=25143,00 ns, Q1=54325,00 ns, Q3=69850,00 ns, IQR=15525,00 ns, CV=33,67%
+     Skewness=2,5786, Kurtosis=15,0537
+Ratio: 1,00, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=71526,00 ns, Median=71450,00 ns, StdDev=16941,91 ns, Q1=59800,00 ns, Q3=60700,00 ns, IQR=900,00 ns, CV=23,69%
+     Skewness=0,6853, Kurtosis=3,6181
+Obj: Mean=76624,00 ns, Median=70100,00 ns, StdDev=69538,06 ns, Q1=72625,00 ns, Q3=59100,00 ns, IQR=-13525,00 ns, CV=90,75%
+     Skewness=9,2398, Kurtosis=89,8382
+Ratio: 0,93, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=105985,00 ns, Median=105050,00 ns, StdDev=29041,21 ns, Q1=82275,00 ns, Q3=107125,00 ns, IQR=24850,00 ns, CV=27,40%
+     Skewness=0,7123, Kurtosis=1,4168
+Obj: Mean=105252,00 ns, Median=100700,00 ns, StdDev=36217,64 ns, Q1=244475,00 ns, Q3=114050,00 ns, IQR=-130425,00 ns, CV=34,41%
+     Skewness=2,1968, Kurtosis=9,3401
+Ratio: 1,01, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: add
+Ref: Mean=38294,00 ns, Median=36550,00 ns, StdDev=11555,12 ns, Q1=37000,00 ns, Q3=36950,00 ns, IQR=-50,00 ns, CV=30,17%
+     Skewness=3,5562, Kurtosis=20,9478
+Obj: Mean=35383,00 ns, Median=34550,00 ns, StdDev=7719,41 ns, Q1=31800,00 ns, Q3=34125,00 ns, IQR=2325,00 ns, CV=21,82%
+     Skewness=1,7510, Kurtosis=7,8290
+Ratio: 1,08, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=31212,00 ns, Median=29500,00 ns, StdDev=10445,74 ns, Q1=34325,00 ns, Q3=38700,00 ns, IQR=4375,00 ns, CV=33,47%
+     Skewness=0,5467, Kurtosis=-0,9112
+Obj: Mean=32271,00 ns, Median=30500,00 ns, StdDev=26240,61 ns, Q1=34100,00 ns, Q3=35600,00 ns, IQR=1500,00 ns, CV=81,31%
+     Skewness=8,1617, Kurtosis=75,5381
+Ratio: 0,97, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=30603,00 ns, Median=22400,00 ns, StdDev=15191,30 ns, Q1=25525,00 ns, Q3=20625,00 ns, IQR=-4900,00 ns, CV=49,64%
+     Skewness=3,9991, Kurtosis=25,3197
+Obj: Mean=27592,00 ns, Median=21900,00 ns, StdDev=8948,66 ns, Q1=21850,00 ns, Q3=19400,00 ns, IQR=-2450,00 ns, CV=32,43%
+     Skewness=1,0839, Kurtosis=0,9531
+Ratio: 1,11, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=57222,00 ns, Median=44200,00 ns, StdDev=37957,31 ns, Q1=69425,00 ns, Q3=76675,00 ns, IQR=7250,00 ns, CV=66,33%
+     Skewness=6,9953, Kurtosis=60,4443
+Obj: Mean=51915,00 ns, Median=41950,00 ns, StdDev=20812,78 ns, Q1=60925,00 ns, Q3=69250,00 ns, IQR=8325,00 ns, CV=40,09%
+     Skewness=3,6277, Kurtosis=20,7630
+Ratio: 1,10, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=56459,00 ns, Median=55400,00 ns, StdDev=16774,96 ns, Q1=57900,00 ns, Q3=41875,00 ns, IQR=-16025,00 ns, CV=29,71%
+     Skewness=0,4342, Kurtosis=-0,8490
+Obj: Mean=59564,00 ns, Median=53900,00 ns, StdDev=34718,42 ns, Q1=84025,00 ns, Q3=57950,00 ns, IQR=-26075,00 ns, CV=58,29%
+     Skewness=6,1316, Kurtosis=49,8780
+Ratio: 0,95, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=94024,00 ns, Median=100700,00 ns, StdDev=23925,84 ns, Q1=60050,00 ns, Q3=59600,00 ns, IQR=-450,00 ns, CV=25,45%
+     Skewness=-0,0118, Kurtosis=-0,8401
+Obj: Mean=92054,00 ns, Median=95300,00 ns, StdDev=35833,73 ns, Q1=67200,00 ns, Q3=68875,00 ns, IQR=1675,00 ns, CV=38,93%
+     Skewness=3,8229, Kurtosis=26,4089
+Ratio: 1,02, KindOfMatrix: ONES
+--------------------------------------------------
+
+Wymiar: 10
+--------------------------------------------------
+Operacja: add
+Ref: Mean=53597,00 ns, Median=25050,00 ns, StdDev=136148,11 ns, Q1=27625,00 ns, Q3=22950,00 ns, IQR=-4675,00 ns, CV=254,02%
+     Skewness=7,6677, Kurtosis=63,3889
+Obj: Mean=34068,00 ns, Median=22600,00 ns, StdDev=25057,60 ns, Q1=21975,00 ns, Q3=32100,00 ns, IQR=10125,00 ns, CV=73,55%
+     Skewness=2,5080, Kurtosis=6,8161
+Ratio: 1,57, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=14127,00 ns, Median=9650,00 ns, StdDev=29545,55 ns, Q1=9950,00 ns, Q3=8025,00 ns, IQR=-1925,00 ns, CV=209,14%
+     Skewness=9,3152, Kurtosis=90,2375
+Obj: Mean=9564,00 ns, Median=8550,00 ns, StdDev=4814,05 ns, Q1=13800,00 ns, Q3=7750,00 ns, IQR=-6050,00 ns, CV=50,34%
+     Skewness=4,0770, Kurtosis=19,5317
+Ratio: 1,48, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=25688,00 ns, Median=18950,00 ns, StdDev=42659,77 ns, Q1=20200,00 ns, Q3=23200,00 ns, IQR=3000,00 ns, CV=166,07%
+     Skewness=9,1281, Kurtosis=87,9815
+Obj: Mean=16171,00 ns, Median=15650,00 ns, StdDev=5790,84 ns, Q1=16950,00 ns, Q3=14200,00 ns, IQR=-2750,00 ns, CV=35,81%
+     Skewness=1,0191, Kurtosis=2,5943
+Ratio: 1,59, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=32217,00 ns, Median=29900,00 ns, StdDev=32001,19 ns, Q1=18625,00 ns, Q3=44200,00 ns, IQR=25575,00 ns, CV=99,33%
+     Skewness=7,2333, Kurtosis=61,7442
+Obj: Mean=27144,00 ns, Median=27800,00 ns, StdDev=12357,36 ns, Q1=15675,00 ns, Q3=29275,00 ns, IQR=13600,00 ns, CV=45,53%
+     Skewness=1,4549, Kurtosis=3,9875
+Ratio: 1,19, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=37769,00 ns, Median=32500,00 ns, StdDev=46108,88 ns, Q1=37750,00 ns, Q3=20075,00 ns, IQR=-17675,00 ns, CV=122,08%
+     Skewness=7,9121, Kurtosis=69,2190
+Obj: Mean=30517,00 ns, Median=32800,00 ns, StdDev=12946,81 ns, Q1=34100,00 ns, Q3=9625,00 ns, IQR=-24475,00 ns, CV=42,42%
+     Skewness=1,5084, Kurtosis=4,8575
+Ratio: 1,24, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=33011,00 ns, Median=25800,00 ns, StdDev=57069,99 ns, Q1=42250,00 ns, Q3=17325,00 ns, IQR=-24925,00 ns, CV=172,88%
+     Skewness=9,2896, Kurtosis=90,1841
+Obj: Mean=25064,00 ns, Median=19250,00 ns, StdDev=14063,19 ns, Q1=27500,00 ns, Q3=16025,00 ns, IQR=-11475,00 ns, CV=56,11%
+     Skewness=3,2605, Kurtosis=16,4003
+Ratio: 1,32, KindOfMatrix: RANDOM
+--------------------------------------------------
+Operacja: add
+Ref: Mean=5084,00 ns, Median=5200,00 ns, StdDev=2949,26 ns, Q1=6250,00 ns, Q3=3175,00 ns, IQR=-3075,00 ns, CV=58,01%
+     Skewness=4,4754, Kurtosis=25,3485
+Obj: Mean=4935,00 ns, Median=4400,00 ns, StdDev=11257,27 ns, Q1=2225,00 ns, Q3=4550,00 ns, IQR=2325,00 ns, CV=228,11%
+     Skewness=9,6343, Kurtosis=94,9878
+Ratio: 1,03, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=5070,00 ns, Median=5450,00 ns, StdDev=2649,01 ns, Q1=3350,00 ns, Q3=5550,00 ns, IQR=2200,00 ns, CV=52,25%
+     Skewness=3,8739, Kurtosis=20,0445
+Obj: Mean=4056,00 ns, Median=4600,00 ns, StdDev=1992,83 ns, Q1=4825,00 ns, Q3=3525,00 ns, IQR=-1300,00 ns, CV=49,13%
+     Skewness=4,2815, Kurtosis=31,2484
+Ratio: 1,25, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=5928,00 ns, Median=6100,00 ns, StdDev=2581,33 ns, Q1=4425,00 ns, Q3=6250,00 ns, IQR=1825,00 ns, CV=43,54%
+     Skewness=3,7119, Kurtosis=19,3655
+Obj: Mean=4792,00 ns, Median=5200,00 ns, StdDev=2640,96 ns, Q1=5200,00 ns, Q3=3600,00 ns, IQR=-1600,00 ns, CV=55,11%
+     Skewness=4,8511, Kurtosis=29,3203
+Ratio: 1,24, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=9670,00 ns, Median=8450,00 ns, StdDev=3090,41 ns, Q1=8200,00 ns, Q3=7950,00 ns, IQR=-250,00 ns, CV=31,96%
+     Skewness=4,1332, Kurtosis=22,7222
+Obj: Mean=9388,00 ns, Median=7800,00 ns, StdDev=3851,15 ns, Q1=7625,00 ns, Q3=14275,00 ns, IQR=6650,00 ns, CV=41,02%
+     Skewness=3,2538, Kurtosis=11,9368
+Ratio: 1,03, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=7520,00 ns, Median=7100,00 ns, StdDev=1647,89 ns, Q1=7150,00 ns, Q3=7525,00 ns, IQR=375,00 ns, CV=21,91%
+     Skewness=5,5177, Kurtosis=39,2479
+Obj: Mean=6878,00 ns, Median=6300,00 ns, StdDev=3300,68 ns, Q1=5925,00 ns, Q3=6475,00 ns, IQR=550,00 ns, CV=47,99%
+     Skewness=6,5736, Kurtosis=46,5743
+Ratio: 1,09, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=9991,00 ns, Median=10150,00 ns, StdDev=3914,11 ns, Q1=13250,00 ns, Q3=7025,00 ns, IQR=-6225,00 ns, CV=39,18%
+     Skewness=0,8814, Kurtosis=0,8671
+Obj: Mean=8863,00 ns, Median=8300,00 ns, StdDev=3618,43 ns, Q1=10575,00 ns, Q3=5125,00 ns, IQR=-5450,00 ns, CV=40,83%
+     Skewness=1,8865, Kurtosis=6,1124
+Ratio: 1,13, KindOfMatrix: ZERO
+--------------------------------------------------
+Operacja: add
+Ref: Mean=2942,00 ns, Median=2800,00 ns, StdDev=1384,34 ns, Q1=2875,00 ns, Q3=2750,00 ns, IQR=-125,00 ns, CV=47,05%
+     Skewness=8,2212, Kurtosis=71,6544
+Obj: Mean=2093,00 ns, Median=2000,00 ns, StdDev=1431,27 ns, Q1=1900,00 ns, Q3=1950,00 ns, IQR=50,00 ns, CV=68,38%
+     Skewness=9,8658, Kurtosis=98,1915
+Ratio: 1,41, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtruct
+Ref: Mean=3662,00 ns, Median=3300,00 ns, StdDev=1824,90 ns, Q1=3275,00 ns, Q3=3400,00 ns, IQR=125,00 ns, CV=49,83%
+     Skewness=7,7891, Kurtosis=68,1946
+Obj: Mean=3665,00 ns, Median=2500,00 ns, StdDev=9881,76 ns, Q1=2525,00 ns, Q3=2350,00 ns, IQR=-175,00 ns, CV=269,63%
+     Skewness=9,6624, Kurtosis=95,0915
+Ratio: 1,00, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: multiplyByScalar
+Ref: Mean=4530,00 ns, Median=3700,00 ns, StdDev=4794,68 ns, Q1=5450,00 ns, Q3=3675,00 ns, IQR=-1775,00 ns, CV=105,84%
+     Skewness=8,3160, Kurtosis=74,8975
+Obj: Mean=6885,00 ns, Median=2950,00 ns, StdDev=34019,66 ns, Q1=3250,00 ns, Q3=2700,00 ns, IQR=-550,00 ns, CV=494,11%
+     Skewness=9,9136, Kurtosis=98,8062
+Ratio: 0,66, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: dotProduct
+Ref: Mean=4906,00 ns, Median=4700,00 ns, StdDev=1609,74 ns, Q1=4625,00 ns, Q3=4975,00 ns, IQR=350,00 ns, CV=32,81%
+     Skewness=7,2788, Kurtosis=58,2249
+Obj: Mean=3894,00 ns, Median=3900,00 ns, StdDev=320,61 ns, Q1=3975,00 ns, Q3=3900,00 ns, IQR=-75,00 ns, CV=8,23%
+     Skewness=3,8216, Kurtosis=26,5426
+Ratio: 1,26, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: opposite
+Ref: Mean=4562,00 ns, Median=4300,00 ns, StdDev=1663,98 ns, Q1=4225,00 ns, Q3=4450,00 ns, IQR=225,00 ns, CV=36,47%
+     Skewness=7,7900, Kurtosis=64,6167
+Obj: Mean=3828,00 ns, Median=3700,00 ns, StdDev=1460,74 ns, Q1=3600,00 ns, Q3=3775,00 ns, IQR=175,00 ns, CV=38,16%
+     Skewness=9,8125, Kurtosis=97,4787
+Ratio: 1,19, KindOfMatrix: ONES
+--------------------------------------------------
+Operacja: subtractVectorNegativeAdd
+Ref: Mean=6421,00 ns, Median=6100,00 ns, StdDev=1633,82 ns, Q1=5125,00 ns, Q3=6375,00 ns, IQR=1250,00 ns, CV=25,44%
+     Skewness=6,0666, Kurtosis=45,4800
+Obj: Mean=5835,00 ns, Median=5100,00 ns, StdDev=3674,77 ns, Q1=4525,00 ns, Q3=5325,00 ns, IQR=800,00 ns, CV=62,98%
+     Skewness=6,0176, Kurtosis=38,5262
+Ratio: 1,10, KindOfMatrix: ONES
+--------------------------------------------------
+

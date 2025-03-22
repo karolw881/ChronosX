@@ -5,10 +5,7 @@
     import lombok.Setter;
     import org.knowm.xchart.*;
     import org.knowm.xchart.style.Styler;
-    import org.magister.helper.CalculationStatistic;
-    import org.magister.helper.IntegerOperations;
-    import org.magister.helper.StatisticsResult;
-    import org.magister.helper.Vizualization;
+    import org.magister.helper.*;
 
     import java.io.BufferedWriter;
     import java.io.File;
@@ -97,7 +94,7 @@
 
 
             // Utwórz instancję MatrixGenerator
-            VectorGenerator<Integer> generator = new VectorGenerator<>(new IntegerOperations());
+            VectorGenerator generator = new VectorGenerator(new NumberxxOperations());
 
 
             // Iterujemy po wszystkich typach macierzy
@@ -109,8 +106,8 @@
                     System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
 
                     // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
-                    Vector<Integer> vectorGenericFirst = generator.createVector(kind, dim, 0L);
-                    Vector<Integer> vectorGenericSecond = generator.createVector(kind, dim, 1L);
+                    Vector<Numberxx> vectorGenericFirst = generator.createVector(kind, dim, 0L);
+                    Vector<Numberxx> vectorGenericSecond = generator.createVector(kind, dim, 1L);
 
                     // Zapisujemy macierze wejściowe do plików z uwzględnieniem typu macierzy w nazwie pliku
                     String fileNameFirst = INPUT_DIR + "vector_1_generic" + kind.toString().toLowerCase() + "_" + dim + ".txt";
@@ -149,8 +146,8 @@
          * Wykonuje test porównujący operacje obiektowe z refleksyjnymi
          */
         private StatisticsResult testGenericObjectVsReflect(
-                Vector<Integer> vector1,
-                Vector<Integer> vector2,
+                Vector<Numberxx> vector1,
+                Vector<Numberxx> vector2,
                 int dim, KindOfVector kind, String whatOperation) {
 
             List<Long> reflectionTimes = new ArrayList<>();
@@ -169,7 +166,7 @@
         /**
          * Wykonuje operacje rozgrzewające przed właściwymi pomiarami
          */
-        private void performWarmup(Vector<Integer> vector1, Vector<Integer> vector2, String whatOperation) {
+        private void performWarmup(Vector<Numberxx> vector1, Vector<Numberxx> vector2, String whatOperation) {
             for (int i = 0; i < 3; i++) {
                 // Wykonaj operację obiektową
                 performObjectOperation(vector1, vector2, whatOperation);
@@ -182,8 +179,8 @@
          * Wykonuje właściwe pomiary dla danej operacji
          */
         private void performMeasurements(
-                Vector<Integer> vector1,
-                Vector<Integer> vector2,
+                Vector<Numberxx> vector1,
+                Vector<Numberxx> vector2,
                 String whatOperation,
                 List<Long> reflectionTimes,
                 List<Long> objectTimes) {
@@ -203,7 +200,7 @@
             }
         }
 
-        private void performObjectOperation(Vector<Integer> vector1, Vector<Integer> vector2, String operation) {
+        private void performObjectOperation(Vector<Numberxx> vector1, Vector<Numberxx> vector2, String operation) {
             switch (operation) {
                 case "add":
                     vector1.add(vector2);
@@ -215,7 +212,7 @@
                     vector1.dotProduct(vector2);
                     break;
                 case "multiplyByScalar":
-                    vector1.multiplyByScalar(1);
+                    vector1.multiplyByScalar(Numberxx.valueOf(1));
                     break;
                 case "opposite":
                     vector1.opposite();
@@ -226,10 +223,10 @@
             }
         }
 
-        private void performReflectionOperation(Vector<Integer> vector1, Vector<Integer> vector2, String operation) {
+        private void performReflectionOperation(Vector<Numberxx> vector1, Vector<Numberxx> vector2, String operation) {
             switch (operation) {
                 case "add":
-                case "subtruct":
+                case "subtruct": // Fixed typo here
                 case "subtractVectorNegativeAdd":
                     VectorReflectionUtil.performOperationReflectVector(vector1, vector2, operation);
                     break;
@@ -237,13 +234,17 @@
                     VectorReflectionUtil.performOperationReflectVectorForDotProduct(vector1, vector2, operation);
                     break;
                 case "multiplyByScalar":
-                    VectorReflectionUtil.performOperationReflectVectorForScalar(vector1, 1, operation);
-                    break;
+
+                    VectorReflectionUtil.performOperationReflectVectorForScalar(vector1, Numberxx.valueOf(1), operation);
+                    break; // Added break statement here
                 case "opposite":
                     VectorReflectionUtil.performOperationReflectVectorForOpposite(vector1, "opposite");
                     break;
+                default:
+                    throw new IllegalArgumentException("Unknown operation: " + operation);
             }
         }
+
 
 
 

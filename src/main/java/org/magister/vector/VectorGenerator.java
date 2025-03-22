@@ -1,16 +1,15 @@
 package org.magister.vector;
 
-
-
-import org.magister.helper.NumberOperations;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
 
 import java.util.Random;
 
-public class VectorGenerator<T extends Number> {
+public class VectorGenerator {
 
-    private final NumberOperations<T> operations;
+    private final NumberxxOperations operations;
 
-    public VectorGenerator(NumberOperations<T> operations) {
+    public VectorGenerator(NumberxxOperations operations) {
         this.operations = operations;
     }
 
@@ -20,9 +19,9 @@ public class VectorGenerator<T extends Number> {
      * @param kind rodzaj wektora
      * @param dimension wymiar wektora
      * @param seed ziarno dla generatora liczb losowych
-     * @return wygenerowany wektor generyczny
+     * @return wygenerowany wektor
      */
-    public Vector<T> createVector(KindOfVector kind, int dimension, long seed) {
+    public Vector<Numberxx> createVector(KindOfVector kind, int dimension, long seed) {
         switch (kind) {
             case RANDOM:
                 return createRandomVector(dimension, seed);
@@ -36,9 +35,9 @@ public class VectorGenerator<T extends Number> {
     }
 
     // Generuje wektor losowy o podanym wymiarze
-    public Vector<T> createRandomVector(int dimension, long seed) {
+    public Vector<Numberxx> createRandomVector(int dimension, long seed) {
         Random random = new Random(seed);
-        T[] data = (T[]) new Number[dimension];
+        Numberxx[] data = new Numberxx[dimension];
         for (int i = 0; i < dimension; i++) {
             data[i] = operations.valueOf(random.nextInt(10));
         }
@@ -46,8 +45,8 @@ public class VectorGenerator<T extends Number> {
     }
 
     // Generuje wektor zerowy
-    public Vector<T> createZeroVector(int dimension) {
-        T[] data = (T[]) new Number[dimension];
+    public Vector<Numberxx> createZeroVector(int dimension) {
+        Numberxx[] data = new Numberxx[dimension];
         for (int i = 0; i < dimension; i++) {
             data[i] = operations.zero();
         }
@@ -55,12 +54,11 @@ public class VectorGenerator<T extends Number> {
     }
 
     // Generuje wektor z samymi jedynkami
-    public Vector<T> createOnesVector(int dimension) {
-        T[] data = (T[]) new Number[dimension];
+    public Vector<Numberxx> createOnesVector(int dimension) {
+        Numberxx[] data = new Numberxx[dimension];
         for (int i = 0; i < dimension; i++) {
             data[i] = operations.one();
         }
         return new Vector<>(data, operations);
     }
 }
-
