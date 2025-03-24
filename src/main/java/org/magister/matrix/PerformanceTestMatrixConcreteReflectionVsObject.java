@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class PerformanceTestMatrixConcreteReflectionVsObject extends PerformanceTestMatrix {
     private static final String INPUT_DIR = PerformanceTestMatrix.INPUT_DIR + "ConcreteOfReflectionVsObject/";
     private static final String OUTPUT_DIR = PerformanceTestMatrix.OUTPUT_DIR + "ConcreteOfReflectionVsObject/";
-    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String CHARTS_DIR = PerformanceTestMatrix.CHARTS_DIR + "ConcreteOfReflectionVsObject/charts/";
     private static final int RUNS = PerformanceTestMatrix.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestMatrix.DIMENSIONS;
 
@@ -35,30 +35,37 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
     }
 
     public void runTest() throws IOException {
-
         aggregatedResults.clear();
         performTestConcrete();
 
-
-        for (KindOfMatrix kind : KindOfMatrix.values())
+        for (KindOfMatrix kind : KindOfMatrix.values()) {
+            createDirectoriesIfNotExists(CHARTS_DIR + "RatioBarChart/");
             Vizualization.showOrSaveBarChartForRatioWithKind(aggregatedResults, kind, CHARTS_DIR);
-
+        }
         Field[] fields = StatisticsResult.class.getDeclaredFields();
+        String temp = CHARTS_DIR + "linearChart/byStat/";
+        String temp2 = CHARTS_DIR + "barChart/byStat/" ;
+        createDirectoriesIfNotExists(temp + "add/");
+        createDirectoriesIfNotExists(temp + "subtract/");
+        createDirectoriesIfNotExists(temp + "multiply/");
+
+
+        createDirectoriesIfNotExists(temp2 + "add/");
+        createDirectoriesIfNotExists(temp2 + "subtract/");
+        createDirectoriesIfNotExists(temp2 + "multiply/");
+
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.getName();
             if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
             } else {
-
-                System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
-                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "add", CHARTS_DIR, field.getName());
-                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "subtract", CHARTS_DIR, field.getName());
-                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "multiply", CHARTS_DIR, field.getName());
-
-                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , CHARTS_DIR , field.getName() );
-                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"multiply" , CHARTS_DIR, field.getName()   );
-                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"subtract" , CHARTS_DIR  , field.getName() );
-
+              //  System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
+                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "add", temp + "add/", field.getName());
+                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "subtract", temp + "subtract/", field.getName());
+                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "multiply", temp + "multiply/", field.getName());
+                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , temp2 + "add/" , field.getName() );
+                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"multiply" , temp2 + "subtract/", field.getName()   );
+                Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"subtract" , temp2 + "multiply/" , field.getName() );
             }
 
         }

@@ -40,7 +40,7 @@ public class Vizualization {
                 "Czas [ns]"
         );
         // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "RatioBarChart/" + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
     }
 
     /**
@@ -229,11 +229,8 @@ public class Vizualization {
                 operation,
                 whatkindofstatist
         );
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR  + whatkindofstatist + "_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
 
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + whatkindofstatist + "_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
     }
 
     private static XYChart createChartRatioVsDimWithOperation(List<StatisticsResult> results,
@@ -543,10 +540,8 @@ public class Vizualization {
                 whatkindofstatist
         );
 
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "DiffrenStatistictVsDimWithOperationForVector\\" + whatkindofstatist + "_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
+        BitmapEncoder.saveBitmap(chart, CHARTS_DIR  + whatkindofstatist + "_vs_dim_chartlinear" + operation + ".png", BitmapEncoder.BitmapFormat.PNG);
+
     }
 
     /**
@@ -605,8 +600,8 @@ public class Vizualization {
 
         chart.addSeries("Ones", onesResults.stream().mapToDouble(r -> r.dimension).toArray(),
                 getStatisticsValues(onesResults, whatkindofstatist));
-        System.out.println( whatkindofstatist  );
-        System.out.println("-------------------");
+       // System.out.println( whatkindofstatist  );
+       // System.out.println("-------------------");
         return chart;
     }
 

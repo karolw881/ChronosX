@@ -1,6 +1,6 @@
 package org.magister.helper;
 
-public class Numberxx extends Number {
+public class Numberxx extends Number implements Comparable<Numberxx> {
     private final int value;
 
     public Numberxx(int value) {
@@ -65,5 +65,11 @@ public class Numberxx extends Number {
 
     public <T extends Number> T one() {
         return (T) new Numberxx(1);
+    }
+
+    @Override
+    public int compareTo(Numberxx other) {
+        // Compare based on integer value
+        return Integer.compare(this.value, other.value);
     }
 }

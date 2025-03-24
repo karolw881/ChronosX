@@ -24,7 +24,7 @@ public  class PerformanceTestMatrix {
     // Directory constants
     protected static final String INPUT_DIR = "test_dataSem2/input/matrix/";
     protected static final String OUTPUT_DIR = "test_dataSem2/output/matrix/";
-    protected static final String CHARTS_DIR = "test_dataSem2/output/matrix/wykres/";
+    protected static final String CHARTS_DIR = "test_dataSem2/output/matrix/";
 
     // Number of test runs for each case
     protected static final int RUNS = 100;

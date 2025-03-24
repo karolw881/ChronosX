@@ -68,7 +68,7 @@ public class MatrixGenerator<T extends Numberxx> {
         return new Matrix<>(data, new NumberxxOperations());
     }
     public Matrix<Numberxx> createIdentityMatrix(int dimension) {
-        Numberxx[][] data = (T[][]) new Number[dimension][dimension];
+        Numberxx[][] data = (T[][]) new Numberxx[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 data[i][j] = (i == j) ? operations.one() : operations.zero();
@@ -79,7 +79,7 @@ public class MatrixGenerator<T extends Numberxx> {
 
     public Matrix<Numberxx> createDiagonalMatrix(int dimension, long seed) {
         Random randomLocal = new Random(seed);
-        T[][] data = (T[][]) new Number[dimension][dimension];
+        T[][] data = (T[][]) new Numberxx[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 data[i][j] = (T) ((i == j) ? Numberxx.valueOf(randomLocal.nextInt(10)) : operations.zero());
@@ -90,7 +90,7 @@ public class MatrixGenerator<T extends Numberxx> {
 
     public Matrix<Numberxx> createSymmetricMatrix(int dimension, long seed) {
         Random randomLocal = new Random(seed);
-        T[][] data = (T[][]) new Number[dimension][dimension];
+        T[][] data = (T[][]) new Numberxx[dimension][dimension];
         // Wypełniamy tylko górną (lub dolną) część macierzy i przypisujemy symetrycznie
         for (int i = 0; i < dimension; i++) {
             for (int j = i; j < dimension; j++) {
@@ -104,7 +104,7 @@ public class MatrixGenerator<T extends Numberxx> {
 
     public Matrix<Numberxx> createAntisymmetricMatrix(int dimension, long seed) {
         Random randomLocal = new Random(seed);
-        T[][] data = (T[][]) new Number[dimension][dimension];
+        T[][] data = (T[][]) new Numberxx[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             data[i][i] = (T) operations.zero(); // przekątna musi być zerowa
             for (int j = i + 1; j < dimension; j++) {
@@ -119,7 +119,7 @@ public class MatrixGenerator<T extends Numberxx> {
 
     public Matrix<Numberxx> createLowerTriangularMatrix(int dimension, long seed) {
         Random randomLocal = new Random(seed);
-        T[][] data = (T[][]) new Number[dimension][dimension];
+        T[][] data = (T[][]) new Numberxx[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (j <= i) {
@@ -134,7 +134,7 @@ public class MatrixGenerator<T extends Numberxx> {
 
     public Matrix<Numberxx> createUpperTriangularMatrix(int dimension, long seed) {
         Random randomLocal = new Random(seed);
-        T[][] data = (T[][]) new Number[dimension][dimension];
+        T[][] data = (T[][]) new Numberxx[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 if (j >= i) {

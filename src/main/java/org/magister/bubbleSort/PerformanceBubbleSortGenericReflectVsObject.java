@@ -1,32 +1,38 @@
 package org.magister.bubbleSort;
 
-import org.magister.helper.CalculationStatistic;
-import org.magister.helper.StatisticsResult;
+import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
-import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.style.Styler;
+import org.magister.helper.CalculationStatistic;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
+import org.magister.helper.StatisticsResult;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class PerformanceBubbleSortGenericReflectVsObject {
+public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTestBubbleSort {
 
     // Katalogi dla danych testowych i wyników
-    private static final String INPUT_DIR = "test_data/input/bubble/Generic/";
-    private static final String OUTPUT_DIR = "test_data/output/bubble/Generic/";
-    private static final String CHARTS_DIR = "test_dataGG/output/bubble/charts/Generic/";
+    private static final String INPUT_DIR = "test_dataGG/input/bubble/Generic/";
+    private static final String OUTPUT_DIR = "test_dataGG/output/bubble/Generic/";
+    private static final String CHARTS_DIR = "test_dataGG/output/bubble/Generic/charts";
     // Liczba pomiarów dla danego przypadku
     private static final int RUNS = 1000;
     // Rozmiary tablic testowych
-    private static final int[] DIMENSIONS = {10, 100, 1000};
+    private static final int[] DIMENSIONS = {10, 20, 30, 40, 80};
 
     // Lista zagregowanych wyników pomiarów
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
 
     public PerformanceBubbleSortGenericReflectVsObject() {
+        super();
         createDirectoriesIfNotExists(INPUT_DIR);
         createDirectoriesIfNotExists(OUTPUT_DIR);
         createDirectoriesIfNotExists(CHARTS_DIR);
@@ -39,44 +45,135 @@ public class PerformanceBubbleSortGenericReflectVsObject {
         aggregatedResults.clear();
         performTestGenericBubbleSort();
         // Dla każdego rodzaju uporządkowania (DataOrder) tworzymy wykres słupkowy
-        for (KindOfBubbleSort  kind : KindOfBubbleSort.values()) {
+        for (KindOfBubbleSort kind : KindOfBubbleSort.values()) {
             showOrSaveBarChartForRatioWithOrder(aggregatedResults, kind);
         }
-        CalculationStatistic.saveStatisticsByOperation(CHARTS_DIR , aggregatedResults , "bubble");
-        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults , "bubble");
+        CalculationStatistic.saveStatisticsByOperation(CHARTS_DIR, aggregatedResults, "bubble");
+        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "bubble");
     }
 
 
     public void performTestGenericBubbleSort() {
+        createDirectoriesIfNotExists(INPUT_DIR);
+        createDirectoriesIfNotExists(OUTPUT_DIR);
+        createDirectoriesIfNotExists(CHARTS_DIR);
+
+        BubbleSortGenerator bubbleSortGenerator = new BubbleSortGenerator(new NumberxxOperations());
+
+
         for (KindOfBubbleSort k : KindOfBubbleSort.values()) {
-            System.out.println("Testy dla uporządkowania: " + k);
-
             for (int dim : DIMENSIONS) {
-                System.out.println("Testujemy tablicę o rozmiarze: " + dim);
+
+                BubbleSort<Numberxx> bubbleSortFirst = bubbleSortGenerator.createArray(k, dim, 0L);
+                BubbleSort<Numberxx> bubbleSortSecond = bubbleSortGenerator.createArray(k, dim, 0L);
 
 
-                List<Long> genericTimes = new ArrayList<>();
-                List<Long> nonGenericTimes = new ArrayList<>();
+                String fileNameFirst = INPUT_DIR + "bubble_1_generic" + k.toString().toLowerCase() + "_" + dim + ".txt";
+                String fileNameSecond = INPUT_DIR + "bubble_2_generic" + k.toString().toLowerCase() + "_" + dim + ".txt";
 
-                // Warm-up
-                for (int i = 0; i < 3; i++) {
+                saveBubbleToFile(bubbleSortFirst,fileNameFirst);
+                saveBubbleToFile(bubbleSortSecond,fileNameSecond);
 
-                }
-
-                // Główne pomiary
-                for (int run = 0; run < RUNS; run++) {
-
-
-                }
-
+                aggregatedResults.add(testGenericObjectVsReflect(bubbleSortFirst,  dim, k, "sort"));
 
             }
         }
     }
 
+    /**
+     * Wykonuje test porównujący operacje obiektowe z refleksyjnymi
+     */
+    private StatisticsResult testGenericObjectVsReflect(
+            BubbleSort<Numberxx> bubble1,
+            int dim, KindOfBubbleSort kind, String whatOperation) {
+
+        List<Long> reflectionTimes = new ArrayList<>();
+        List<Long> objectTimes = new ArrayList<>();
+
+        // Wykonaj rozgrzewkę dla odpowiedniej operacji
+        performWarmup(bubble1, whatOperation);
+
+        // Wykonaj pomiary dla odpowiedniej operacji
+        performMeasurements(bubble1, whatOperation, reflectionTimes, objectTimes);
+
+        // Zapisz wyniki i statystyki
+        return saveResults(reflectionTimes, objectTimes, whatOperation, dim, kind);
+    }
 
 
 
+    private StatisticsResult saveResults(List<Long> reflectionTimes, List<Long> objectTimes, String operation, int dim, KindOfBubbleSort kind) {
+        String resultsFilename = OUTPUT_DIR + "bubble_performance_" + operation +   kind + "_of_reflection_generic" + dim + ".txt";
+        saveResultsToFile(resultsFilename, objectTimes, reflectionTimes);
+
+        String statsFilename = OUTPUT_DIR + "bubble_statistics_" + operation  + kind + "_of_reflection_generic" + dim + ".txt";
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
+
+        System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
+        return stats;
+    }
+
+    private void performMeasurements(BubbleSort<Numberxx> bubble1,
+                                     String whatOperation,
+                                     List<Long> reflectionTimes,
+                                     List<Long> objectTimes) {
+
+
+        for (int i = 0; i < RUNS; i++) {
+            // Pomiar operacji refleksyjnej
+            long startReflection = System.nanoTime();
+            performReflectionOperation(bubble1, whatOperation);
+            long endReflection = System.nanoTime();
+            reflectionTimes.add(endReflection - startReflection);
+
+            // Pomiar operacji obiektowej
+            long startObject = System.nanoTime();
+            performObjectOperation(bubble1);
+            long endObject = System.nanoTime();
+            objectTimes.add(endObject - startObject);
+        }
+
+
+    }
+
+    private void performWarmup(BubbleSort<Numberxx> bubble1,
+                               String whatOperation) {
+        // Wykonaj operację obiektową
+        performObjectOperation(bubble1);
+        // Wykonaj operację refleksyjną
+        performReflectionOperation(bubble1,  whatOperation);
+
+    }
+
+    private void performReflectionOperation(BubbleSort<Numberxx> bubble1,
+                                            String whatOperation) {
+
+        BubbleSortReflectionUtil.performOperationReflectBubble(bubble1,whatOperation);
+    }
+
+    private void performObjectOperation(BubbleSort<Numberxx> bubble1) {
+
+        bubble1.sort();
+
+
+
+
+    }
+
+
+    public static void saveBubbleToFile(BubbleSort<Numberxx> bubbleSort, String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write("Bubble Dimension: " + bubbleSort.getArr().length);
+            writer.newLine();
+            writer.newLine();
+            for (Numberxx coordinate : bubbleSort.getArr()) {
+                writer.write(coordinate.toString() + "\t");
+            }
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error saving bubble to file: " + e.getMessage());
+        }
+    }
 
 
 

@@ -1,6 +1,7 @@
 package org.magister;
 
 
+import org.magister.bubbleSort.PerformanceBubbleSortGenericReflectVsObject;
 import org.magister.bubbleSort.PerformanceTestBubbleSort;
 import org.magister.matrix.PerformanceTestMatrix;
 import org.magister.matrix.PerformanceTestMatrixConcreteReflectionVsObject;
@@ -14,10 +15,19 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-
+        /**
+         *  bubble  ogolny
+         */
 
         PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
        //  performanceTestBubbleSort.performTests();
+
+
+        /**
+         * Generic bubble
+         */
+        PerformanceBubbleSortGenericReflectVsObject performanceBubbleSortGenericReflectVsObject = new PerformanceBubbleSortGenericReflectVsObject();
+        performanceBubbleSortGenericReflectVsObject.performTestGenericBubbleSort();
 
 
         /**
@@ -26,7 +36,7 @@ public class Main {
 
 
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
-        //performanceTestMatrixGenericofReflectionVsObject.runTest();
+       // performanceTestMatrixGenericofReflectionVsObject.runTest();
 
 
         /**
@@ -34,7 +44,7 @@ public class Main {
          */
 
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-    //    performanceTestMatrixConcreteReflectionVsObject.runTest();
+       // performanceTestMatrixConcreteReflectionVsObject.runTest();
 
 
         /**
@@ -42,7 +52,7 @@ public class Main {
          */
 
         PerformanceTestVectorGenericOfReflectionVsObject performanceTestVectorGenericOfReflectionVsObject = new PerformanceTestVectorGenericOfReflectionVsObject();
-        performanceTestVectorGenericOfReflectionVsObject.runTest();
+        //performanceTestVectorGenericOfReflectionVsObject.runTest();
 
 
         /**
