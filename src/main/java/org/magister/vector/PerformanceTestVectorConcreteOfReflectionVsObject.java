@@ -2,15 +2,13 @@ package org.magister.vector;
 
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
-import org.magister.helper.CalculationStatistic;
-import org.magister.helper.IntegerOperations;
-import org.magister.helper.Numberxx;
-import org.magister.helper.StatisticsResult;
+import org.magister.helper.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.DoubleSummaryStatistics;
@@ -18,9 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PerformanceTestVectorConcreteOfReflectionVsObject extends PerformanceTestVector {
-    private static final String INPUT_DIR = PerformanceTestVector.INPUT_DIR + "ConcreteOfReflectionVsObject/";
-    private static final String OUTPUT_DIR = PerformanceTestVector.OUTPUT_DIR + "ConcreteOfReflectionVsObject/";
-    private static final String CHARTS_DIR = PerformanceTestVector.CHARTS_DIR + "ConcreteOfReflectionVsObject/";
+    private static final String INPUT_DIR = PerformanceTestVector.INPUT_DIR + "/ConcreteOfReflectionVsObject/";
+    private static final String OUTPUT_DIR = PerformanceTestVector.OUTPUT_DIR + "/ConcreteOfReflectionVsObject/";
+    private static final String CHARTS_DIR = PerformanceTestVector.CHARTS_DIR + "/ConcreteOfReflectionVsObject/charts/";
     private static final int RUNS = PerformanceTestVector.RUNS;
     private static final int[] DIMENSIONS = PerformanceTestVector.DIMENSIONS;
 
@@ -28,88 +26,94 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
 
 
     public PerformanceTestVectorConcreteOfReflectionVsObject(){
+        super();
         createDirectories();
 
     }
 
     public void runTest() throws IOException {
-        aggregatedResults.clear(); // Czyszczenie poprzednich wyników
+        aggregatedResults.clear();
         performTestConcrete();
-        for (KindOfVector kind : KindOfVector.values()) {    // Iterujemy po wszystkich typach wektora
-            showOrSaveBarChartForRatioWithKind(aggregatedResults, kind);
+        for (KindOfVector kind : KindOfVector.values()) {
+           createDirectoriesIfNotExists(CHARTS_DIR + "RatioBarChart/");
+            Vizualization.showOrSaveBarChartForRatioWithKindForVector(aggregatedResults, kind , CHARTS_DIR + "RatioBarChart/");
         }
 
+        String temp = CHARTS_DIR + "linearChart/byStat/";
+        String temp2 = CHARTS_DIR + "barChart/byStat/" ;
+
+        createDirectoriesIfNotExists(temp + "add/");
+        createDirectoriesIfNotExists(temp + "subtruct/");
+        createDirectoriesIfNotExists(temp + "multiplyByScalar/");
+        createDirectoriesIfNotExists(temp + "dotProduct/");
+        createDirectoriesIfNotExists(temp + "subtractVectorNegativeAdd/");
+        createDirectoriesIfNotExists(temp + "opposite/");
+        createDirectoriesIfNotExists(temp2 + "add/");
+        createDirectoriesIfNotExists(temp2 + "subtruct/");
+        createDirectoriesIfNotExists(temp2 + "multiplyByScalar/");
+        createDirectoriesIfNotExists(temp2 + "dotProduct/");
+        createDirectoriesIfNotExists(temp2 + "subtractVectorNegativeAdd/");
+        createDirectoriesIfNotExists(temp2 + "opposite/");
+
+
+
+
+
+
+
+
+        Field[] fields = StatisticsResult.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object value = field.getName();
+            if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
+            } else {
+
+                // System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "add", temp + "add/", field.getName());
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtruct", temp + "subtruct/", field.getName());
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "dotProduct", temp + "dotProduct/", field.getName());
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "multiplyByScalar", temp + "multiplyByScalar/", field.getName());
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtractVectorNegativeAdd", temp2 + "subtractVectorNegativeAdd/", field.getName());
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "opposite", temp2 + "opposite/", field.getName());
+
+
+
+                Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"add" , temp2 + "add/" , field.getName() );
+                Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtruct" , temp2 + "subtruct/"  , field.getName() );
+                Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"dotProduct" , temp2 + "dotProduct/" , field.getName() );
+                Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"multiplyByScalar" , temp2 + "multiplyByScalar/", field.getName()   );
+                Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtractVectorNegativeAdd" , temp2 + "subtractVectorNegativeAdd/", field.getName()   );
+                Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"opposite" , temp2 + "opposite/"  , field.getName() );
+
+            }
+
+        }
+
+
         // rysuj wykresy
-        showOrSaveChartRatioVsDim2(aggregatedResults, "add");
-        showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
-        showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
-        showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
-        showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
-        showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
-
-
-    }
-
-    private void showOrSaveChartRatioVsDim2(List<StatisticsResult> results, String whatoperation) throws IOException {
-        XYChart chart = createChartRatioVsDim2ForAdd(
-                results,
-                "Wykres: Ratio (x) vs. Dim (y) dla operacji " + whatoperation,
-                "Wymiar (Dim)",
-                "Ratio (Gen Ref / Gen Obj)", whatoperation
-        );
-        // Zapis do pliku:
-        BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinear" + whatoperation + ".png", BitmapEncoder.BitmapFormat.PNG);
-        // Lub wyświetlenie w okienku Swing:
-        // new SwingWrapper<>(chart).displayChart();
-    }
-
-    public static XYChart createChartRatioVsDim2ForAdd(List<StatisticsResult> results,
-                                                       String chartTitle,
-                                                       String xAxisTitle,
-                                                       String yAxisTitle, String whatoperation) {
-
-        // Tworzymy wykres XY
-        XYChart chart = new XYChartBuilder()
-                .width(1800)
-                .height(1000)
-                .title(chartTitle)
-                .xAxisTitle(xAxisTitle)
-                .yAxisTitle(yAxisTitle)
-                .build();
+        // Vizu/alization.showOrSaveChartRatioVsDim2(aggregatedResults, "add");
+        //  showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
+        // showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
+        // showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
+        //  showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
+        //  showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
 
 
 
-        List<StatisticsResult> radomResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
-                .filter(r -> r.kindOfVector == KindOfVector.RANDOM)
-                .toList();
-
-        System.out.println("Bede rysowac dla : " + whatoperation);
-
-        List<StatisticsResult> identityResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
-                .filter(r -> r.kindOfVector == KindOfVector.ONES)
-                .toList();
-
-        List<StatisticsResult> diagResults = results.stream()
-                .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
-                .filter(r -> r.kindOfVector == KindOfVector.ZERO)
-                .toList();
 
 
-        // Dodaj serie osobno
-
-        chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                radomResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("Ones", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                identityResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-        chart.addSeries("zeros", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                diagResults.stream().mapToDouble(r -> r.ratio).toArray());
 
 
-        return chart;
+        // rysuj wykresy
+    //    showOrSaveChartRatioVsDim2(aggregatedResults, "add");
+     //   showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
+      //  showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
+      //  showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
+       // showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
+       // showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
+
+
     }
 
 
@@ -126,11 +130,11 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
 
     // Iterujemy po wszystkich typach macierzy
     for (KindOfVector kind : KindOfVector.values()) {
-        System.out.println("Test dla typu macierzy: " + kind);
+      //  System.out.println("Test dla typu macierzy: " + kind);
 
         // Testujemy dla każdego wymiaru macierzy
         for (int dim : DIMENSIONS) {
-            System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
+        ///    System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
 
             // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
             Vector1 vectorConcreteFirst = generator.createVector1(kind, dim, 0L);
@@ -160,9 +164,9 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
     }
 
     // Wyświetlamy i zapisujemy zagregowane statystyki
-    displayDetailedStatistics();
-   saveAggregatedStatisticsToFile();
-   saveStatisticsByOperation();
+    //displayDetailedStatistics();
+   //saveAggregatedStatisticsToFile();
+ //  saveStatisticsByOperation();
 
 }
     void saveAggregatedStatisticsToFile() {

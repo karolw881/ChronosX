@@ -1,35 +1,28 @@
 package org.magister.bubbleSort;
 
 import java.util.Random;
-import org.magister.helper.NumberOperations;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
 
-/**
- * Generator tablic dla sortowania bąbelkowego.
- * Klasa umożliwia tworzenie tablic (T[]) określonych przez enum {@link KindOfBubbleSort},
- * dla typów rozszerzających {@link Number}.
- *
- * Uwaga: Zakładamy, że przekazany NumberOperations<T> udostępnia metodę:
- * - T valueOf(int value) – konwersja liczby int do typu T.
- */
-public class BubbleSortGenerator<T extends Number> {
+public class BubbleSortGenerator {
 
-    private final NumberOperations<T> operations;
+    private final NumberxxOperations operations;
 
-    public BubbleSortGenerator(NumberOperations<T> operations) {
+    public BubbleSortGenerator(NumberxxOperations operations) {
         this.operations = operations;
     }
 
     /**
-     * Generuje tablicę typu T[] według określonego porządku.
+     * Generates an array of Numberxx according to a specified order.
      *
-     * @param kind rodzaj tablicy określony przez {@link KindOfBubbleSort} (RANDOM, SORTED, REVERSED)
-     * @param size rozmiar tablicy
-     * @param seed ziarno dla generatora liczb losowych (używane przy generowaniu wartości losowych)
-     * @return wygenerowana tablica T[]
+     * @param kind array type defined by {@link KindOfBubbleSort} (RANDOM, SORTED, REVERSED)
+     * @param size array size
+     * @param seed seed for random number generator (used when generating random values)
+     * @return a BubbleSort instance with the generated array
      */
-    public T[] createArray(KindOfBubbleSort kind, int size, long seed) {
+    public BubbleSort<Numberxx> createArray(KindOfBubbleSort kind, int size, long seed) {
         Random randomLocal = new Random(seed);
-        T[] data = (T[]) new Number[size];
+        Numberxx[] data = new Numberxx[size];
 
         switch (kind) {
             case RANDOM:
@@ -48,8 +41,8 @@ public class BubbleSortGenerator<T extends Number> {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Nieznany typ generacji tablicy: " + kind);
+                throw new IllegalArgumentException("Unknown array generation type: " + kind);
         }
-        return data;
+        return new BubbleSort<>(data);
     }
 }

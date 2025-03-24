@@ -5,13 +5,13 @@ import org.magister.helper.NumberxxOperations;
 
 import java.lang.reflect.Array;
 
-public class Vector<T extends Number> {
+public class Vector<T extends Numberxx> {
     private final T[] coordinates;
     private final NumberxxOperations operations;
 
     public Vector(T[] coordinates, NumberxxOperations operations) {
         this.coordinates = coordinates.clone();
-        this.operations = (NumberxxOperations) operations;
+        this.operations = operations;
     }
 
     public T[] getCoordinates() {
@@ -34,7 +34,7 @@ public class Vector<T extends Number> {
     // Metoda obliczania przeciwnego wektora (negacja) poprzez: 0 - coordinate
     public Vector<T> opposite() {
         int n = this.coordinates.length;
-        T[] result = (T[]) new Number[n];
+        T[] result = (T[]) new Numberxx[n];
         for (int i = 0; i < n; i++) {
             result[i] = (T) operations.subtract(operations.zero(), (Numberxx) this.coordinates[i]);
         }
@@ -52,7 +52,7 @@ public class Vector<T extends Number> {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą wymiarowość");
         }
         int n = this.coordinates.length;
-        T[] result = (T[]) new Number[n];
+        T[] result = (T[]) new Numberxx[n];
         for (int i = 0; i < n; i++) {
             result[i] = (T) operations.subtract((Numberxx) this.coordinates[i], (Numberxx) vector.coordinates[i]);
         }

@@ -1,9 +1,17 @@
 package org.magister.bubbleSort;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Comparator;
 
 
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class BubbleSort1 {
     public Object[] sort(Object[] arr, Comparator comparator) {
         int n = arr.length;

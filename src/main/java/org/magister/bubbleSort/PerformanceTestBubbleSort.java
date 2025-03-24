@@ -1,6 +1,7 @@
 package org.magister.bubbleSort;
 
 
+import org.magister.helper.Numberxx;
 import org.magister.helper.StatisticsResult;
 
 import java.io.BufferedWriter;
@@ -22,7 +23,7 @@ public class PerformanceTestBubbleSort {
     // Rozmiary tablic testowych (ilość elementów)
     protected static final int[] DIMENSIONS = {10, 100, 1000};
 
-    protected static final String CHARTS_DIR = "test_dataGG/output/vector/charts";
+    protected static final String CHARTS_DIR = "test_dataGG/output/bubble/charts";
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
 
 
@@ -40,6 +41,38 @@ public class PerformanceTestBubbleSort {
     }
 
 
+    /**
+     * Zapisuje wektor do pliku tekstowego.
+     */
+    public static void saveBubbleToFile(BubbleSort<Numberxx> bubbleSort, String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            // Using the Lombok-generated getter for the field "arr"
+            writer.write("Vector Dimension: " + bubbleSort.getArr().length);
+            writer.newLine();
+            writer.newLine();
+            for (Numberxx coordinate : bubbleSort.getArr()) {
+                writer.write(coordinate.toString() + "\t");
+            }
+            writer.newLine();
+        } catch (IOException e) {
+            System.err.println("Error saving vector to file: " + e.getMessage());
+        }
+    }
+
+    public void saveResultsToFile(String filename, List<Long> objectTimes, List<Long> reflectionTimes) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            // Nagłówki
+            writer.write(String.format("%-15s %-15s%n", "Direct Time (ns)", "Reflection Time (ns)"));
+            writer.write(String.format("%-15s %-15s%n", "---------------", "-------------------"));
+
+            // Dane
+            for (int i = 0; i < reflectionTimes.size(); i++) {
+                writer.write(String.format("%-15d %-15d%n", objectTimes.get(i), reflectionTimes.get(i)));
+            }
+        } catch (IOException e) {
+            System.err.println("Error saving results to file: " + e.getMessage());
+        }
+    }
 
 
 

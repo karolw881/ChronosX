@@ -20,25 +20,42 @@
     @Getter
     @Setter
     public class PerformanceTestVectorGenericOfReflectionVsObject extends PerformanceTestVector {
-        private static final String INPUT_DIR = PerformanceTestVector.INPUT_DIR + "GenericOfReflectionVsObject/";
-        private static final String OUTPUT_DIR = PerformanceTestVector.OUTPUT_DIR + "GenericOfReflectionVsObject/";
-        private static final String CHARTS_DIR = PerformanceTestVector.CHARTS_DIR + "GenericOfReflectionVsObject/";
+        private static final String INPUT_DIR = PerformanceTestVector.INPUT_DIR + "/GenericOfReflectionVsObject/";
+        private static final String OUTPUT_DIR = PerformanceTestVector.OUTPUT_DIR + "/GenericOfReflectionVsObject/";
+        private static final String CHARTS_DIR = PerformanceTestVector.CHARTS_DIR + "/GenericOfReflectionVsObject/";
         private static final int RUNS = PerformanceTestVector.RUNS;
         private static final int[] DIMENSIONS = PerformanceTestVector.DIMENSIONS;
 
         public PerformanceTestVectorGenericOfReflectionVsObject() {
-            createDirectories();
+            super();
             createDirectories();
         }
 
 
         public void runTest() throws IOException {
-            aggregatedResults.clear(); // Czyszczenie poprzednich wyników
+            aggregatedResults.clear();
             performTestGeneric();
-            for (KindOfVector kind : KindOfVector.values()) {    // Iterujemy po wszystkich typach wektora
-                Vizualization.showOrSaveBarChartForRatioWithKindForVector(aggregatedResults, kind,CHARTS_DIR);
+            for (KindOfVector kind : KindOfVector.values()) {
+                createDirectoriesIfNotExists(CHARTS_DIR + "RatioBarChart/");
+                Vizualization.showOrSaveBarChartForRatioWithKindForVector(aggregatedResults, kind,CHARTS_DIR + "RatioBarChart/");
 
             }
+
+            String temp = CHARTS_DIR + "linearChart/byStat/";
+            String temp2 = CHARTS_DIR + "barChart/byStat/" ;
+            createDirectoriesIfNotExists(temp + "add/");
+            createDirectoriesIfNotExists(temp + "subtruct/");
+            createDirectoriesIfNotExists(temp + "multiplyByScalar/");
+            createDirectoriesIfNotExists(temp + "dotProduct/");
+            createDirectoriesIfNotExists(temp + "subtractVectorNegativeAdd/");
+            createDirectoriesIfNotExists(temp + "opposite/");
+            createDirectoriesIfNotExists(temp2 + "add/");
+            createDirectoriesIfNotExists(temp2 + "subtruct/");
+            createDirectoriesIfNotExists(temp2 + "multiplyByScalar/");
+            createDirectoriesIfNotExists(temp2 + "dotProduct/");
+            createDirectoriesIfNotExists(temp2 + "subtractVectorNegativeAdd/");
+            createDirectoriesIfNotExists(temp2 + "opposite/");
+
 
 
             Field[] fields = StatisticsResult.class.getDeclaredFields();
@@ -49,24 +66,21 @@
                 } else {
 
                     // System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
-                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "add", CHARTS_DIR, field.getName());
-                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtruct", CHARTS_DIR, field.getName());
-                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "dotProduct", CHARTS_DIR, field.getName());
-                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "multiplyByScalar", CHARTS_DIR, field.getName());
-                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtractVectorNegativeAdd", CHARTS_DIR, field.getName());
-                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "opposite", CHARTS_DIR, field.getName());
+                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "add", temp + "add/", field.getName());
+                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtruct", temp + "subtruct/", field.getName());
+                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "dotProduct", temp + "dotProduct/", field.getName());
+                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "multiplyByScalar", temp + "multiplyByScalar/", field.getName());
+                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtractVectorNegativeAdd", temp + "subtractVectorNegativeAdd/", field.getName());
+                    Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "opposite", temp + "opposite/", field.getName());
 
 
 
-
-
-
-
-                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"add" , CHARTS_DIR , field.getName() );
-                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtruct" , CHARTS_DIR  , field.getName() );
-                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"dotProduct" , CHARTS_DIR , field.getName() );
-                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"multiplyByScalar" , CHARTS_DIR, field.getName()   );
-                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"opposite" , CHARTS_DIR  , field.getName() );
+                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"add" , temp2 + "add/" , field.getName() );
+                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtruct" , temp2 + "subtruct/"  , field.getName() );
+                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"dotProduct" , temp2 + "dotProduct/" , field.getName() );
+                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"multiplyByScalar" , temp2 + "multiplyByScalar/", field.getName()   );
+                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtractVectorNegativeAdd" , temp2 + "subtractVectorNegativeAdd/", field.getName()   );
+                    Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"opposite" , temp2 + "opposite/"  , field.getName() );
 
                 }
 
@@ -75,14 +89,21 @@
 
             // rysuj wykresy
            // Vizu/alization.showOrSaveChartRatioVsDim2(aggregatedResults, "add");
-            showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
-            showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
-            showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
-            showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
-            showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
+          //  showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
+           // showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
+           // showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
+          //  showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
+          //  showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
 
 
         }
+
+
+        public void createDirectoreForChart(){
+
+        }
+
+
 
 
         public void performTestGeneric() {
@@ -90,8 +111,6 @@
             createDirectoriesIfNotExists(INPUT_DIR);
             createDirectoriesIfNotExists(OUTPUT_DIR);
             createDirectoriesIfNotExists(CHARTS_DIR);
-            createDirectoriesIfNotExists(CHARTS_DIR + "DiffrenStatistictVsDimWithOperationForVector/");
-
 
             // Utwórz instancję MatrixGenerator
             VectorGenerator generator = new VectorGenerator(new NumberxxOperations());
@@ -225,8 +244,8 @@
 
         private void performReflectionOperation(Vector<Numberxx> vector1, Vector<Numberxx> vector2, String operation) {
             switch (operation) {
-                case "add":
-                case "subtruct": // Fixed typo here
+                case "add": VectorReflectionUtil.performOperationReflectVector(vector1, vector2, operation);break;
+                case "subtruct": VectorReflectionUtil.performOperationReflectVector(vector1, vector2, operation);break;
                 case "subtractVectorNegativeAdd":
                     VectorReflectionUtil.performOperationReflectVector(vector1, vector2, operation);
                     break;

@@ -56,7 +56,6 @@ public class VectorReflectionUtil extends Numberxx {
     public static <T extends Numberxx> Vector<T> performOperationReflectVector(Vector<T> vector1, Vector<T> vector2, String operationName) {
         try {
             Method method = Vector.class.getMethod(operationName, Vector.class);
-            @SuppressWarnings("unchecked")
             Vector<T> result = (Vector<T>) method.invoke(vector1, vector2);
             return result;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
