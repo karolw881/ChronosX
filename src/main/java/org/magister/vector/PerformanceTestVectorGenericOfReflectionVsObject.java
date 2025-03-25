@@ -118,11 +118,9 @@
 
             // Iterujemy po wszystkich typach macierzy
             for (KindOfVector kind : KindOfVector.values()) {
-                System.out.println("Test dla typu macierzy: " + kind);
 
                 // Testujemy dla każdego wymiaru macierzy
                 for (int dim : DIMENSIONS) {
-                    System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
 
                     // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
                     Vector<Numberxx> vectorGenericFirst = generator.createVector(kind, dim, 0L);
@@ -151,13 +149,17 @@
             }
 
 
+            /**
+             * zmienic na do plku
+             */
+
             // Wyświetlamy i zapisujemy zagregowane statystyki
-            CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "vector");
-            CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtruct" , "vector");
-            CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiplyByScalar" , "vector");
-            CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "dotProduct" , "vector");
-            CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "opposite" , "vector");
-            CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtractVectorNegativeAdd" , "vector");
+          //  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "vector");
+          //  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtruct" , "vector");
+          //  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiplyByScalar" , "vector");
+          ///  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "dotProduct" , "vector");
+           // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "opposite" , "vector");
+           // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtractVectorNegativeAdd" , "vector");
 
 
         }
@@ -220,7 +222,7 @@
         }
 
         private void performObjectOperation(Vector<Numberxx> vector1, Vector<Numberxx> vector2, String operation) {
-            switch (operation) {
+           switch (operation) {
                 case "add":
                     vector1.add(vector2);
                     break;
@@ -275,7 +277,7 @@
             String statsFilename = OUTPUT_DIR + "vector_statistics_" + operation + "_of_reflection_generic" + dim + ".txt";
             StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
 
-            System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
+          //  System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
             return stats;
         }
 
@@ -418,7 +420,7 @@
             if (!directory.exists()) {
                 boolean created = directory.mkdirs();
                 if (created) {
-                    System.out.println("Created directory: " + path);
+                    //System.out.println("Created directory: " + path);
                 } else {
                     System.err.println("Failed to create directory: " + path);
                 }

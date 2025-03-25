@@ -346,7 +346,7 @@ public class CalculationStatistic {
     }
 
     public  static void displayDetailedStatisticsByMatrixKind(List<StatisticsResult> aggregatedResults) {
-        System.out.println("\n===== AGREGOWANE STATYSTYKI =====");
+        System.out.printf("\n===== AGREGOWANE STATYSTYKI =====");
         System.out.printf("%-10s %-5s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
                 "Operacja", "Dim",
                 "Ref_Mean(ns)", "Ref_Median(ns)", "Ref_StdDev(ns)", "Ref_Q1(ns)", "Ref_Q3(ns)", "Ref_IQR(ns)",
@@ -390,7 +390,8 @@ public class CalculationStatistic {
 
 
     public static void displayDetailedStatisticsByOperation(List<StatisticsResult> aggregatedResults, String operation , String whatKind) {
-        System.out.println("\n===== AGREGOWANE STATYSTYKI DLA OPERACJI: " + operation + " =====");
+
+        System.out.printf("\n===== AGREGOWANE STATYSTYKI DLA OPERACJI: " + operation + " =====");
         System.out.printf("%-10s %-5s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s\n",
                 "Operacja", "Dim",
                 "Ref_Mean(ns)", "Ref_Median(ns)", "Ref_StdDev(ns)", "Ref_Q1(ns)", "Ref_Q3(ns)", "Ref_IQR(ns)",
@@ -487,7 +488,7 @@ public class CalculationStatistic {
             }
         }
 
-        System.out.println("==================================\n");
+        System.out.printf("==================================\n");
     }
 
     public static void saveStatisticsByOperation(String chartsDir, List<StatisticsResult> aggregatedResults , String whatKind) {
@@ -538,12 +539,11 @@ public class CalculationStatistic {
                 }
                 writer.write("\n");
             }
-            System.out.println("Statystyki pogrupowane zapisano do pliku: " + filename);
+           // System.out.println("Statystyki pogrupowane zapisano do pliku: " + filename);
         } catch (IOException e) {
             System.err.println("Błąd zapisu statystyk pogrupowanych: " + e.getMessage());
         }
     }
 
-    public static void saveAggregatedStatisticsToFile() {
-    }
+
 }

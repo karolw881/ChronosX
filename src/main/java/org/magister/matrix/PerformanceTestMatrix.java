@@ -73,7 +73,7 @@ public  class PerformanceTestMatrix {
         }
 
         // Wyświetl zagregowane statystyki w konsoli
-        displayDetailedStatistics();
+      //  displayDetailedStatistics();
 
         // Zapisz zagregowane statystyki do pliku
         saveAggregatedStatisticsToFile();
@@ -503,14 +503,6 @@ public  class PerformanceTestMatrix {
         g.dispose();
     }
 
-    StatisticsResult testAddGenericObjectVsReflect(Matrix<Integer> matrix1,
-                                                   Matrix<Integer> matrix2,
-                                                   int dim) {
-        return null;
-    }
 
-    /**
-     * Klasa przechowująca zagregowane statystyki dla danej operacji i wymiaru macierzy.
-     */
 
 }

@@ -92,7 +92,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         for (KindOfMatrix kind : KindOfMatrix.values()) {
             // Testujemy dla każdego wymiaru macierzy
             for (int dim : DIMENSIONS) {
-                System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
+             //   System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
 
 
                 Matrix1 matrixConcreteFirst = generator.createMatrix1(kind,dim,0L);
@@ -114,15 +114,15 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
             CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults,"matrix");
         }
-        System.out.println("noew @@@@@@@ ");
+ ;
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" ,"matrix");
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix");
+       /// CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
+       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" ,"matrix");
+       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix");
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
+       /// CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
 
-        CalculationStatistic.saveAggregatedStatisticsToFile();
+
     }
 
 
@@ -160,10 +160,10 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         }
 
         String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+      //  saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_of_reflection_and_object_concrete" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
-        System.out.println("multiply results saved to " + resultsFilename + " and " + statsFilename);
+      //  System.out.println("multiply results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
     }
@@ -200,7 +200,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_subtract_of_reflection_and_object_concrete" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim,kindOfMatrix);
-        System.out.println("subtract results saved to " + resultsFilename + " and " + statsFilename);
+        //System.out.println("subtract results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
     }
@@ -237,29 +237,14 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_and_object_concrete" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Add", dim,kindOfMatrix);
-        System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
+       // System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
 
     }
 
 
 
-    @Override
-    void displayDetailedStatistics() {
-        System.out.println("\n===== AGREGOWANE STATYSTYKI Concrete obiektowe versus Generyki refleksyjne =====");
-        System.out.printf("%-10s %-5s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-20s %-10s\n",
-                "Operacja", "Dim", "Gen_Ref_Mean(ns)", "Gen_Ref_Median(ns)", "Gen_Ref_Mode(ns)", "Gen_Ref_StdDev(ns)",
-                "Gen_Object_Mean(ns)", "Gen_Object_Median(ns)", "Gen_Object_Mode(ns)", "Gen_Object_StdDev(ns)", "Ratio");
 
-        for (StatisticsResult sr : aggregatedResults) {
-            System.out.printf("%-10s %-5d %20.2f %20.2f %20d %20.2f %20.2f %20.2f %20d %20.2f %10.2f\n",
-                    sr.operation, sr.dimension,
-                    sr.reflectMean, sr.reflectMedian,  sr.reflectStdDev,
-                    sr.objectMean, sr.objectMedian,  sr.objectStdDev,
-                    sr.ratio);
-        }
-        System.out.println("=========================================================================================");
-    }
 
 
     private void createDirectoriesIfNotExists(String path) {
@@ -267,7 +252,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         if (!directory.exists()) {
             boolean created = directory.mkdirs();
             if (created) {
-                System.out.println("Created directory: " + path);
+               // System.out.println("Created directory: " + path);
             } else {
                 System.err.println("Failed to create directory: " + path);
             }

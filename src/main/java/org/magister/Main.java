@@ -1,6 +1,7 @@
 package org.magister;
 
 
+import org.magister.bubbleSort.PerformanceBubbleSortConcreteReflectVsObject;
 import org.magister.bubbleSort.PerformanceBubbleSortGenericReflectVsObject;
 import org.magister.bubbleSort.PerformanceTestBubbleSort;
 import org.magister.matrix.PerformanceTestMatrix;
@@ -19,15 +20,23 @@ public class Main {
          *  bubble  ogolny
          */
 
-        PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
-       //  performanceTestBubbleSort.performTests();
+       // PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
+        //performanceTestBubbleSort.performTests();
+
+
+        /**
+         * Concrete Bubble
+         */
+
+        PerformanceBubbleSortConcreteReflectVsObject performanceBubbleSortConcreteReflectVsObject = new PerformanceBubbleSortConcreteReflectVsObject();
+        performanceBubbleSortConcreteReflectVsObject.runTest();
 
 
         /**
          * Generic bubble
          */
         PerformanceBubbleSortGenericReflectVsObject performanceBubbleSortGenericReflectVsObject = new PerformanceBubbleSortGenericReflectVsObject();
-        performanceBubbleSortGenericReflectVsObject.performTestGenericBubbleSort();
+        performanceBubbleSortGenericReflectVsObject.runTest();
 
 
         /**
@@ -36,7 +45,7 @@ public class Main {
 
 
         PerformanceTestMatrixGenericofReflectionVsObject performanceTestMatrixGenericofReflectionVsObject = new PerformanceTestMatrixGenericofReflectionVsObject();
-       // performanceTestMatrixGenericofReflectionVsObject.runTest();
+        performanceTestMatrixGenericofReflectionVsObject.runTest();
 
 
         /**
@@ -44,7 +53,7 @@ public class Main {
          */
 
         PerformanceTestMatrixConcreteReflectionVsObject performanceTestMatrixConcreteReflectionVsObject = new PerformanceTestMatrixConcreteReflectionVsObject();
-       // performanceTestMatrixConcreteReflectionVsObject.runTest();
+        performanceTestMatrixConcreteReflectionVsObject.runTest();
 
 
         /**
@@ -52,14 +61,14 @@ public class Main {
          */
 
         PerformanceTestVectorGenericOfReflectionVsObject performanceTestVectorGenericOfReflectionVsObject = new PerformanceTestVectorGenericOfReflectionVsObject();
-        //performanceTestVectorGenericOfReflectionVsObject.runTest();
+        performanceTestVectorGenericOfReflectionVsObject.runTest();
 
 
         /**
          * Vector Concrete
          */
         PerformanceTestVectorConcreteOfReflectionVsObject performanceTestVectorConcreteOfReflectionVsObject = new PerformanceTestVectorConcreteOfReflectionVsObject();
-        //performanceTestVectorConcreteOfReflectionVsObject.runTest();
+        performanceTestVectorConcreteOfReflectionVsObject.runTest();
     }
 }
 

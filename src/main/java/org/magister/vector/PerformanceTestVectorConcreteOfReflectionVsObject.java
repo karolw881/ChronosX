@@ -367,7 +367,7 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
         if (!directory.exists()) {
             boolean created = directory.mkdirs();
             if (created) {
-                System.out.println("Created directory: " + path);
+                //System.out.println("Created directory: " + path);
             } else {
                 System.err.println("Failed to create directory: " + path);
             }
@@ -383,7 +383,7 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
         String statsFilename = OUTPUT_DIR + "vector_statistics_" + operation + "_of_reflection_concrete" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
 
-        System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
+      //  System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
     }
 
