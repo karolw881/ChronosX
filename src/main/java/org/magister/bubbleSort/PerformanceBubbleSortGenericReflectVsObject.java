@@ -4,15 +4,13 @@ import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.CategoryChart;
 import org.knowm.xchart.CategoryChartBuilder;
 import org.knowm.xchart.style.Styler;
-import org.magister.helper.CalculationStatistic;
-import org.magister.helper.Numberxx;
-import org.magister.helper.NumberxxOperations;
-import org.magister.helper.StatisticsResult;
+import org.magister.helper.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +18,9 @@ import java.util.stream.Collectors;
 public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTestBubbleSort {
 
     // Katalogi dla danych testowych i wyników
-    private static final String INPUT_DIR = "test_dataGG/input/bubble/Generic/";
-    private static final String OUTPUT_DIR = "test_dataGG/output/bubble/Generic/";
-    private static final String CHARTS_DIR = "test_dataGG/output/bubble/Generic/charts";
+    private static final String INPUT_DIR = "test_dataSem2/input/bubble/Generic/";
+    private static final String OUTPUT_DIR = "test_dataSem2/output/bubble/Generic/";
+    private static final String CHARTS_DIR = "test_dataSem2/output/bubble/Generic/charts";
     // Liczba pomiarów dla danego przypadku
     private static final int RUNS = 1000;
     // Rozmiary tablic testowych
@@ -46,10 +44,36 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
         performTestGenericBubbleSort();
         // Dla każdego rodzaju uporządkowania (DataOrder) tworzymy wykres słupkowy
         for (KindOfBubbleSort kind : KindOfBubbleSort.values()) {
-            showOrSaveBarChartForRatioWithOrder(aggregatedResults, kind);
+            createDirectoriesIfNotExists(CHARTS_DIR + "/RatioBarChart/");
+            Vizualization.showOrSaveBarChartForRatioWithKindForBubble(aggregatedResults,kind,CHARTS_DIR+ "/RatioBarChart/");
         }
-        CalculationStatistic.saveStatisticsByOperation(CHARTS_DIR, aggregatedResults, "bubble");
-        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "bubble");
+
+        String temp = CHARTS_DIR + "/linearChart/byStat/";
+        String temp2 = CHARTS_DIR + "/barChart/byStat/" ;
+        createDirectoriesIfNotExists(temp + "sort/");
+        createDirectoriesIfNotExists(temp2 + "sort/");
+
+
+
+          CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "bubble");
+
+        Field[] fields = StatisticsResult.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object value = field.getName();
+            if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
+            } else {
+                Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForBubble(aggregatedResults, "sort", temp + "sort/", field.getName());
+                Vizualization.showOrSaveBarChartForOperationBubble(aggregatedResults,"sort" , temp2 + "sort/" , field.getName() );
+
+            }
+
+        }
+
+
+
+
+
     }
 
 
@@ -109,7 +133,7 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
         String statsFilename = OUTPUT_DIR + "bubble_statistics_" + operation  + kind + "_of_reflection_generic" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
 
-        System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
+       // System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
     }
 
@@ -151,9 +175,9 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
         BubbleSortReflectionUtil.performOperationReflectBubble(bubble1,whatOperation);
     }
 
-    private void performObjectOperation(BubbleSort<Numberxx> bubble1) {
+    private void performObjectOperation(BubbleSort<Numberxx> bubble) {
 
-        bubble1.sort();
+        bubble.sort();
 
 
 
@@ -228,7 +252,7 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
     }
 
     // --- Metoda pomocnicza do tworzenia katalogów ---
-    private void createDirectoriesIfNotExists(String path) {
+    protected void createDirectoriesIfNotExists(String path) {
         File directory = new File(path);
         if (!directory.exists() && !directory.mkdirs()) {
             System.err.println("Nie udało się utworzyć katalogu: " + path);

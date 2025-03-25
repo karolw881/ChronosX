@@ -18,4 +18,19 @@ public class BubbleSortReflectionUtil {
         }
     }
 
-}
+    public static BubbleSort1 performOperationReflectBubbleConcrete(BubbleSort1 bubble1,
+                                                             String sort) {
+        try {
+                  Method method = BubbleSort1.class.getMethod(sort);
+                  BubbleSort1 result = (BubbleSort1) method.invoke(bubble1);
+                  return result;
+              } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                 throw new RuntimeException("Błąd podczas wykonywania operacji '" + sort +
+                                        "' na wektorze za pomocą refleksji: " + e.getMessage(), e);
+             }
+         }
+
+
+    }
+
+

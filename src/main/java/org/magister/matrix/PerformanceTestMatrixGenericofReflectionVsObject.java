@@ -78,9 +78,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
         MatrixGenerator<Numberxx> generator = new MatrixGenerator<>(new NumberxxOperations());
         for (KindOfMatrix kind : KindOfMatrix.values()) {
-            System.out.println("Test dla typu macierzy: " + kind);
-            for (int dim : DIMENSIONS) {
-                System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
+           for (int dim : DIMENSIONS) {
 
                 Matrix<Numberxx> matrixGenericFirst = generator.createMatrix(kind, dim, 0L);
                 Matrix<Numberxx> matrixGenericSecond = generator.createMatrix(kind, dim, 1L);
@@ -96,13 +94,15 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
             }
             // Wyświetlamy i zapisujemy zagregowane statystyki
-            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "matrix");
+           CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "matrix");
         }
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" , "matrix");
-        CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix" );
+
+        //CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
+       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" , "matrix");
+       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix" );
         // Wyświetlamy i zapisujemy zagregowane statystyki
-        CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
+
+      // CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
 
 
 
@@ -267,7 +267,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(
                 reflectionTimes, objectTimes, statsFilename, whatOperation, dim, kind);
 
-        System.out.println(whatOperation + " results saved to " + resultsFilename + " and " + statsFilename);
+       // System.out.println(whatOperation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
     }
 
@@ -309,7 +309,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         if (!directory.exists()) {
             boolean created = directory.mkdirs();
             if (created) {
-                System.out.println("Created directory: " + path);
+                //System.out.println("Created directory: " + path);
             } else {
                 System.err.println("Failed to create directory: " + path);
             }
