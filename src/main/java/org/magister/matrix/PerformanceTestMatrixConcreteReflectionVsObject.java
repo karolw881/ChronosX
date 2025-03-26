@@ -90,18 +90,10 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
         // Iterujemy po wszystkich typach macierzy
         for (KindOfMatrix kind : KindOfMatrix.values()) {
-            // Testujemy dla każdego wymiaru macierzy
             for (int dim : DIMENSIONS) {
-             //   System.out.println("Testujemy macierz " + kind + " o wymiarze " + dim + "x" + dim);
-
-
                 Matrix1 matrixConcreteFirst = generator.createMatrix1(kind,dim,0L);
                 Matrix1 matrixConcreteSecond = generator.createMatrix1(kind,dim,1L);
 
-
-
-
-                // Zapisujemy macierze wejściowe do plików
                 saveMatrix1ToFile(matrixConcreteFirst, INPUT_DIR + "matrix1_concrete_" + kind.toString().toLowerCase() + "_" + dim + ".txt");
                 saveMatrix1ToFile(matrixConcreteSecond, INPUT_DIR + "matrix2_concrete_" +  kind.toString().toLowerCase() + "_" +dim + ".txt");
 
@@ -109,12 +101,17 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
                 aggregatedResults.add(testSubstractConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
                 aggregatedResults.add(testMultiplyConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
 
-
             }
 
             CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR,aggregatedResults,"matrix");
         }
- ;
+
+        CalculationStatistic.writeDetailedStatisticsByMatrixKindToFile(aggregatedResults,OUTPUT_DIR + "statistic/" + "DetailedStatisticsByMatrixKind.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "add" , "matrix" , OUTPUT_DIR + "statistic/" + "addDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtract" , "matrix", OUTPUT_DIR + "statistic/" + "subtractDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "multiply" , "matrix" , OUTPUT_DIR + "statistic/" + "MultiplyDetailedStatisticsByOperation.txt");
+
+        ;
         // Wyświetlamy i zapisujemy zagregowane statystyki
        /// CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
        // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" ,"matrix");
@@ -160,11 +157,11 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         }
 
         String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-      //  saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+       // saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
+      //  StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
       //  System.out.println("multiply results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
+        return saveResults(reflectionTimes,objectTimes,"multiply" , dim , kindOfMatrix);
 
     }
 
@@ -197,11 +194,11 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         }
 
         String resultsFilename = OUTPUT_DIR + "matrix_performance_subtract_of_reflection_and_object_concrete" + dim + ".txt";
-        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+        // saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_subtract_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim,kindOfMatrix);
+       // StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "subtract", dim,kindOfMatrix);
         //System.out.println("subtract results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
+        return  saveResults(reflectionTimes,objectTimes,"subtract" , dim, kindOfMatrix);
 
     }
 
@@ -234,12 +231,30 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         }
 
         String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_and_object_concrete" + dim + ".txt";
-        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+       // saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_and_object_concrete" + dim + ".txt";
-        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Add", dim,kindOfMatrix);
-       // System.out.println("add results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
+      //  StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "Add", dim,kindOfMatrix);
+       return saveResults(reflectionTimes,objectTimes,"add" , dim , kindOfMatrix);
 
+    }
+
+    private StatisticsResult saveResults(
+            List<Long> reflectionTimes,
+            List<Long> objectTimes,
+            String whatOperation,
+            int dim,
+            KindOfMatrix kind) {
+
+        createDirectoriesIfNotExists(OUTPUT_DIR  + "statistic/" + whatOperation + "/");
+
+        String resultsFilename = OUTPUT_DIR + "statistic/" + whatOperation + "/" + "matrix_performance_" + whatOperation + "_of_reflection_concrete" + dim + ".txt";
+        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+
+        String statsFilename = OUTPUT_DIR + "statistic/" + whatOperation + "/" + "matrix_statistics_" + whatOperation + "_of_reflection_concrete" + dim + ".txt";
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(
+                reflectionTimes, objectTimes, statsFilename, whatOperation, dim, kind);
+
+        return stats;
     }
 
 

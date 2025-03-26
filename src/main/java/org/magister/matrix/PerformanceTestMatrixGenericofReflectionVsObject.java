@@ -24,6 +24,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
 
     public PerformanceTestMatrixGenericofReflectionVsObject() {
         super();
+        createDirectoriesIfNotExists(OUTPUT_DIR + "statistic/");
 
     }
     public void runTest() throws IOException {
@@ -46,6 +47,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         createDirectoriesIfNotExists(temp2 + "subtract/");
         createDirectoriesIfNotExists(temp2 + "multiply/");
 
+
         Field[] fields = StatisticsResult.class.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
@@ -58,11 +60,10 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "subtract", temp +  "subtract/", field.getName());
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "multiply", temp +"multiply/", field.getName());
 
-
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , temp2 +"add/" , field.getName() );
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"multiply" , temp2 +  "subtract/", field.getName()   );
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"subtract" , temp2 +"multiply/" , field.getName() );
-                //System.out.println(field.getName());
+
             }
 
         }
@@ -93,17 +94,13 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
                 aggregatedResults.add(testGenericObjectVsReflect(matrixGenericFirst, matrixGenericSecond, dim,kind , "subtract"));
 
             }
-            // Wyświetlamy i zapisujemy zagregowane statystyki
            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "matrix");
         }
 
-        //CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
-       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" , "matrix");
-       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix" );
-        // Wyświetlamy i zapisujemy zagregowane statystyki
-
-      // CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
-
+        CalculationStatistic.writeDetailedStatisticsByMatrixKindToFile(aggregatedResults,OUTPUT_DIR + "statistic/" + "DetailedStatisticsByMatrixKind.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "add" , "matrix" , OUTPUT_DIR + "statistic/" + "addDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtract" , "matrix", OUTPUT_DIR + "statistic/" + "subtractDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "multiply" , "matrix" , OUTPUT_DIR + "statistic/" + "MultiplyDetailedStatisticsByOperation.txt");
 
 
     }
@@ -260,10 +257,12 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             int dim,
             KindOfMatrix kind) {
 
-        String resultsFilename = OUTPUT_DIR + "matrix_performance_" + whatOperation + "_of_reflection_generic" + dim + ".txt";
+        createDirectoriesIfNotExists(OUTPUT_DIR  + "statistic/" + whatOperation + "/");
+
+        String resultsFilename = OUTPUT_DIR + "statistic/" + whatOperation + "/" + "matrix_performance_" + whatOperation + "_of_reflection_generic" + dim + ".txt";
         saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
 
-        String statsFilename = OUTPUT_DIR + "matrix_statistics_" + whatOperation + "_of_reflection_generic" + dim + ".txt";
+        String statsFilename = OUTPUT_DIR + "statistic/" + whatOperation + "/" + "matrix_statistics_" + whatOperation + "_of_reflection_generic" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(
                 reflectionTimes, objectTimes, statsFilename, whatOperation, dim, kind);
 
