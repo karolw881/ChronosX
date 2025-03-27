@@ -22,6 +22,7 @@ public class PerformanceBubbleSortConcreteReflectVsObject extends  PerformanceTe
         createDirectoriesIfNotExists(INPUT_DIR);
         createDirectoriesIfNotExists(OUTPUT_DIR);
         createDirectoriesIfNotExists(CHARTS_DIR);
+        createDirectoriesIfNotExists(OUTPUT_DIR + "statistic/");
 
     }
 
@@ -67,30 +68,27 @@ public class PerformanceBubbleSortConcreteReflectVsObject extends  PerformanceTe
     }
 
     private void performTestConcreteBubbleSort() {
-       // createDirectoriesIfNotExists(INPUT_DIR);
-       // createDirectoriesIfNotExists(OUTPUT_DIR);
-       // createDirectoriesIfNotExists(CHARTS_DIR);
-
         BubbleSort1Generator bubbleSort1Generator = new BubbleSort1Generator();
-
-
         for (KindOfBubbleSort k : KindOfBubbleSort.values()) {
             for (int dim : DIMENSIONS) {
 
                 BubbleSort1 bubbleSortFirst = bubbleSort1Generator.createArray(k, dim, 0L);
                 BubbleSort1 bubbleSortSecond = bubbleSort1Generator.createArray(k, dim, 0L);
 
-
                 String fileNameFirst = INPUT_DIR + "bubble_1_generic" + k.toString().toLowerCase() + "_" + dim + ".txt";
                 String fileNameSecond = INPUT_DIR + "bubble_2_generic" + k.toString().toLowerCase() + "_" + dim + ".txt";
 
-              saveBubble1ToFile(bubbleSortFirst,fileNameFirst);
-              saveBubble1ToFile(bubbleSortSecond,fileNameSecond);
+                saveBubble1ToFile(bubbleSortFirst,fileNameFirst);
+                saveBubble1ToFile(bubbleSortSecond,fileNameSecond);
 
                 aggregatedResults.add(testConcreteObjectVsReflect(bubbleSortFirst,  dim, k, "sort"));
 
             }
+       CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "bubble");
         }
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults,"sort" , "bubble" ,OUTPUT_DIR + "statistic/" + "sortStatisticsByOperation.txt" );
+        CalculationStatistic.writeDetailedStatisticsByBubbleKindToFile(aggregatedResults,OUTPUT_DIR + "statistic/" + "DetailedStatisticsByBubbleKind.txt");
+
     }
 
     private StatisticsResult testConcreteObjectVsReflect(BubbleSort1 bubble1, int dim, KindOfBubbleSort k, String sort) {
@@ -155,13 +153,11 @@ public class PerformanceBubbleSortConcreteReflectVsObject extends  PerformanceTe
     }
 
     private StatisticsResult saveResults(List<Long> reflectionTimes, List<Long> objectTimes, String operation, int dim, KindOfBubbleSort kind) {
-        String resultsFilename = OUTPUT_DIR + "bubble_performance_" + operation +   kind + "_of_reflection_concrete" + dim + ".txt";
+        createDirectoriesIfNotExists(OUTPUT_DIR  + "statistic/" + operation + "/");
+        String resultsFilename = OUTPUT_DIR + "statistic/"+ operation + "/"  + "bubble_performance_" + operation +   kind + "_of_reflection_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, objectTimes, reflectionTimes);
-
-        String statsFilename = OUTPUT_DIR + "bubble_statistics_" + operation  + kind + "_of_reflection_concrete" + dim + ".txt";
+        String statsFilename = OUTPUT_DIR + "statistic/"+ operation + "/" +  "bubble_statistics_" + operation  + kind + "_of_reflection_concrete" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
-
-      //  System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
     }
 
@@ -174,9 +170,7 @@ public class PerformanceBubbleSortConcreteReflectVsObject extends  PerformanceTe
 
     public static void saveBubble1ToFile(BubbleSort1 bubbleSort, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            // Using the Lombok-generated getter for the field "arr"
-           // writer.write("Vector Dimension: " + bubbleSort.getData().length);
-            writer.newLine();
+    writer.newLine();
             writer.newLine();
             for (int coordinate : bubbleSort.getData()) {
                 writer.write(coordinate + "\t");

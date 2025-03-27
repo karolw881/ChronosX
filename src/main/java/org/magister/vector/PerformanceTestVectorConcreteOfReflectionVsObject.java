@@ -28,6 +28,7 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
     public PerformanceTestVectorConcreteOfReflectionVsObject(){
         super();
         createDirectories();
+        createDirectoriesIfNotExists(OUTPUT_DIR + "statistic/");
 
     }
 
@@ -161,9 +162,22 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
         // Wyświetlamy i zapisujemy zagregowane statystyki
        // displayDetailedStatistics();
       //  saveAggregatedStatisticsToFile();
+        CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "vector");
+
     }
 
-    // Wyświetlamy i zapisujemy zagregowane statystyki
+        CalculationStatistic.writeDetailedStatisticsByVectorKindToFile(aggregatedResults,OUTPUT_DIR + "statistic/" + "DetailedStatisticsByVectorKind.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "add" , "vector" , OUTPUT_DIR + "statistic/" + "addDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtruct" , "vector", OUTPUT_DIR + "statistic/" + "subtractDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "dotProduct" , "vector" , OUTPUT_DIR + "statistic/" + "dotProductDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "multiplyByScalar" , "vector", OUTPUT_DIR + "statistic/" + "multiplyByScalarDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "opposite" , "vector" , OUTPUT_DIR + "statistic/" + "oppositeDetailedStatisticsByOperation.txt");
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtractVectorNegativeAdd" , "vector" , OUTPUT_DIR + "statistic/" + "subtractVectorNegativeAddDetailedStatisticsByOperation.txt");
+
+
+
+
+        // Wyświetlamy i zapisujemy zagregowane statystyki
     //displayDetailedStatistics();
    //saveAggregatedStatisticsToFile();
  //  saveStatisticsByOperation();
@@ -377,10 +391,14 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
 
     private StatisticsResult saveResults(List<Long> reflectionTimes, List<Long> objectTimes,
                                          String operation, int dim, KindOfVector kind) {
-        String resultsFilename = OUTPUT_DIR + "vector_performance_" + operation + "_of_reflection_concrete" + dim + ".txt";
+
+
+        createDirectoriesIfNotExists(OUTPUT_DIR  + "statistic/" + operation + "/");
+
+        String resultsFilename = OUTPUT_DIR + "statistic/"  + operation + "/" + "vector_performance_" + operation + "_of_reflection_concrete" + dim + ".txt";
         saveResultsToFile(resultsFilename, objectTimes, reflectionTimes);
 
-        String statsFilename = OUTPUT_DIR + "vector_statistics_" + operation + "_of_reflection_concrete" + dim + ".txt";
+        String statsFilename = OUTPUT_DIR + "statistic/" +  operation + "/" + "vector_statistics_" + operation + "_of_reflection_concrete" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
 
       //  System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);

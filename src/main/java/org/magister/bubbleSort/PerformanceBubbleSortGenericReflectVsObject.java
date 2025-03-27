@@ -18,22 +18,18 @@ import java.util.stream.Collectors;
 public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTestBubbleSort {
 
     // Katalogi dla danych testowych i wyników
-    private static final String INPUT_DIR = "test_dataSem2/input/bubble/Generic/";
-    private static final String OUTPUT_DIR = "test_dataSem2/output/bubble/Generic/";
-    private static final String CHARTS_DIR = "test_dataSem2/output/bubble/Generic/charts";
-    // Liczba pomiarów dla danego przypadku
-    private static final int RUNS = 1000;
-    // Rozmiary tablic testowych
-    private static final int[] DIMENSIONS = {10, 20, 30, 40, 80};
-
-    // Lista zagregowanych wyników pomiarów
-    protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
+    private static final String INPUT_DIR = PerformanceTestBubbleSort.INPUT_DIR + "/GenericOfReflectionVsObject/";
+    private static final String OUTPUT_DIR = PerformanceTestBubbleSort.OUTPUT_DIR + "/GenericOfReflectionVsObject/";
+    private static final String CHARTS_DIR = PerformanceTestBubbleSort.CHARTS_DIR + "/GenericOfReflectionVsObject/charts/";
+    private static final int RUNS = PerformanceTestBubbleSort.RUNS;
+    private static final int[] DIMENSIONS = PerformanceTestBubbleSort.DIMENSIONS;
 
     public PerformanceBubbleSortGenericReflectVsObject() {
         super();
         createDirectoriesIfNotExists(INPUT_DIR);
         createDirectoriesIfNotExists(OUTPUT_DIR);
         createDirectoriesIfNotExists(CHARTS_DIR);
+        createDirectoriesIfNotExists(OUTPUT_DIR + "statistic/");
     }
 
     /**
@@ -101,7 +97,11 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
                 aggregatedResults.add(testGenericObjectVsReflect(bubbleSortFirst,  dim, k, "sort"));
 
             }
+            CalculationStatistic.saveStatisticsByOperation(OUTPUT_DIR, aggregatedResults, "bubble");
         }
+        CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults,"sort" , "bubble" ,OUTPUT_DIR + "statistic/" + "sortStatisticsByOperation.txt" );
+        CalculationStatistic.writeDetailedStatisticsByBubbleKindToFile(aggregatedResults,OUTPUT_DIR + "statistic/" + "DetailedStatisticsByBubbleKind.txt");
+
     }
 
     /**
@@ -127,13 +127,11 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
 
 
     private StatisticsResult saveResults(List<Long> reflectionTimes, List<Long> objectTimes, String operation, int dim, KindOfBubbleSort kind) {
-        String resultsFilename = OUTPUT_DIR + "bubble_performance_" + operation +   kind + "_of_reflection_generic" + dim + ".txt";
+        createDirectoriesIfNotExists(OUTPUT_DIR  + "statistic/" + operation + "/");
+        String resultsFilename = OUTPUT_DIR +  "statistic/"+ operation + "/" + "bubble_performance_" + operation +   kind + "_of_reflection_generic" + dim + ".txt";
         saveResultsToFile(resultsFilename, objectTimes, reflectionTimes);
-
-        String statsFilename = OUTPUT_DIR + "bubble_statistics_" + operation  + kind + "_of_reflection_generic" + dim + ".txt";
+        String statsFilename = OUTPUT_DIR + "statistic/" +  operation + "/" + "bubble_statistics_" + operation  + kind + "_of_reflection_generic" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
-
-       // System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
     }
 

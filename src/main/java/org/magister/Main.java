@@ -16,27 +16,20 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        /**
-         *  bubble  ogolny
-         */
-
-       // PerformanceTestBubbleSort performanceTestBubbleSort = new PerformanceTestBubbleSort();
-        //performanceTestBubbleSort.performTests();
-
 
         /**
          * Concrete Bubble
          */
 
         PerformanceBubbleSortConcreteReflectVsObject performanceBubbleSortConcreteReflectVsObject = new PerformanceBubbleSortConcreteReflectVsObject();
-       // performanceBubbleSortConcreteReflectVsObject.runTest();
+        performanceBubbleSortConcreteReflectVsObject.runTest();
 
 
         /**
          * Generic bubble
          */
         PerformanceBubbleSortGenericReflectVsObject performanceBubbleSortGenericReflectVsObject = new PerformanceBubbleSortGenericReflectVsObject();
-       // performanceBubbleSortGenericReflectVsObject.runTest();
+        performanceBubbleSortGenericReflectVsObject.runTest();
 
 
         /**
@@ -62,14 +55,14 @@ public class Main {
          */
 
         PerformanceTestVectorGenericOfReflectionVsObject performanceTestVectorGenericOfReflectionVsObject = new PerformanceTestVectorGenericOfReflectionVsObject();
-        //performanceTestVectorGenericOfReflectionVsObject.runTest();
+         performanceTestVectorGenericOfReflectionVsObject.runTest();
 
 
         /**
          * Vector Concrete
          */
         PerformanceTestVectorConcreteOfReflectionVsObject performanceTestVectorConcreteOfReflectionVsObject = new PerformanceTestVectorConcreteOfReflectionVsObject();
-        //performanceTestVectorConcreteOfReflectionVsObject.runTest();
+          performanceTestVectorConcreteOfReflectionVsObject.runTest();
     }
 }
 
