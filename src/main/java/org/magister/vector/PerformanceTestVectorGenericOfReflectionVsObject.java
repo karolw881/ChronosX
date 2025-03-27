@@ -29,6 +29,7 @@
         public PerformanceTestVectorGenericOfReflectionVsObject() {
             super();
             createDirectories();
+            createDirectoriesIfNotExists(OUTPUT_DIR + "statistic/");
         }
 
 
@@ -65,7 +66,6 @@
                 if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
                 } else {
 
-                    // System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
                     Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "add", temp + "add/", field.getName());
                     Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtruct", temp + "subtruct/", field.getName());
                     Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "dotProduct", temp + "dotProduct/", field.getName());
@@ -73,35 +73,18 @@
                     Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "subtractVectorNegativeAdd", temp + "subtractVectorNegativeAdd/", field.getName());
                     Vizualization.showOrSaveChartDiffrenStatistictVsDimWithOperationForVector(aggregatedResults, "opposite", temp + "opposite/", field.getName());
 
-
-
                     Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"add" , temp2 + "add/" , field.getName() );
                     Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtruct" , temp2 + "subtruct/"  , field.getName() );
                     Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"dotProduct" , temp2 + "dotProduct/" , field.getName() );
                     Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"multiplyByScalar" , temp2 + "multiplyByScalar/", field.getName()   );
                     Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"subtractVectorNegativeAdd" , temp2 + "subtractVectorNegativeAdd/", field.getName()   );
                     Vizualization.showOrSaveBarChartForOperationVector(aggregatedResults,"opposite" , temp2 + "opposite/"  , field.getName() );
-
                 }
-
             }
 
-
-            // rysuj wykresy
-           // Vizu/alization.showOrSaveChartRatioVsDim2(aggregatedResults, "add");
-          //  showOrSaveChartRatioVsDim2(aggregatedResults, "subtruct");
-           // showOrSaveChartRatioVsDim2(aggregatedResults, "dotProduct");
-           // showOrSaveChartRatioVsDim2(aggregatedResults, "multiplyByScalar");
-          //  showOrSaveChartRatioVsDim2(aggregatedResults, "subtractVectorNegativeAdd");
-          //  showOrSaveChartRatioVsDim2(aggregatedResults, "opposite");
-
-
         }
 
 
-        public void createDirectoreForChart(){
-
-        }
 
 
 
@@ -112,21 +95,16 @@
             createDirectoriesIfNotExists(OUTPUT_DIR);
             createDirectoriesIfNotExists(CHARTS_DIR);
 
-            // Utwórz instancję MatrixGenerator
             VectorGenerator generator = new VectorGenerator(new NumberxxOperations());
 
 
-            // Iterujemy po wszystkich typach macierzy
             for (KindOfVector kind : KindOfVector.values()) {
 
-                // Testujemy dla każdego wymiaru macierzy
                 for (int dim : DIMENSIONS) {
 
-                    // Tworzymy macierze z ustalonymi ziarnami: seed 0 dla pierwszej i seed 1 dla drugiej
                     Vector<Numberxx> vectorGenericFirst = generator.createVector(kind, dim, 0L);
                     Vector<Numberxx> vectorGenericSecond = generator.createVector(kind, dim, 1L);
 
-                    // Zapisujemy macierze wejściowe do plików z uwzględnieniem typu macierzy w nazwie pliku
                     String fileNameFirst = INPUT_DIR + "vector_1_generic" + kind.toString().toLowerCase() + "_" + dim + ".txt";
                     String fileNameSecond = INPUT_DIR + "vector_2_generic" + kind.toString().toLowerCase() + "_" + dim + ".txt";
 
@@ -153,13 +131,16 @@
              * zmienic na do plku
              */
 
-            // Wyświetlamy i zapisujemy zagregowane statystyki
-          //  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "vector");
-          //  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtruct" , "vector");
-          //  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiplyByScalar" , "vector");
-          ///  CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "dotProduct" , "vector");
-           // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "opposite" , "vector");
-           // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtractVectorNegativeAdd" , "vector");
+            CalculationStatistic.writeDetailedStatisticsByVectorKindToFile(aggregatedResults,OUTPUT_DIR + "statistic/" + "DetailedStatisticsByVectorKind.txt");
+            CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "add" , "vector" , OUTPUT_DIR + "statistic/" + "addDetailedStatisticsByOperation.txt");
+            CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtruct" , "vector", OUTPUT_DIR + "statistic/" + "subtractDetailedStatisticsByOperation.txt");
+            CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "dotProduct" , "vector" , OUTPUT_DIR + "statistic/" + "dotProductDetailedStatisticsByOperation.txt");
+            CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "multiplyByScalar" , "vector", OUTPUT_DIR + "statistic/" + "multiplyByScalarDetailedStatisticsByOperation.txt");
+            CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "opposite" , "vector" , OUTPUT_DIR + "statistic/" + "oppositeDetailedStatisticsByOperation.txt");
+            CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtractVectorNegativeAdd" , "vector" , OUTPUT_DIR + "statistic/" + "subtractVectorNegativeAddDetailedStatisticsByOperation.txt");
+
+
+
 
 
         }
@@ -271,13 +252,13 @@
 
         private StatisticsResult saveResults(List<Long> reflectionTimes, List<Long> objectTimes,
                                              String operation, int dim, KindOfVector kind) {
-            String resultsFilename = OUTPUT_DIR + "vector_performance_" + operation + "_of_reflection_generic" + dim + ".txt";
+
+            createDirectoriesIfNotExists(OUTPUT_DIR  + "statistic/" + operation + "/");
+            String resultsFilename = OUTPUT_DIR + "statistic/"+ operation + "/" + "vector_performance_" + operation + "_of_reflection_generic" + dim + ".txt";
             saveResultsToFile(resultsFilename, objectTimes, reflectionTimes);
 
-            String statsFilename = OUTPUT_DIR + "vector_statistics_" + operation + "_of_reflection_generic" + dim + ".txt";
+            String statsFilename = OUTPUT_DIR + "statistic/" +  operation + "/" + "vector_statistics_" + operation + "_of_reflection_generic" + dim + ".txt";
             StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, operation, dim, kind);
-
-          //  System.out.println(operation + " results saved to " + resultsFilename + " and " + statsFilename);
             return stats;
         }
 
