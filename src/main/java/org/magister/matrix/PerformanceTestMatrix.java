@@ -25,26 +25,17 @@ public  class PerformanceTestMatrix {
     protected static final String INPUT_DIR = "test_dataSem2/input/matrix/";
     protected static final String OUTPUT_DIR = "test_dataSem2/output/matrix/";
     protected static final String CHARTS_DIR = "test_dataSem2/output/matrix/";
-
-    // Number of test runs for each case
     protected static final int RUNS = 100;
 
-    // Matrix dimensions to test
-   // protected static final int[] DIMENSIONS = {2, 3 , 4 , 5 , 6 , 10, 50, 100, 200 , 1000, 2000 };
-   // protected static final int[] DIMENSIONS = {  100,50,10,6,5,4,3,2,1 };
-    protected static final int[] DIMENSIONS = {2, 3 , 4 , 5  , 10 , 20 , 30    };
+  protected static final int[] DIMENSIONS = {2, 3 , 4 , 5  , 10 , 20 , 30    };
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
 
-    /**
-     * Main method to run performance tests.
-     */
     public void performTests() {
-        // Ensure directories exist
         createDirectories();
 
-        // Test each matrix dimension
+
         for (int dim : DIMENSIONS) {
             System.out.println("Testing matrix of dimension " + dim + "x" + dim);
 
@@ -59,21 +50,7 @@ public  class PerformanceTestMatrix {
             saveMatrix1ToFile(matrix1Concrete, INPUT_DIR + "matrix1_concrete_" + dim + ".txt");
             saveMatrix1ToFile(matrix2Concrete, INPUT_DIR + "matrix2_concrete_" + dim + ".txt");
 
-            // Zapisz porównanie macierzy (porównujemy te utworzone z seed 0)
-         //   porownajIMZapiszMacierze(dim, matrix1Generic, matrix1Concrete);
-
-            // Test operacji i agregacja statystyk
-           // aggregatedResults.add(testAdd(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
-
-            // Zapisz macierze wejściowe do plików
-          //  aggregatedResults.add(testSubtract(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
-        //    aggregatedResults.add(testMultiply(matrix1Generic, matrix2Generic, matrix1Concrete, matrix2Concrete, dim));
-           // aggregatedResults.add(testAddGenericObjectVsReflect(matrix1Generic, matrix2Generic ,  matrix1Concrete , matrix1Concrete ,   dim));
-
         }
-
-        // Wyświetl zagregowane statystyki w konsoli
-      //  displayDetailedStatistics();
 
         // Zapisz zagregowane statystyki do pliku
         saveAggregatedStatisticsToFile();
@@ -83,41 +60,7 @@ public  class PerformanceTestMatrix {
     }
 
 
-    StatisticsResult testAddGenericObjectVsReflect(Matrix<Integer> matrix1,
-                                                   Matrix<Integer> matrix2,
-                                                   Matrix1 matrix1Concrete,
-                                                   Matrix1 matrix2Concrete,
-                                                   int dim) {
-        List<Long> objectTester = new ArrayList<>();
-        List<Long> reflectionTester = new ArrayList<>();
 
-        // Warm-up runs
-        for (int i = 0; i < 3; i++) {
-            matrix1.add(matrix2);
-            MatrixReflectionUtil.performOperation(matrix1, matrix2, "add");
-        }
-
-        // Main runs
-        for (int i = 0; i < RUNS; i++) {
-            long startReflectionOfGeneric = System.nanoTime();
-            MatrixReflectionUtil.performOperation(matrix1, matrix2, "add");
-            long endReflectionOfGeneric = System.nanoTime();
-            objectTester.add(endReflectionOfGeneric - startReflectionOfGeneric);
-
-            long startObjectOfGeneric = System.nanoTime();
-            matrix1.add(matrix2);
-            long endoObjectOfGeneric = System.nanoTime();
-            reflectionTester.add(endoObjectOfGeneric - startObjectOfGeneric);
-        }
-
-        String resultsFilename = OUTPUT_DIR + "matrix_performance_add_of_reflection_generic" + dim + ".txt";
-        saveResultsToFile(resultsFilename, objectTester, reflectionTester);
-        String statsFilename = OUTPUT_DIR + "matrix_statistics_add_of_reflection_generic" + dim + ".txt";
-
-        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(objectTester, reflectionTester, statsFilename, "Add", dim,        KindOfBubbleSort.SORTED);
-        System.out.println("Addition results saved to " + resultsFilename + " and " + statsFilename);
-        return stats;
-    }
 
 
 
@@ -154,7 +97,7 @@ public  class PerformanceTestMatrix {
     /**
      * Save generic matrix to a text file.
      */
-    <T extends Number> void saveMatrixToFile(Matrix<T> matrix, String filename) {
+    <T extends Number> void saveMatrixToFile(Matrix matrix, String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             int rows = matrix.getRows();
             int cols = matrix.getCols();
@@ -194,24 +137,7 @@ public  class PerformanceTestMatrix {
      * Compare and save the matrices used in tests.
      * Porównanie odbywa się dla macierzy utworzonych z tym samym seed (0L).
      */
-    public void porownajIMZapiszMacierze(int dimension, Matrix<Integer> matrixGeneric, Matrix1 matrixConcrete) {
-        File dir = new File("wyniki");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        String fileName = "wyniki/porownanie_macierzy_" + dimension + ".txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write("Porównanie macierzy dla wymiaru " + dimension + "x" + dimension + ":\n");
-            writer.write("-------------------------------------------------\n");
-            writer.write("Generic implementation (Matrix<Integer>):\n");
-            writer.write(matrixGeneric.toString() + "\n\n");
-            writer.write("Concrete implementation (Matrix1):\n");
-            writer.write(matrixConcrete.toString() + "\n\n");
-            writer.write("Użyty seed: 0L\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     /**
      * Ensure necessary directories exist.
@@ -245,27 +171,6 @@ public  class PerformanceTestMatrix {
         }
     }
 
-
-
-
-
-    void displayDetailedStatistics() {
-        System.out.println("\n===== AGREGOWANE STATYSTYKI =====");
-        System.out.printf("%-10s %-8s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-10s\n",
-                "Operacja", "Dim", "Gen_Mean(ns)", "Gen_Median(ns)", "Gen_Mode(ns)", "Gen_StdDev(ns)",
-                "Con_Mean(ns)", "Con_Median(ns)", "Con_Mode(ns)", "Con_StdDev(ns)", "Ratio");
-        for (StatisticsResult sr : aggregatedResults) {
-            System.out.printf("%-10s %-8d %-15.2f %-15.2f %-15d %-15.2f %-15.2f %-15.2f %-15d %-15.2f %-10.2f\n",
-                    sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian,  sr.reflectStdDev,
-                    sr.objectMean, sr.objectMedian,  sr.objectStdDev, sr.ratio);
-        }
-        System.out.println("==================================\n");
-    }
-
-    StatisticsResult calculateAndSaveStatistics(List<Long> genericReflectTimes, List<Long> GenericObjectTimes,
-                                                String filename, String operation, int dimension, KindOfMatrix kind) {
-        return null;
-    }
 
     /**
      * Zapisz zagregowane statystyki do pliku tekstowego.

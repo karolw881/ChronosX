@@ -265,41 +265,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         String statsFilename = OUTPUT_DIR + "statistic/" + whatOperation + "/" + "matrix_statistics_" + whatOperation + "_of_reflection_generic" + dim + ".txt";
         StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(
                 reflectionTimes, objectTimes, statsFilename, whatOperation, dim, kind);
-
-       // System.out.println(whatOperation + " results saved to " + resultsFilename + " and " + statsFilename);
         return stats;
-    }
-
-
-
-    @Override
-    void displayDetailedStatistics() {
-        System.out.println("\n===== AGREGOWANE STATYSTYKI Generyki obiektowe versus Generyki refleksyjne =====");
-
-        // Nagłówek tabeli rozszerzony o nowe statystyki
-        System.out.printf("%-10s %-5s %-15s %-15s %-15s %-15s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s " +
-                        "%-15s %-15s %-15s %-15s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s\n",
-                "Operacja", "Dim",
-                "Ref_Mean(ns)", "Ref_Median(ns)", "Ref_Mode(ns)", "Ref_StdDev(ns)",
-                "Ref_Q1(ns)", "Ref_Q3(ns)", "Ref_IQR(ns)", "Ref_CV(%)", "Ref_Skew", "Ref_Kurt",
-                "Ref_Mom3", "Ref_Mom4",
-                "Obj_Mean(ns)", "Obj_Median(ns)", "Obj_Mode(ns)", "Obj_StdDev(ns)",
-                "Obj_Q1(ns)", "Obj_Q3(ns)", "Obj_IQR(ns)", "Obj_CV(%)", "Obj_Skew", "Obj_Kurt",
-                "Obj_Mom3", "Obj_Mom4",
-                "Ratio","Kind of matrix");
-
-        // Iteracja po wynikach i wypisanie wierszy tabeli
-        for (StatisticsResult sr : aggregatedResults) {
-            System.out.printf("%-10s %-5d %15.2f %15.2f %15d %15.2f %10.2f %10.2f %10.2f %10.2f %10.4f %10.4f %10.4f %10.4f " +
-                            "%15.2f  %15.2f %10.2f %10.2f %10.2f %10.2f %10.4f %10.4f %10.4f %10.4f %10.2f %s  \n",
-                    sr.operation, sr.dimension,
-                    sr.reflectMean, sr.reflectMedian, sr.reflectStdDev,
-                    sr.reflectQ1, sr.reflectQ3, sr.reflectIQR, sr.reflectCV, sr.reflectSkewness, sr.reflectKurtosis,
-                    sr.objectMean, sr.objectMedian, sr.objectStdDev,
-                    sr.objectQ1, sr.objectQ3, sr.objectIQR, sr.objectCV, sr.objectSkewness, sr.objectKurtosis,
-                    sr.ratio , sr.kindOfMatrix.toString() );
-        }
-        System.out.println("=========================================================================================");
     }
 
 
@@ -308,7 +274,6 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         if (!directory.exists()) {
             boolean created = directory.mkdirs();
             if (created) {
-                //System.out.println("Created directory: " + path);
             } else {
                 System.err.println("Failed to create directory: " + path);
             }

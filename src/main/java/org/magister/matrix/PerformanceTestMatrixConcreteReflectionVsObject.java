@@ -59,8 +59,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             Object value = field.getName();
             if (value.equals("kindOfBubbleSort") || value.equals("kindOfVector") || value.equals("kindOfMatrix") || value.equals("dimension") || value.equals("operation")) {
             } else {
-              //  System.out.println("Nazwa pola: " + field.getName() + " -> wartość: " + value);
-                Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "add", temp + "add/", field.getName());
+             Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "add", temp + "add/", field.getName());
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "subtract", temp + "subtract/", field.getName());
                 Vizualization.showOrSaveChartRatioVsDimWithOperationStat(aggregatedResults, "multiply", temp + "multiply/", field.getName());
                 Vizualization.showOrSaveBarChartForOperation(aggregatedResults,"add" , temp2 + "add/" , field.getName() );
@@ -81,22 +80,16 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         createDirectoriesIfNotExists(OUTPUT_DIR);
         createDirectoriesIfNotExists(CHARTS_DIR);
 
-
-
         // Utworz instancje
         Matrix1Generator generator = new Matrix1Generator();
-
-
 
         // Iterujemy po wszystkich typach macierzy
         for (KindOfMatrix kind : KindOfMatrix.values()) {
             for (int dim : DIMENSIONS) {
                 Matrix1 matrixConcreteFirst = generator.createMatrix1(kind,dim,0L);
                 Matrix1 matrixConcreteSecond = generator.createMatrix1(kind,dim,1L);
-
                 saveMatrix1ToFile(matrixConcreteFirst, INPUT_DIR + "matrix1_concrete_" + kind.toString().toLowerCase() + "_" + dim + ".txt");
                 saveMatrix1ToFile(matrixConcreteSecond, INPUT_DIR + "matrix2_concrete_" +  kind.toString().toLowerCase() + "_" +dim + ".txt");
-
                 aggregatedResults.add(testAddConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
                 aggregatedResults.add(testSubstractConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
                 aggregatedResults.add(testMultiplyConcreteObjectVsReflect(matrixConcreteFirst, matrixConcreteSecond, dim,kind));
@@ -111,13 +104,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "subtract" , "matrix", OUTPUT_DIR + "statistic/" + "subtractDetailedStatisticsByOperation.txt");
         CalculationStatistic.writeDetailedStatisticsByOperationToFile(aggregatedResults , "multiply" , "matrix" , OUTPUT_DIR + "statistic/" + "MultiplyDetailedStatisticsByOperation.txt");
 
-        ;
-        // Wyświetlamy i zapisujemy zagregowane statystyki
-       /// CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "add" , "matrix");
-       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "subtract" ,"matrix");
-       // CalculationStatistic.displayDetailedStatisticsByOperation(aggregatedResults , "multiply" , "matrix");
-        // Wyświetlamy i zapisujemy zagregowane statystyki
-       /// CalculationStatistic.displayDetailedStatisticsByMatrixKind(aggregatedResults);
+
 
 
     }
@@ -302,7 +289,6 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
 
 
 
-
     @Override
     void saveAggregatedStatisticsToFile() {
         String filename = CHARTS_DIR + "/aggregated_concrete_statistics.txt";
@@ -320,20 +306,6 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
             System.err.println("Error saving aggregated statistics: " + e.getMessage());
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

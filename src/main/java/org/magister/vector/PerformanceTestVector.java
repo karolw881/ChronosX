@@ -70,13 +70,10 @@ public class PerformanceTestVector implements VtPerformance {
      */
     protected void saveResultsToFile(String filename, List<Long> objectTimes, List<Long> reflectTimes) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            // Nagłówki
-            writer.write(String.format("%-15s %-15s%n", "Direct Time (ns)", "Reflection Time (ns)"));
+          writer.write(String.format("%-15s %-15s%n", "Direct Time (ns)", "Reflection Time (ns)"));
             writer.write(String.format("%-15s %-15s%n", "---------------", "-------------------"));
-
-            // Dane
-            for (int i = 0; i < objectTimes.size(); i++) {
-                writer.write(String.format("%-15d %-15d%n", objectTimes.get(i), reflectTimes.get(i)));
+         for (int i = 0; i < objectTimes.size(); i++) {
+             writer.write( objectTimes.get(i).toString() + "        " + reflectTimes.get(i).toString() + "\n");
             }
         } catch (IOException e) {
             System.err.println("Error saving results to file: " + e.getMessage());

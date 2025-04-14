@@ -10,10 +10,10 @@ import java.lang.reflect.Method;
 public class MatrixReflectionUtil {
 
     // Wykonanie operacji za pomocą refleksji
-    public static <T extends Number> Matrix<T> performOperation(Matrix<T> matrix1, Matrix<T> matrix2, String operationName) {
+    public static <T extends Number> Matrix performOperation(Matrix matrix1, Matrix matrix2, String operationName) {
         try {
             Method method = Matrix.class.getMethod(operationName, Matrix.class);
-            Matrix<T> result = (Matrix<T>) method.invoke(matrix1, matrix2);
+            Matrix result = (Matrix) method.invoke(matrix1, matrix2);
             return result;
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Błąd podczas wykonywania operacji za pomocą refleksji: " + e.getMessage(), e);

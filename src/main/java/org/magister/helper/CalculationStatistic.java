@@ -41,6 +41,7 @@ public class CalculationStatistic {
 
         // Podstawowe statystyki
         double reflectMean = reflectStats.getMean();
+      //  System.out.println(reflectMean);
         double objectMean = objectStats.getMean();
         double reflectMedian = new    Median().evaluate(reflectArray);
         double objectMedian = new Median().evaluate(objectArray);
@@ -391,7 +392,7 @@ public class CalculationStatistic {
                     "Ratio", "Kind od matrix");
 
             for (StatisticsResult sr : aggregatedResults) {
-                writer.printf("%-10s %-5d %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
+                writer.printf("%-10s %-5d %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.2f %-15.4f %-15.4f %-15.2f %s\n",
                         sr.operation,
                         sr.dimension,
                         // Statystyki refleksyjne
