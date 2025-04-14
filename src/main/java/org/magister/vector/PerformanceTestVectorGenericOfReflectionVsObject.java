@@ -238,7 +238,7 @@
                 case "multiplyByScalar":
 
                     VectorReflectionUtil.performOperationReflectVectorForScalar(vector1, Numberxx.valueOf(1), operation);
-                    break; // Added break statement here
+                    break;
                 case "opposite":
                     VectorReflectionUtil.performOperationReflectVectorForOpposite(vector1, "opposite");
                     break;
@@ -246,8 +246,6 @@
                     throw new IllegalArgumentException("Unknown operation: " + operation);
             }
         }
-
-
 
 
         private StatisticsResult saveResults(List<Long> reflectionTimes, List<Long> objectTimes,
@@ -262,266 +260,20 @@
             return stats;
         }
 
-        /**
-         * Zapisz zagregowane statystyki do pliku tekstowego.
-         */
-        void saveAggregatedStatisticsToFile() {
-            String filename = CHARTS_DIR + "/aggregated_statistics.txt";
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-                // Nagłówki z odpowiednim formatowaniem
-                writer.write(String.format("%-15s %-5s %-12s %-14s %-12s %-14s %-12s %-14s %-12s %-14s %-10s%n",
-                        "Operacja", "Dim", "Gen_Mean(ns)", "Gen_Median(ns)", "Gen_Mode(ns)", "Gen_StdDev(ns)",
-                        "Con_Mean(ns)", "Con_Median(ns)", "Con_Mode(ns)", "Con_StdDev(ns)", "Ratio"));
-
-                writer.write(String.format("%-15s %-5s %-12s %-14s %-12s %-14s %-12s %-14s %-12s %-14s %-10s%n",
-                        "---------------", "-----", "------------", "--------------", "------------", "--------------",
-                        "------------", "--------------", "------------", "--------------", "----------"));
-
-                // Dane z odpowiednim formatowaniem
-                for (StatisticsResult sr : aggregatedResults) {
-                    writer.write(String.format(
-                            "%-15s %-5d %12.2f %14.2f %12d %14.2f %12.2f %14.2f %12d %14.2f %10.2f%n",
-                            sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectStdDev,
-                            sr.objectMean, sr.objectMedian,  sr.objectStdDev, sr.ratio
-                    ));
-                }
-            } catch (IOException e) {
-                System.err.println("Error saving aggregated statistics: " + e.getMessage());
-            }
-        }
-
-        /**
-         * Zapisuje statystyki pogrupowane według rodzaju operacji do pliku.
-         * Dla każdej operacji (add, subtract, multiplyByScalar, dotProduct) zbiera dane
-         * dla różnych wymiarów i przedstawia je w uporządkowany sposób.
-         */
-        void saveStatisticsByOperation() {
-            String filename = OUTPUT_DIR + "/statistics_by_operation.txt";
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-                // Nagłówek pliku
-                writer.write("STATYSTYKI POGRUPOWANE WEDŁUG OPERACJI\n");
-                writer.write("=====================================\n\n");
-
-                // Lista wszystkich operacji
-                List<String> operations = new ArrayList<>();
-                for (StatisticsResult sr : aggregatedResults) {
-                    if (!operations.contains(sr.operation)) {
-                        operations.add(sr.operation);
-                    }
-                }
-
-                // Dla każdej operacji
-                for (String operation : operations) {
-                    writer.write(String.format("OPERACJA: %s\n", operation.toUpperCase()));
-                    writer.write("--------------------------------------\n");
-
-                    // Nagłówki tabeli
-                    writer.write(String.format("%-5s %-12s %-12s %-12s %-12s %-12s %-12s %-10s%n",
-                            "Dim", "Direct_Mean", "Reflect_Mean", "Direct_Med", "Reflect_Med", "Direct_Std", "Reflect_Std", "Ratio"));
-                    writer.write(String.format("%-5s %-12s %-12s %-12s %-12s %-12s %-12s %-10s%n",
-                            "-----", "------------", "------------", "------------", "------------", "------------", "------------", "----------"));
-
-                    // Znajdź wszystkie wyniki dla tej operacji i posortuj według wymiaru
-                    List<StatisticsResult> operationResults = aggregatedResults.stream()
-                            .filter(sr -> sr.operation.equals(operation))
-                            .sorted(Comparator.comparingInt(sr -> sr.dimension))
-                            .collect(Collectors.toList());
-
-                    // Dla każdego wymiaru dla tej operacji
-                    for (StatisticsResult sr : operationResults) {
-                        writer.write(String.format("%-5d %12.2f %12.2f %12.2f %12.2f %12.2f %12.2f %10.2f%n",
-                                sr.dimension,
-                                sr.objectMean,
-                                sr.reflectMean,
-                                sr.objectMedian,
-                                sr.reflectMedian,
-                                sr.objectStdDev,
-                                sr.reflectStdDev,
-                                sr.ratio));
-                    }
-
-                    // Dodaj podsumowanie dla tej operacji
-                    double avgRatio = operationResults.stream().mapToDouble(sr -> sr.ratio).average().orElse(0);
-                    double minRatio = operationResults.stream().mapToDouble(sr -> sr.ratio).min().orElse(0);
-                    double maxRatio = operationResults.stream().mapToDouble(sr -> sr.ratio).max().orElse(0);
-
-                    writer.write("\nPODSUMOWANIE:\n");
-                    writer.write(String.format("Średni stosunek: %.2f\n", avgRatio));
-                    writer.write(String.format("Minimalny stosunek: %.2f\n", minRatio));
-                    writer.write(String.format("Maksymalny stosunek: %.2f\n", maxRatio));
-                    writer.write("\n\n");
-                }
-
-                // Dodaj ogólne podsumowanie
-                writer.write("PODSUMOWANIE OGÓLNE\n");
-                writer.write("==================\n");
-                writer.write(String.format("%-15s %-12s %-12s %-12s%n",
-                        "Operacja", "Śr. Stosunek", "Min Stosunek", "Max Stosunek"));
-                writer.write(String.format("%-15s %-12s %-12s %-12s%n",
-                        "---------------", "------------", "------------", "------------"));
-
-                for (String operation : operations) {
-                    List<StatisticsResult> operationResults = aggregatedResults.stream()
-                            .filter(sr -> sr.operation.equals(operation))
-                            .collect(Collectors.toList());
-
-                    double avgRatio = operationResults.stream().mapToDouble(sr -> sr.ratio).average().orElse(0);
-                    double minRatio = operationResults.stream().mapToDouble(sr -> sr.ratio).min().orElse(0);
-                    double maxRatio = operationResults.stream().mapToDouble(sr -> sr.ratio).max().orElse(0);
-
-                    writer.write(String.format("%-15s %12.2f %12.2f %12.2f%n",
-                            operation, avgRatio, minRatio, maxRatio));
-                }
-
-                System.out.println("Statystyki pogrupowane według operacji zapisane do pliku: " + filename);
-
-            } catch (IOException e) {
-                System.err.println("Błąd podczas zapisywania statystyk pogrupowanych: " + e.getMessage());
-            }
-        }
-
-        void displayDetailedStatistics() {
-            System.out.println("\n===== AGREGOWANE STATYSTYKI =====");
-            System.out.printf("%-10s %-8s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-10s\n",
-                    "Operacja", "Dim", "Gen_Mean(ns)", "Gen_Median(ns)", "Gen_Mode(ns)", "Gen_StdDev(ns)",
-                    "Con_Mean(ns)", "Con_Median(ns)", "Con_Mode(ns)", "Con_StdDev(ns)", "Ratio");
-            for (StatisticsResult sr : aggregatedResults) {
-                System.out.printf("%-10s %-8d %-15.2f %-15.2f %-15d %-15.2f %-15.2f %-15.2f %-15d %-15.2f %-10.2f\n",
-                        sr.operation, sr.dimension, sr.reflectMean, sr.reflectMedian, sr.reflectStdDev,
-                        sr.objectMean, sr.objectMedian, sr.objectStdDev, sr.ratio);
-            }
-            System.out.println("==================================\n");
-        }
-
-
-
         private void createDirectoriesIfNotExists(String path) {
             File directory = new File(path);
             if (!directory.exists()) {
                 boolean created = directory.mkdirs();
                 if (created) {
-                    //System.out.println("Created directory: " + path);
                 } else {
                     System.err.println("Failed to create directory: " + path);
                 }
             }
         }
 
-        public static XYChart createChartRatioVsDim2ForAdd(List<StatisticsResult> results,
-                                                           String chartTitle,
-                                                           String xAxisTitle,
-                                                           String yAxisTitle, String whatoperation) {
-
-            // Tworzymy wykres XY
-            XYChart chart = new XYChartBuilder()
-                    .width(1800)
-                    .height(1000)
-                    .title(chartTitle)
-                    .xAxisTitle(xAxisTitle)
-                    .yAxisTitle(yAxisTitle)
-                    .build();
-
-
-
-            List<StatisticsResult> radomResults = results.stream()
-                    .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
-                    .filter(r -> r.kindOfVector == KindOfVector.RANDOM)
-                    .toList();
-
-            System.out.println("Bede rysowac dla : " + whatoperation);
-
-            List<StatisticsResult> identityResults = results.stream()
-                    .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
-                    .filter(r -> r.kindOfVector == KindOfVector.ONES)
-                    .toList();
-
-            List<StatisticsResult> diagResults = results.stream()
-                    .filter(r -> r.operation.equalsIgnoreCase(whatoperation))
-                    .filter(r -> r.kindOfVector == KindOfVector.ZERO)
-                    .toList();
-
-
-            // Dodaj serie osobno
-
-            chart.addSeries("Random", radomResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                    radomResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-            chart.addSeries("Ones", identityResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                    identityResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-            chart.addSeries("zeros", diagResults.stream().mapToDouble(r -> r.dimension).toArray(),
-                    diagResults.stream().mapToDouble(r -> r.ratio).toArray());
-
-
-            return chart;
-        }
 
 
 
 
-            private void showOrSaveChartRatioVsDim2(List<StatisticsResult> results, String whatoperation) throws IOException {
-                XYChart chart = createChartRatioVsDim2ForAdd(
-                        results,
-                        "Wykres: Ratio (x) vs. Dim (y) dla operacji " + whatoperation,
-                        "Wymiar (Dim)",
-                        "Ratio (Gen Ref / Gen Obj)", whatoperation
-                );
-                // Zapis do pliku:
-                BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_vs_dim_chartlinear" + whatoperation + ".png", BitmapEncoder.BitmapFormat.PNG);
-                // Lub wyświetlenie w okienku Swing:
-                // new SwingWrapper<>(chart).displayChart();
-            }
-
-        private void showOrSaveBarChartForRatioWithKind(List<StatisticsResult> results, KindOfVector kind) throws IOException {
-            CategoryChart chart = createBarChartForRatioWithKind(
-                    results,
-                    kind,
-                    "Porównanie Mean (Gen Ref vs. Gen Obj)",
-                    "Wymiar",
-                    "Czas [ns]"
-            );
-            // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
-            BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
-
-
-        }
-
-        public static CategoryChart createBarChartForRatioWithKind(
-                List<StatisticsResult> results,
-                KindOfVector kind,
-                String chartTitle,
-                String xAxisTitle,
-                String yAxisTitle
-        ) {
-            // Filtruj wyniki tylko dla wskazanego rodzaju macierzy
-            List<StatisticsResult> filteredResults = results.stream()
-                    .filter(r -> r.kindOfVector == kind)
-                    .collect(Collectors.toList());
-
-            CategoryChart chart = new CategoryChartBuilder()
-                    .width(1800)
-                    .height(1000)
-                    .title(chartTitle + " - " + kind)
-                    .xAxisTitle(xAxisTitle)
-                    .yAxisTitle(yAxisTitle)
-                    .build();
-
-            chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
-            chart.getStyler().setXAxisLabelRotation(90);
-
-            // Używaj przefiltrowanych wyników
-            List<String> xLabels = filteredResults.stream()
-                    .map(r -> "(D=" + r.dimension + ")(Op=" + r.operation + ")")
-                    .toList();
-
-            List<Double> ratioValues = filteredResults.stream()
-                    .map(r -> r.ratio)
-                    .toList();
-
-            chart.addSeries("Gen Ref/Gen Obj Ratio - " + kind, xLabels, ratioValues);
-
-            return chart;
-        }
 
     }

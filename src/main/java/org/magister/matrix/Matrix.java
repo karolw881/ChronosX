@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.magister.helper.NumberOperations;
+import org.magister.helper.Numberxx;
+import org.magister.helper.NumberxxOperations;
 
 // Implementacja generyczna z użyciem refleksji
 // Generyczna klasa macierzy
@@ -14,15 +16,15 @@ import org.magister.helper.NumberOperations;
 @Setter
 @AllArgsConstructor
 
-public class Matrix<T extends Number> {
+public class Matrix<T extends Numberxx> {
     private T[][] data;
-    private NumberOperations<T> operations;
+    private NumberxxOperations operations;
     private int rows;
     private int cols;
 
 
 
-    public Matrix(T[][] data, NumberOperations<T> operations ) {
+    public Matrix(T[][] data, NumberxxOperations operations ) {
         if (data == null || data.length == 0 || data[0].length == 0) {
             throw new IllegalArgumentException("Dane macierzy nie mogą być puste");
         }
@@ -32,7 +34,7 @@ public class Matrix<T extends Number> {
 
 
         // Kopiowanie danych aby uniknąć modyfikacji zewnętrznej
-        this.data = (T[][]) new Number[rows][cols];
+        this.data = (T[][]) new Numberxx[rows][cols];
         for (int i = 0; i < rows; i++) {
             if (data[i].length != cols) {
                 throw new IllegalArgumentException("Wszystkie wiersze muszą mieć taką samą długość");
@@ -48,10 +50,10 @@ public class Matrix<T extends Number> {
         }
 
 
-        T[][] result = (T[][]) new Number[rows][cols];
+        T[][] result = (T[][]) new Numberxx[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                result[i][j] = operations.add(data[i][j], matrix.data[i][j]);
+                result[i][j] = (T) operations.add(data[i][j], matrix.data[i][j]);
             }
         }
         return new Matrix<>(result, operations);
@@ -63,10 +65,10 @@ public class Matrix<T extends Number> {
             throw new IllegalArgumentException("Macierze muszą mieć identyczne wymiary do odejmowania");
         }
 
-        T[][] result = (T[][]) new Number[rows][cols];
+        T[][] result = (T[][]) new Numberxx[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                result[i][j] = operations.subtract(data[i][j], matrix.data[i][j]);
+                result[i][j] = (T) operations.subtract(data[i][j], matrix.data[i][j]);
             }
         }
         return new Matrix<>(result, operations);
@@ -79,12 +81,12 @@ public class Matrix<T extends Number> {
         }
 
 
-        T[][] result = (T[][]) new Number[rows][matrix.cols];
+        T[][] result = (T[][]) new Numberxx[rows][matrix.cols];
 
         // Inicjalizacja wynikowej macierzy zerami
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < matrix.cols; j++) {
-                result[i][j] = operations.zero();
+                result[i][j] = (T) operations.zero();
             }
         }
 
@@ -92,8 +94,8 @@ public class Matrix<T extends Number> {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < matrix.cols; j++) {
                 for (int k = 0; k < cols; k++) {
-                    T product = operations.multiply(data[i][k], matrix.data[k][j]);
-                    result[i][j] = operations.add(result[i][j], product);
+                    T product = (T) operations.multiply(data[i][k], matrix.data[k][j]);
+                    result[i][j] = (T) operations.add(result[i][j], product);
                 }
             }
         }
@@ -133,7 +135,7 @@ public class Matrix<T extends Number> {
         for (int i = 0; i < n; i++) {
             System.arraycopy(data[i], 0, augmented[i], 0, n);
             for (int j = n; j < 2 * n; j++) {
-                augmented[i][j] = (j - n == i) ? operations.one() : operations.zero();
+                augmented[i][j] = (T) ((j - n == i) ? operations.one() : operations.zero());
             }
         }
 
@@ -158,15 +160,15 @@ public class Matrix<T extends Number> {
             // Normalizujemy wiersz, aby pivot stał się jedynką
             T pivot = augmented[i][i];
             for (int j = 0; j < 2 * n; j++) {
-                augmented[i][j] = operations.divide(augmented[i][j], pivot);
+                augmented[i][j] = (T) operations.divide(augmented[i][j], pivot);
             }
             // Eliminujemy pozostałe elementy w kolumnie pivotu
             for (int k = 0; k < n; k++) {
                 if (k == i) continue;
                 T factor = augmented[k][i];
                 for (int j = 0; j < 2 * n; j++) {
-                    T product = operations.multiply(factor, augmented[i][j]);
-                    augmented[k][j] = operations.subtract(augmented[k][j], product);
+                    T product = (T) operations.multiply(factor, augmented[i][j]);
+                    augmented[k][j] = (T) operations.subtract(augmented[k][j], product);
                 }
             }
         }
@@ -196,20 +198,20 @@ public class Matrix<T extends Number> {
             T c = data[1][0];
             T d = data[1][1];
 
-            T ad = operations.multiply(a, d);
-            T bc = operations.multiply(b, c);
+            T ad = (T) operations.multiply(a, d);
+            T bc = (T) operations.multiply(b, c);
 
-            return operations.subtract(ad, bc);
+            return (T) operations.subtract(ad, bc);
         }
 
         // Dla większych macierzy używamy rozwinięcia Laplace'a
-        T result = operations.zero();
+        T result = (T) operations.zero();
         for (int j = 0; j < cols; j++) {
             Matrix<T> subMatrix = getSubMatrix(0, j);
             T subDet = subMatrix.determinant();
-            T multiplier = j % 2 == 0 ? data[0][j] : operations.multiply(operations.multiply(data[0][j], operations.one()), operations.multiply(operations.one(), operations.subtract(operations.zero(), operations.one())));
-            T term = operations.multiply(multiplier, subDet);
-            result = operations.add(result, term);
+            T multiplier = j % 2 == 0 ? data[0][j] : (T) operations.multiply(operations.multiply(data[0][j], operations.one()), operations.multiply(operations.one(), operations.subtract(operations.zero(), operations.one())));
+            T term = (T) operations.multiply(multiplier, subDet);
+            result = (T) operations.add(result, term);
         }
 
         return result;
@@ -217,7 +219,7 @@ public class Matrix<T extends Number> {
 
     // Metoda pomocnicza do tworzenia podmacierzy poprzez usunięcie wiersza i kolumny
     private Matrix<T> getSubMatrix(int excludeRow, int excludeCol) {
-        T[][] subData = (T[][]) new Number[rows - 1][cols - 1];
+        T[][] subData = (T[][]) new Numberxx[rows - 1][cols - 1];
 
         int r = 0;
         for (int i = 0; i < rows; i++) {
@@ -270,4 +272,6 @@ public class Matrix<T extends Number> {
         }
         return sb.toString();
     }
+
+
 }
