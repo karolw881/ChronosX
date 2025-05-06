@@ -83,7 +83,7 @@ public class PerformanceBubbleSortGenericReflectVsObject extends PerformanceTest
 
         for (KindOfBubbleSort k : KindOfBubbleSort.values()) {
             for (int dim : DIMENSIONS) {
-
+                System.out.println("kind = " + k + ", dim = " + dim);
                 BubbleSort<Numberxx> bubbleSortFirst = bubbleSortGenerator.createArray(k, dim, 0L);
                 BubbleSort<Numberxx> bubbleSortSecond = bubbleSortGenerator.createArray(k, dim, 0L);
 

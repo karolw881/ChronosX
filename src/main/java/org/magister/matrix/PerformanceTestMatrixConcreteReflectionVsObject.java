@@ -86,6 +86,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         // Iterujemy po wszystkich typach macierzy
         for (KindOfMatrix kind : KindOfMatrix.values()) {
             for (int dim : DIMENSIONS) {
+                System.out.println("kind = " + kind + ", dim = " + dim);
                 Matrix1 matrixConcreteFirst = generator.createMatrix1(kind,dim,0L);
                 Matrix1 matrixConcreteSecond = generator.createMatrix1(kind,dim,1L);
                 saveMatrix1ToFile(matrixConcreteFirst, INPUT_DIR + "matrix1_concrete_" + kind.toString().toLowerCase() + "_" + dim + ".txt");

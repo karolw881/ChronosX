@@ -34,7 +34,7 @@ public class PerformanceBubbleSortConcreteReflectVsObject extends  PerformanceTe
         aggregatedResults.clear();
         performTestConcreteBubbleSort();
         // Dla każdego rodzaju uporządkowania (DataOrder) tworzymy wykres słupkowy
-        for (KindOfBubbleSort kind : KindOfBubbleSort.values()) {
+        for (KindOfBubbleSort kind: KindOfBubbleSort.values()) {
             createDirectoriesIfNotExists(CHARTS_DIR + "/RatioBarChart/");
             Vizualization.showOrSaveBarChartForRatioWithKindForBubble(aggregatedResults,kind,CHARTS_DIR+ "/RatioBarChart/");
         }
@@ -71,7 +71,7 @@ public class PerformanceBubbleSortConcreteReflectVsObject extends  PerformanceTe
         BubbleSort1Generator bubbleSort1Generator = new BubbleSort1Generator();
         for (KindOfBubbleSort k : KindOfBubbleSort.values()) {
             for (int dim : DIMENSIONS) {
-
+                System.out.println("kind = " + k + ", dim = " + dim);
                 BubbleSort1 bubbleSortFirst = bubbleSort1Generator.createArray(k, dim, 0L);
                 BubbleSort1 bubbleSortSecond = bubbleSort1Generator.createArray(k, dim, 0L);
 

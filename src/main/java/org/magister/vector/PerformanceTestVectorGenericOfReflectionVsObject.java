@@ -101,7 +101,7 @@
             for (KindOfVector kind : KindOfVector.values()) {
 
                 for (int dim : DIMENSIONS) {
-
+                    System.out.println("kind = " + kind + ", dim = " + dim);
                     Vector<Numberxx> vectorGenericFirst = generator.createVector(kind, dim, 0L);
                     Vector<Numberxx> vectorGenericSecond = generator.createVector(kind, dim, 1L);
 

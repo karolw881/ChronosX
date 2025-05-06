@@ -27,7 +27,7 @@ public  class PerformanceTestMatrix {
     protected static final String CHARTS_DIR = "test_dataSem2/output/matrix/";
     protected static final int RUNS = 100;
 
-  protected static final int[] DIMENSIONS = {2, 3 , 4 , 5  , 10 , 20 , 30    };
+  protected static final int[] DIMENSIONS = {2, 3 , 4 , 5  , 10 , 20 , 30, 50};
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();

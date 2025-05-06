@@ -26,7 +26,7 @@ public class PerformanceTestVector implements VtPerformance {
     protected static final int RUNS = 100;
     protected static final Random random = new Random(42);
     // Vector dimensions (wymiar wektora)
-    protected static final int[] DIMENSIONS = {10, 50, 100, 200};
+    protected static final int[] DIMENSIONS = {10, 50, 100, 200, 300, 500, 1000};
 
     // Lista zagregowanych wyników (dla każdego typu operacji i rozmiaru)
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();

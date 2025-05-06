@@ -101,6 +101,7 @@ public class PerformanceTestVectorConcreteOfReflectionVsObject extends Performan
     // Iterujemy po wszystkich typach macierzy
     for (KindOfVector kind : KindOfVector.values()) {
         for (int dim : DIMENSIONS) {
+            System.out.println("kind = " + kind + ", dim = " + dim);
             Vector1 vectorConcreteFirst = generator.createVector1(kind, dim, 0L);
             Vector1 vectorConcreteSecond = generator.createVector1(kind, dim, 1L);
             // Zapisujemy macierze wejściowe do plików z uwzględnieniem typu macierzy w nazwie pliku

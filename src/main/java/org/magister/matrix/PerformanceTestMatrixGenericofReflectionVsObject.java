@@ -80,7 +80,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
         MatrixGenerator<Numberxx> generator = new MatrixGenerator<>(new NumberxxOperations());
         for (KindOfMatrix kind : KindOfMatrix.values()) {
            for (int dim : DIMENSIONS) {
-
+               System.out.println("kind = " + kind + ", dim = " + dim);
                 Matrix<Numberxx> matrixGenericFirst = generator.createMatrix(kind, dim, 0L);
                 Matrix<Numberxx> matrixGenericSecond = generator.createMatrix(kind, dim, 1L);
 
@@ -193,18 +193,23 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
             String whatOperation,
             List<Long> reflectionTimes,
             List<Long> objectTimes) {
+        long startReflection;
+        long endReflection;
+        long startObject;
+        long endObject;
 
+        //AK RUNS
         for (int i = 0; i < RUNS; i++) {
             // Pomiar operacji refleksyjnej
-            long startReflection = System.nanoTime();
+             startReflection = System.nanoTime();
             MatrixReflectionUtil.performOperation(matrix1, matrix2, whatOperation);
-            long endReflection = System.nanoTime();
+             endReflection = System.nanoTime();
             reflectionTimes.add(endReflection - startReflection);
 
             // Pomiar operacji obiektowej
-            long startObject = System.nanoTime();
+             startObject = System.nanoTime();
             matrix1.subtract(matrix2);
-            long endObject = System.nanoTime();
+             endObject = System.nanoTime();
             objectTimes.add(endObject - startObject);
         }
     }

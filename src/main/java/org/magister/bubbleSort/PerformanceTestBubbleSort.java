@@ -22,7 +22,7 @@ public class PerformanceTestBubbleSort {
     // Liczba pomiarów dla danego przypadku
     protected static final int RUNS = 1000;
     // Rozmiary tablic testowych
-    protected static final int[] DIMENSIONS = {10, 20, 30, 40, 80};
+    protected static final int[] DIMENSIONS = {10, 20, 30, 40, 80, 160, 320, 500, 1000, 2000};
 
     // Lista zagregowanych wyników pomiarów
     protected final List<StatisticsResult> aggregatedResults = new ArrayList<>();
