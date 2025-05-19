@@ -37,8 +37,8 @@ public class Vizualization {
                 results,
                 kind,
                 "Porównanie Mean (Gen Ref vs. Gen Obj)",
-                "Wymiar",
-                "Czas [ns]"
+                "Wymiar[dim]",
+                "stosunek czasu refleksyjnego do obiektowego"
         );
         // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
         BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "RatioBarChart/" + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
@@ -225,8 +225,8 @@ public class Vizualization {
         XYChart chart = createChartRatioVsDimWithOperation(
                 results,
                 "Wykres: " + whatkindofstatist + " (x) vs. Dim (y) dla operacji " + operation,
-                "Wymiar (Dim)",
-                whatkindofstatist,
+                "Wymiar [Dim]",
+                whatkindofstatist + "[ns]",
                 operation,
                 whatkindofstatist
         );
@@ -383,8 +383,8 @@ public class Vizualization {
                 results,
                 operation,
                 "Wykres słupkowy dla operacji " + operation,
-                "Wymiar (Dim)",
-                "Wartość (np. czas [ns] lub ratio)",
+                "Wymiar [Dim]",
+                "Wartość czas [ns] )",
                 statisticType // Przekazujemy nowy parametr
         );
         // Nazwa pliku zawiera nazwę operacji
@@ -456,8 +456,8 @@ public class Vizualization {
                 results,
                 kind,
                 "Porównanie Mean (Gen Ref vs. Gen Obj)",
-                "Wymiar",
-                "Czas [ns]"
+                "Wymiar [dim]",
+                "Stosunek czasu refleksyjnego do obiektowego"
         );
         // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
         BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
@@ -535,8 +535,8 @@ public class Vizualization {
         XYChart chart = createChartDiffrentStatisticsVsDimWithOperationForVector(
                 results,
                 "Wykres: " + whatkindofstatist + " (x) vs. Dim (y) dla operacji " + operation,
-                "Wymiar (Dim)",
-                whatkindofstatist,
+                "Wymiar [Dim]",
+                whatkindofstatist + "[ns]",
                 operation,
                 whatkindofstatist
         );
@@ -621,8 +621,8 @@ public class Vizualization {
                 results,
                 operation,
                 "Wykres słupkowy dla operacji " + operation,
-                "Wymiar (Dim)",
-                "Wartość (np. czas [ns] lub ratio)",
+                "Wymiar [Dim]",
+                "stosunek czasu refleksyjnego do obiektowego ",
                 statisticType // Przekazujemy nowy parametr
         );
         // Nazwa pliku zawiera nazwę operacji
@@ -700,8 +700,8 @@ public class Vizualization {
                 results,
                 kind,
                 "Porównanie Mean (Gen Ref vs. Gen Obj)",
-                "Wymiar",
-                "Czas [ns]"
+                "Wymiar [dim]",
+                "stosunek czasy refleksyjnego do obiektowego "
         );
         // Zapisujemy do pliku z uwzględnieniem rodzaju macierzy w nazwie
         BitmapEncoder.saveBitmap(chart, CHARTS_DIR + "ratio_bar_chart_" + kind + ".png", BitmapEncoder.BitmapFormat.PNG);
@@ -766,8 +766,8 @@ public class Vizualization {
         XYChart chart = createChartDiffrentStatisticsVsDimWithOperationForBubble(
                 results,
                 "Wykres: " + whatkindofstatist + " (x) vs. Dim (y) dla operacji " + operation,
-                "Wymiar (Dim)",
-                whatkindofstatist,
+                "Wymiar [Dim]",
+                whatkindofstatist + "[ns]",
                 operation,
                 whatkindofstatist
         );
@@ -845,7 +845,7 @@ public class Vizualization {
                 operation,
                 "Wykres słupkowy dla operacji " + operation,
                 "Wymiar (Dim)",
-                "Wartość (np. czas [ns] lub ratio)",
+                "Wartość czas [ns]",
                 statisticType // Przekazujemy nowy parametr
         );
         // Nazwa pliku zawiera nazwę operacji
