@@ -145,9 +145,9 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
         }
 
         String resultsFilename = OUTPUT_DIR + "matrix_performance_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-       // saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
+        saveResultsToFile(resultsFilename, reflectionTimes, objectTimes);
         String statsFilename = OUTPUT_DIR + "matrix_statistics_multiply_of_reflection_and_object_concrete" + dim + ".txt";
-      //  StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
+        StatisticsResult stats = CalculationStatistic.calculateAndSaveStatistics(reflectionTimes, objectTimes, statsFilename, "multiply", dim,kindOfMatrix);
       //  System.out.println("multiply results saved to " + resultsFilename + " and " + statsFilename);
         return saveResults(reflectionTimes,objectTimes,"multiply" , dim , kindOfMatrix);
 
@@ -278,7 +278,7 @@ public class PerformanceTestMatrixConcreteReflectionVsObject extends Performance
                                      List<Long> objectTimes) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Generic Reflection Time\tGeneric Object Time\n");
+            writer.write("Generic Reflection Time; \tGeneric Object Time\n");
             writer.write("-----------\t-------------\n");
             for (int i = 0; i < reflectionTimes.size(); i++) {
                 writer.write(reflectionTimes.get(i) + "\t\t" + objectTimes.get(i) + "\n");

@@ -135,8 +135,8 @@ public class CalculationStatistic {
 
     // Wersja z KindOfBubbleSort
     public static StatisticsResult calculateAndSaveStatistics(
-            List<Long> genericObjectTimes,
             List<Long> genericReflectTimes,
+            List<Long> genericObjectTimes,
             String filename,
             String operation,
             int dimension,

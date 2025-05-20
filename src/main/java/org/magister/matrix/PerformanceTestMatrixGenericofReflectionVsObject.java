@@ -299,7 +299,7 @@ public class PerformanceTestMatrixGenericofReflectionVsObject extends Performanc
                                      List<Long> objectTimes) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            writer.write("Generic Reflection Time\tGeneric Object Time\n");
+            writer.write("Generic Reflection Time; \tGeneric Object Time\n");
             writer.write("-----------\t-------------\n");
             for (int i = 0; i < reflectionTimes.size(); i++) {
                 writer.write(reflectionTimes.get(i) + "\t\t" + objectTimes.get(i) + "\n");

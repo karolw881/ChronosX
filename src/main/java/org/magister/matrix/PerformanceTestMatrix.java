@@ -164,7 +164,7 @@ public  class PerformanceTestMatrix {
 
             // Dane
             for (int i = 0; i < genericTimes.size(); i++) {
-                writer.write(String.format("%-15d %-15d%n", genericTimes.get(i), concreteTimes.get(i)));
+                writer.write(String.format("%-15d %-15d%n", concreteTimes.get(i), genericTimes.get(i)));
             }
         } catch (IOException e) {
             System.err.println("Error saving results to file: " + e.getMessage());
